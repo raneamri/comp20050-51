@@ -21,6 +21,8 @@ public class Board {
       cells[row] = new Cell[numHexagons];
       for (int col = 0; col < numHexagons; col++) {
         cells[row][col] = new Cell();
+        cells[row][col].coords[0] = row;
+        cells[row][col].coords[1] = col;
       }
     }
   }
@@ -50,7 +52,7 @@ public class Board {
    * @param row used to perform maths to figure width of current row
    * @return
    */
-  private int getNumHexagonsInRow(int row) {
+  public int getNumHexagonsInRow(int row) {
     if (row < 4) {
       return row + 5;
     } else {
@@ -65,11 +67,15 @@ public class Board {
    * @param row
    * @return
    */
-  private double getStartXForRow(int row) {
+    private double getStartXForRow(int row) {
     if (row < 4) {
       return (4 - row) * HEXAGON_SIZE * 1.73 / 2;
     } else {
       return (row - 4) * HEXAGON_SIZE * 1.73 / 2;
     }
   }
+  public Cell[][] getCells(){
+    return cells;
+  }
+
 }

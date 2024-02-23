@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -10,8 +12,8 @@ public class Main extends Application {
   /**
    * Constant variables
    */
-  private static final int HEIGHT = 1024;
-  private static final int WIDTH = 1024;
+  private static final int HEIGHT = 600; //1024
+  private static final int WIDTH = 600;
   public static final int MAX_ATOMS = 6;
 
   /**
@@ -42,11 +44,12 @@ public class Main extends Application {
     startBtn.setOnAction(event -> {
       System.out.println("Start");
       ingame(primaryStage, root);
-      root.getChildren().remove(0);
-      root.getChildren().remove(1);
+      for(int i = 0; i < 3; i++)
+        root.getChildren().remove(0);
+      System.out.println("Menu hidden");
     });
     root.getChildren().add(startBtn);
-    StackPane.setAlignment(startBtn, javafx.geometry.Pos.TOP_CENTER);
+    StackPane.setAlignment(startBtn, Pos.CENTER);
 
     Button quitBtn = new Button("Quit");
     quitBtn.setOnAction(event -> {
@@ -54,7 +57,13 @@ public class Main extends Application {
       System.exit(0);
     });
     root.getChildren().add(quitBtn);
-    StackPane.setAlignment(quitBtn, javafx.geometry.Pos.BOTTOM_CENTER);
+    StackPane.setAlignment(quitBtn, Pos.BOTTOM_CENTER);
+
+    Label menuTitle = new Label("BlackBox+");
+    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 50;");
+    root.getChildren().add(menuTitle);
+    StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
+    System.out.println("Title created");
 
     Scene scene = new Scene(root, HEIGHT, WIDTH);
 
@@ -69,8 +78,6 @@ public class Main extends Application {
      */
     Board board = new Board();
     board.getBoardGroup();
-    // remove button & add board to stage
-    root.getChildren().remove(0);
     root.getChildren().add(getGroup());
   }
 

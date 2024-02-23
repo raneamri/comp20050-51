@@ -10,5 +10,18 @@ public class Atom extends Circle {
     setFill(Color.RED);
   }
 
-  public int correctAngle(double theta) { return (int)theta; }
+  //public int correctAngle(double theta) { return (int)theta; }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(this == obj)
+      return true;
+
+    if(obj == null || getClass() != obj.getClass())
+      return false;
+
+    Atom other = (Atom)obj;
+    return this.getCenterX() == other.getCenterX() && this.getCenterY() == other.getCenterY();
+  }
+
 }

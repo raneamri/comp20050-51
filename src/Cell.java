@@ -32,6 +32,7 @@ public class Cell {
         atom.coi = new COI(centerX, centerY);
         System.out.println("hexagon enter coordinates: (" + centerX + ", " +
                            centerY + ")");
+        System.out.println("Readable coords " + coords[0] + " " + coords[1]);
 
         if (Main.atoms.size() == Main.MAX_ATOMS) {
           try {
@@ -40,17 +41,22 @@ public class Cell {
             Thread.currentThread().interrupt();
           }
           return;
-        } else if (Main.atoms.contains(atom)) {
-          System.out.println("atom exists, event blocked");
-          return;
-        } else {
-          Main.getGroup().getChildren().add(atom);
-          Main.getGroup().getChildren().add(atom.coi);
-          Main.atoms.add(atom);
         }
+
+        for(Atom newAtom : Main.atoms)
+          if(atom.equals(newAtom)){
+            System.out.println("atom exists, event blocked");
+            return;
+          }
+
+        Main.getGroup().getChildren().add(atom);
+        Main.getGroup().getChildren().add(atom.coi);
+        Main.atoms.add(atom);
+
       }
     });
 
     return hexagon;
   }
+
 }
