@@ -6,11 +6,12 @@ import javafx.scene.shape.Polygon;
 public class Cell {
   int[] coords = new int[] {0, 0};
   private static final double ROTATION_ANGLE = Math.PI / 6.0;
+  Polygon hexagon;
 
   public Cell() {}
 
   public Polygon createHexagon(double size) {
-    Polygon hexagon = new Polygon();
+    hexagon = new Polygon();
 
     for (int i = 0; i < 6; i++) {
       double angle = ROTATION_ANGLE + (2.0 * Math.PI / 6 * i);
@@ -57,6 +58,11 @@ public class Cell {
     });
 
     return hexagon;
+  }
+  //returns midpoint of two points
+  public double[] midPoint(double x1, double y1, double x2, double y2) {
+    double midpoint[] = {(x1 + x2)/2, (y1+y2)/2 };
+    return midpoint;
   }
 
 }

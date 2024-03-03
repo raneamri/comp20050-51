@@ -41,6 +41,66 @@ public class Board {
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);
           Main.getGroup().getChildren().add(hexagon);
+
+          Torch t;
+          /**
+           * passing in the array position of the hexagon point needed to
+          draw triangle of torch **/
+          if(row == 0){
+            for(int i = 0; i < 2; i++){
+              t = new Torch(cell,
+                      (i == 0)? 6 :8);
+              Main.getGroup().getChildren().add(t.interactable);
+
+            }
+          }
+
+          if(row == NUM_ROWS - 1){
+            for(int i = 0; i < 2; i++){
+              t = new Torch(cell,
+                      (i == 0)? 0 :2);
+              Main.getGroup().getChildren().add(t.interactable);
+            }
+          }
+
+          if(col == 0){
+            if(row <= NUM_ROWS/2) {
+              for (int i = 0; i < 2; i++) {
+                t = new Torch(cell,
+                        (i == 0) ? 4 : 6);
+
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
+
+            if(row >= NUM_ROWS/2){
+              for(int i = 0; i < 2; i++){
+                t = new Torch(cell,
+                        (i == 0)? 2 :4);
+
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+
+            }
+          }
+
+          if(col == getNumHexagonsInRow(row) - 1){
+            if(row <= NUM_ROWS/2) {
+              for (int i = 0; i < 2; i++) {
+                t = new Torch(cell,
+                        (i == 0) ? 8 : 10);
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
+            if(row >= NUM_ROWS/2){
+              for(int i = 0; i < 2; i++){
+                t = new Torch(cell,
+                        (i == 0)? 10 :0);
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
+
+          }
         }
       }
     }
