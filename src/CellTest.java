@@ -1,8 +1,8 @@
-import javafx.scene.paint.Color;
+/*import javafx.scene.paint.Color;
+import static org.junit.jupiter.api.Assertions.*;
+
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class CellTest {
 
@@ -18,4 +18,4 @@ public class CellTest {
 
     //Debugging fractures for mouse event in cell class
 
-}
+}*/

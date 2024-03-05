@@ -1,4 +1,6 @@
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 
 public class Board {
   /**
@@ -38,6 +40,12 @@ public class Board {
           double y = row * yOffset * 1.73;
 
           Polygon hexagon = cell.createHexagon(HEXAGON_SIZE);
+          Text numText =
+              new Text(Integer.toString(row) + " " + Integer.toString(col));
+          numText.setStroke(Color.DARKGRAY);
+          numText.setLayoutX(x);
+          numText.setLayoutY(y);
+          Main.getGroup().getChildren().add(numText);
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);
           Main.getGroup().getChildren().add(hexagon);
@@ -45,61 +53,53 @@ public class Board {
           Torch t;
           /**
            * passing in the array position of the hexagon point needed to
-          draw triangle of torch **/
-          if(row == 0){
-            for(int i = 0; i < 2; i++){
-              t = new Torch(cell,
-                      (i == 0)? 6 :8);
-              Main.getGroup().getChildren().add(t.interactable);
-
-            }
-          }
-
-          if(row == NUM_ROWS - 1){
-            for(int i = 0; i < 2; i++){
-              t = new Torch(cell,
-                      (i == 0)? 0 :2);
+           * draw triangle of torch
+           */
+          if (row == 0) {
+            for (int i = 0; i < 2; i++) {
+              t = new Torch(cell, (i == 0) ? 6 : 8);
               Main.getGroup().getChildren().add(t.interactable);
             }
           }
 
-          if(col == 0){
-            if(row <= NUM_ROWS/2) {
-              for (int i = 0; i < 2; i++) {
-                t = new Torch(cell,
-                        (i == 0) ? 4 : 6);
-
-                Main.getGroup().getChildren().add(t.interactable);
-              }
-            }
-
-            if(row >= NUM_ROWS/2){
-              for(int i = 0; i < 2; i++){
-                t = new Torch(cell,
-                        (i == 0)? 2 :4);
-
-                Main.getGroup().getChildren().add(t.interactable);
-              }
-
+          if (row == NUM_ROWS - 1) {
+            for (int i = 0; i < 2; i++) {
+              t = new Torch(cell, (i == 0) ? 0 : 2);
+              Main.getGroup().getChildren().add(t.interactable);
             }
           }
 
-          if(col == getNumHexagonsInRow(row) - 1){
-            if(row <= NUM_ROWS/2) {
+          if (col == 0) {
+            if (row <= NUM_ROWS / 2) {
               for (int i = 0; i < 2; i++) {
-                t = new Torch(cell,
-                        (i == 0) ? 8 : 10);
-                Main.getGroup().getChildren().add(t.interactable);
-              }
-            }
-            if(row >= NUM_ROWS/2){
-              for(int i = 0; i < 2; i++){
-                t = new Torch(cell,
-                        (i == 0)? 10 :0);
+                t = new Torch(cell, (i == 0) ? 4 : 6);
+
                 Main.getGroup().getChildren().add(t.interactable);
               }
             }
 
+            if (row >= NUM_ROWS / 2) {
+              for (int i = 0; i < 2; i++) {
+                t = new Torch(cell, (i == 0) ? 2 : 4);
+
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
+          }
+
+          if (col == getNumHexagonsInRow(row) - 1) {
+            if (row <= NUM_ROWS / 2) {
+              for (int i = 0; i < 2; i++) {
+                t = new Torch(cell, (i == 0) ? 8 : 10);
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
+            if (row >= NUM_ROWS / 2) {
+              for (int i = 0; i < 2; i++) {
+                t = new Torch(cell, (i == 0) ? 10 : 0);
+                Main.getGroup().getChildren().add(t.interactable);
+              }
+            }
           }
         }
       }
@@ -127,15 +127,12 @@ public class Board {
    * @param row
    * @return
    */
-    private double getStartXForRow(int row) {
+  private double getStartXForRow(int row) {
     if (row < 4) {
       return (4 - row) * HEXAGON_SIZE * 1.73 / 2;
     } else {
       return (row - 4) * HEXAGON_SIZE * 1.73 / 2;
     }
   }
-  public Cell[][] getCells(){
-    return cells;
-  }
-
+  public Cell[][] getCells() { return cells; }
 }

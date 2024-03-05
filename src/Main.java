@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -44,28 +45,25 @@ public class Main extends Application {
     startBtn.setOnAction(event -> {
       System.out.println("Start");
       ingame(primaryStage, root);
-      for(int i = 0; i < 3; i++)
+      for (int i = 0; i < 2; i++)
         root.getChildren().remove(0);
       System.out.println("Menu hidden");
     });
+    startBtn.getStyleClass().add("button");
+    startBtn.setScaleZ(200);
     root.getChildren().add(startBtn);
     StackPane.setAlignment(startBtn, Pos.CENTER);
 
-    Button quitBtn = new Button("Quit");
-    quitBtn.setOnAction(event -> {
-      System.out.println("Quit");
-      System.exit(0);
-    });
-    root.getChildren().add(quitBtn);
-    StackPane.setAlignment(quitBtn, Pos.BOTTOM_CENTER);
-
     Label menuTitle = new Label("BlackBox+");
-    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 50;");
+    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 100;");
     root.getChildren().add(menuTitle);
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
+    StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
     System.out.println("Title created");
 
     Scene scene = new Scene(root, HEIGHT, WIDTH);
+    scene.getStylesheets().add(
+        getClass().getResource("styles.css").toExternalForm());
 
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+ (51)");
