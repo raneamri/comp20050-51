@@ -48,9 +48,9 @@ public class Torch {
       @Override
       public void handle(MouseEvent event) {
         // passing in hex side midpoint and hex centre to shoot ray
-        ray = new Ray(mainMidpoint[0], mainMidpoint[1], centerX, centerY);
         System.out.println("Torch clicked. Ray cast at: " + mainMidpoint[0] +
                            " " + mainMidpoint[1]);
+        ray = new Ray(mainMidpoint[0], mainMidpoint[1], centerX, centerY);
         interactable.setOnMouseClicked(null);
       }
     });

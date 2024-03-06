@@ -20,30 +20,6 @@ public class Ray {
   }
 
   /**
-   * Calculates the slope of the line going through two points
-   *
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
-   * @return slope
-   */
-  public double getSlope(double x1, double y1, double x2, double y2) {
-    return (y2 - y1) / (x2 - x1);
-  }
-
-  /**
-   * Calculates the y-intercept of a line equation
-   * @param x1
-   * @param y1
-   * @param m
-   * @return y-intercept
-   */
-  public double getYIntercept(double x1, double y1, double m) {
-    return y1 - m * x1;
-  }
-
-  /**
    * Checks if three points are collinear. Done by comparing slopes, with a
    * level of error allowed
    *
@@ -55,13 +31,30 @@ public class Ray {
    * @param y3
    * @return true if collinear, false otherwise
    */
-  public boolean isCollinear(double x1, double y1, double x2, double y2,
-                             double x3, double y3) {
+  private boolean isCollinear(double x1, double y1, double x2, double y2,
+                              double x3, double y3) {
     double m1 = (y2 - y1) / (x2 - x1);
     double m2 = (y3 - y2) / (x3 - x2);
-    double error = 1e-5;
+    double error = 0.5;
 
     return Math.abs(m1 - m2) < error;
+  }
+
+  private boolean isTangential(double[] line, double[] center, double r) {
+    double distance = Math.sqrt(Math.pow(center[0] - line[0], 2) +
+                                Math.pow(center[1] - line[1], 2));
+
+    /**
+     * Check if distance is equal to radius (with leeway)
+     */
+    return Math.abs(distance - r) < 1e-6;
+  }
+
+  private boolean isReflectedBy(double[] point, double[] center, double r) {
+    double distance = Math.sqrt(Math.pow(point[0] - center[0], 2) +
+                                Math.pow(point[1] - center[1], 2));
+
+    return distance <= r;
   }
 
   /**
@@ -79,9 +72,9 @@ public class Ray {
    * @return the coordinates of the meaningful point of contact with the circle,
    *     or null if there is none
    */
-  public static double[] getPointOfContact(double x1, double y1, double x2,
-                                           double y2, double centerX,
-                                           double centerY, double radius) {
+  private static double[] getPointOfContact(double x1, double y1, double x2,
+                                            double y2, double centerX,
+                                            double centerY, double radius) {
 
     /**
      * Vector components
@@ -153,6 +146,90 @@ public class Ray {
     return d1 < d2 ? new double[] {p1x, p1y} : new double[] {p2x, p2y};
   }
 
+  private double[] getReflectedRay(double[] line, double[] normal,
+                                   double[] poc) {
+    double n = 1;
+
+    /**
+     * Recast points
+     */
+    double x2 = line[2];
+    double y2 = line[3];
+    double nx1 = normal[0];
+    double ny1 = normal[1];
+    double nx2 = normal[2];
+    double ny2 = normal[3];
+
+    /**
+     * Compute directional vector of incident ray
+     */
+    double[] incidentRay = {x2 - poc[0], y2 - poc[1]};
+
+    /**
+     * Compute normal vector
+     */
+    double normalX = ny1 - ny2;
+    double normalY = nx2 - nx1;
+
+    /**
+     * Check if the normal vector points towards the incident ray
+     */
+    double dotProduct = incidentRay[0] * normalX + incidentRay[1] * normalY;
+    if (dotProduct < 0) {
+      /**
+       * Sometimes reflected ray will be in wrong direction, this reverses it
+       */
+      normalX = -normalX;
+      normalY = -normalY;
+    }
+
+    /**
+     * Get magnitude of normal vector
+     */
+    double normalMagnitude = Math.sqrt(normalX * normalX + normalY * normalY);
+
+    /**
+     * Get unit of normal vector
+     */
+    double[] unitNormal = {normalX / normalMagnitude,
+                           normalY / normalMagnitude};
+
+    /**
+     * Compute the dot product of the incident ray direction vector and the
+     * unit normal vector
+     */
+    double dotProduct2 =
+        incidentRay[0] * unitNormal[0] + incidentRay[1] * unitNormal[1];
+
+    /**
+     * Get reflected ray vector
+     */
+    double[] reflectedRay = {incidentRay[0] - 2 * dotProduct2 * unitNormal[0],
+                             incidentRay[1] - 2 * dotProduct2 * unitNormal[1]};
+
+    /**
+     * Get its magnitude
+     */
+    double reflectedRayMagnitude = Math.sqrt(reflectedRay[0] * reflectedRay[0] +
+                                             reflectedRay[1] * reflectedRay[1]);
+
+    /**
+     * Shorten vector to n
+     */
+    double scale = n / reflectedRayMagnitude;
+    double[] scaledReflectedRay = {reflectedRay[0] * scale,
+                                   reflectedRay[1] * scale};
+
+    /**
+     * Add the scaled reflected ray direction vector to the point of
+     * contact to get the end point of the reflected ray
+     */
+    double[] reflectedRayEndPoint = {poc[0] + scaledReflectedRay[0],
+                                     poc[1] + scaledReflectedRay[1]};
+
+    return reflectedRayEndPoint;
+  }
+
   /**
    * For a line interpreted as two points, this method checks for the first
    * COI it'd intersect with
@@ -162,15 +239,24 @@ public class Ray {
    * @param x2
    * @param y2
    */
-  public void checkCollisions(double x1, double y1, double x2, double y2) {
+  private void checkCollisions(double x1, double y1, double x2, double y2) {
     for (Atom atom : Main.atoms) {
+      /**
+       * If line touches atom because it has just been reflected by it
+       */
+      if (isReflectedBy(new double[] {x1, y1},
+                        new double[] {atom.getCenterX(), atom.getCenterY()},
+                        atom.coi.getRadius())) {
+        continue;
+      }
+
       /**
        * If they are collinear
        */
       if (isCollinear(x1, y1, x2, y2, atom.getCenterX(), atom.getCenterY())) {
         /**
-         * This will be the last collision so we return the coordinates of the
-         * atom
+         * This will be the last collision so we return the coordinates of
+         * the atom
          */
         System.out.println("Absorption at " + atom.getCenterX() + " " +
                            atom.getCenterY());
@@ -186,30 +272,50 @@ public class Ray {
       double[] pointOfContact =
           getPointOfContact(x1, y1, x2, y2, atom.getCenterX(),
                             atom.getCenterY(), atom.coi.getRadius());
+
+      /**
+       * If line is tangential to atom (360 reflection)
+       */
+      if (isTangential(new double[] {x1, y1, x2, y2},
+                       new double[] {atom.getCenterX(), atom.getCenterY()},
+                       atom.coi.getRadius())) {
+        coords.add(new Pair<Double, Double>(x1, y1));
+        return;
+      }
+
       if (pointOfContact != null) {
         /**
          * Calculate point of collision of with COI
          */
-        System.out.println("Collision at " + pointOfContact[0] + " " +
-                           pointOfContact[1]);
+        double[] nextPoint =
+            getReflectedRay(new double[] {x1, y1, x2, y2},
+                            new double[] {atom.getCenterX(), atom.getCenterY(),
+                                          pointOfContact[0], pointOfContact[1]},
+                            pointOfContact);
+
         coords.add(
             new Pair<Double, Double>(pointOfContact[0], pointOfContact[1]));
+        coords.add(new Pair<Double, Double>(nextPoint[0], nextPoint[1]));
+
+        System.out.println("Collision at " + pointOfContact[0] + " " +
+                           pointOfContact[1]);
+        System.out.println("Next point at " + nextPoint[0] + " " +
+                           nextPoint[1]);
 
         /**
          * Recursive call with next point
          */
-        checkCollisions(atom.getCenterX(), atom.getCenterY(), pointOfContact[0],
-                        pointOfContact[1]);
-        return;
+        checkCollisions(pointOfContact[0], pointOfContact[1], nextPoint[0],
+                        nextPoint[1]);
       } else {
         System.out.println("No collision");
-        return;
       }
     }
 
     /**
      * No collisions left
      */
+    System.out.println("No collision left");
     return;
   }
 

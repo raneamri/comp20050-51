@@ -3,7 +3,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 
 public class COI extends Circle {
-  private static final double RADIUS = 1.73f * 50;
+  private static final double RADIUS = Math.sqrt(3) * 40;
 
   public COI(double centerX, double centerY) {
     super(centerX, centerY, RADIUS);
