@@ -4,8 +4,6 @@ import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
 public class Ray {
-  public enum ORDER { ROW_LR, ROW_RL, COL_LR, COL_RL }
-
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
 
@@ -35,19 +33,9 @@ public class Ray {
                               double x3, double y3) {
     double m1 = (y2 - y1) / (x2 - x1);
     double m2 = (y3 - y2) / (x3 - x2);
-    double error = 0.5;
+    double error = 1e-1;
 
     return Math.abs(m1 - m2) < error;
-  }
-
-  private boolean isTangential(double[] line, double[] center, double r) {
-    double distance = Math.sqrt(Math.pow(center[0] - line[0], 2) +
-                                Math.pow(center[1] - line[1], 2));
-
-    /**
-     * Check if distance is equal to radius (with leeway)
-     */
-    return Math.abs(distance - r) < 1e-6;
   }
 
   private boolean isReflectedBy(double[] point, double[] center, double r) {
@@ -241,82 +229,41 @@ public class Ray {
    */
   private void checkCollisions(double x1, double y1, double x2, double y2) {
     for (Atom atom : Main.atoms) {
-      /**
-       * If line touches atom because it has just been reflected by it
-       */
-      if (isReflectedBy(new double[] {x1, y1},
-                        new double[] {atom.getCenterX(), atom.getCenterY()},
-                        atom.coi.getRadius())) {
+      double centerX = atom.getCenterX();
+      double centerY = atom.getCenterY();
+      double radius = atom.coi.getRadius();
+
+      // Check for collisions with atoms
+      if (isReflectedBy(new double[] {x1, y1}, new double[] {centerX, centerY},
+                        radius)) {
         continue;
       }
 
-      /**
-       * If they are collinear
-       */
-      if (isCollinear(x1, y1, x2, y2, atom.getCenterX(), atom.getCenterY())) {
-        /**
-         * This will be the last collision so we return the coordinates of
-         * the atom
-         */
-        System.out.println("Absorption at " + atom.getCenterX() + " " +
-                           atom.getCenterY());
-        System.out.println(atom.coi.getRadius());
-        coords.add(
-            new Pair<Double, Double>(atom.getCenterX(), atom.getCenterY()));
+      if (isCollinear(x1, y1, x2, y2, centerX, centerY)) {
+        // Absorption when collinear
+        coords.add(new Pair<>(centerX, centerY));
         return;
       }
 
-      /**
-       * If they collide
-       */
       double[] pointOfContact =
-          getPointOfContact(x1, y1, x2, y2, atom.getCenterX(),
-                            atom.getCenterY(), atom.coi.getRadius());
-
-      /**
-       * If line is tangential to atom (360 reflection)
-       */
-      if (isTangential(new double[] {x1, y1, x2, y2},
-                       new double[] {atom.getCenterX(), atom.getCenterY()},
-                       atom.coi.getRadius())) {
-        coords.add(new Pair<Double, Double>(x1, y1));
-        return;
-      }
+          getPointOfContact(x1, y1, x2, y2, centerX, centerY, radius);
 
       if (pointOfContact != null) {
-        /**
-         * Calculate point of collision of with COI
-         */
+        // Calculate reflection
         double[] nextPoint =
             getReflectedRay(new double[] {x1, y1, x2, y2},
-                            new double[] {atom.getCenterX(), atom.getCenterY(),
-                                          pointOfContact[0], pointOfContact[1]},
+                            new double[] {centerX, centerY, pointOfContact[0],
+                                          pointOfContact[1]},
                             pointOfContact);
 
-        coords.add(
-            new Pair<Double, Double>(pointOfContact[0], pointOfContact[1]));
-        coords.add(new Pair<Double, Double>(nextPoint[0], nextPoint[1]));
+        coords.add(new Pair<>(pointOfContact[0], pointOfContact[1]));
+        coords.add(new Pair<>(nextPoint[0], nextPoint[1]));
 
-        System.out.println("Collision at " + pointOfContact[0] + " " +
-                           pointOfContact[1]);
-        System.out.println("Next point at " + nextPoint[0] + " " +
-                           nextPoint[1]);
-
-        /**
-         * Recursive call with next point
-         */
         checkCollisions(pointOfContact[0], pointOfContact[1], nextPoint[0],
                         nextPoint[1]);
-      } else {
-        System.out.println("No collision");
+        return;
       }
     }
-
-    /**
-     * No collisions left
-     */
-    System.out.println("No collision left");
-    return;
   }
 
   public void drawRays() {
