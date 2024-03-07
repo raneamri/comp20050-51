@@ -8,6 +8,7 @@ public class Ray {
 
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
+  private Line createdLine;
 
   public Ray(double startX, double startY, double endX, double endY) {
     /**
@@ -329,6 +330,7 @@ public class Ray {
       line.setStrokeWidth(4);
       lines.add(line);
       Main.getGroup().getChildren().add(line);
+      createdLine = line;
       return;
     }
 
@@ -344,6 +346,11 @@ public class Ray {
       line.setStrokeWidth(4);
       lines.add(line);
       Main.getGroup().getChildren().add(line);
+      createdLine = line;
     }
+  }
+
+  public Line getCreatedLine(){
+    return createdLine;
   }
 }
