@@ -13,8 +13,8 @@ public class Main extends Application {
   /**
    * Constant variables
    */
-  private static final int HEIGHT = 1024;
-  private static final int WIDTH = 1024;
+  private static final int HEIGHT = 650;
+  private static final int WIDTH = 650;
   public static final int MAX_ATOMS = 6;
 
   /**
