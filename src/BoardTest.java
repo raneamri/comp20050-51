@@ -1,4 +1,4 @@
-/*import javafx.scene.Node;
+import javafx.scene.Node;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.scene.shape.Polygon;
@@ -12,8 +12,7 @@ public class BoardTest {
         Board newBoard = new Board();
 
         assertNotNull(newBoard.getCells());//Ensuring cells are created
-        assertEquals(NUM_ROWS, newBoard.getCells().length);//Ensuring the no of
-rows is correct
+        assertEquals(NUM_ROWS, newBoard.getCells().length);//Ensuring the no of rows is correct
 
         // Verify coordinates
         for(int row = 0; row < NUM_ROWS/2; row++){
@@ -56,4 +55,4 @@ rows is correct
         expectedHexagons = 9;
         assertEquals(expectedHexagons, newBoard.getCells()[4].length);
     }
-}*/
+}
