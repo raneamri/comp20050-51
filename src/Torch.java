@@ -50,7 +50,7 @@ public class Torch {
         // passing in hex side midpoint and hex centre to shoot ray
         System.out.println("Torch clicked. Ray cast at: " + mainMidpoint[0] +
                            " " + mainMidpoint[1]);
-        ray = new Ray(mainMidpoint[0], mainMidpoint[1], centerX, centerY);
+        ray = new Ray(mainMidpoint[0], mainMidpoint[1], cell);
         interactable.setOnMouseClicked(null);
       }
     });

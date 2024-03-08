@@ -4,7 +4,7 @@ import javafx.scene.text.Text;
 
 public class Board {
   /**
-   * Proportions as constants
+   * Dimensions as constants
    */
   private static final int HEXAGON_SIZE = 40;
   private static final int NUM_ROWS = 9;
@@ -12,19 +12,16 @@ public class Board {
   /**
    * Matrix to hold cell positions
    */
-  private Cell[][] cells;
+  private static Cell[][] cells;
 
   public Board() { createBoard(); }
 
   private void createBoard() {
     cells = new Cell[NUM_ROWS][];
     for (int row = 0; row < NUM_ROWS; row++) {
-      int numHexagons = getNumHexagonsInRow(row);
-      cells[row] = new Cell[numHexagons];
-      for (int col = 0; col < numHexagons; col++) {
-        cells[row][col] = new Cell();
-        cells[row][col].coords[0] = row;
-        cells[row][col].coords[1] = col;
+      cells[row] = new Cell[getNumHexagonsInRow(row)];
+      for (int col = 0; col < getNumHexagonsInRow(row); col++) {
+        cells[row][col] = new Cell(row, col);
       }
     }
   }
@@ -46,13 +43,14 @@ public class Board {
           numText.setLayoutX(x);
           numText.setLayoutY(y);
           Main.getGroup().getChildren().add(numText);
+
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);
           Main.getGroup().getChildren().add(hexagon);
 
           Torch t;
           /**
-           * passing in the array position of the hexagon point needed to
+           * Passing in the array position of the hexagon point needed to
            * draw triangle of torch
            */
           if (row == 0) {
@@ -112,7 +110,7 @@ public class Board {
    * @param row used to perform maths to figure width of current row
    * @return
    */
-  public int getNumHexagonsInRow(int row) {
+  public static int getNumHexagonsInRow(int row) {
     if (row < 4) {
       return row + 5;
     } else {
@@ -134,5 +132,6 @@ public class Board {
       return (row - 4) * HEXAGON_SIZE * 1.73 / 2;
     }
   }
-  public Cell[][] getCells() { return cells; }
+
+  public static Cell[][] getCells() { return cells; }
 }

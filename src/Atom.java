@@ -10,8 +10,6 @@ public class Atom extends Circle {
     setFill(Color.RED);
   }
 
-  // public int correctAngle(double theta) { return (int)theta; }
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj)

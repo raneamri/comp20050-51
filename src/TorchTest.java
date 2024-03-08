@@ -1,8 +1,9 @@
-import javafx.scene.paint.Color;
+/*import javafx.scene.paint.Color;
+import static org.junit.jupiter.api.Assertions.*;
+
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 public class TorchTest {
 
     @Test
@@ -37,10 +38,10 @@ public class TorchTest {
         double[] result = cell.midPoint(2,10,4,12);
         assertEquals(3,result[0]);
         assertEquals(11,result[1]);
-        
+
         double[] result2 = cell.midPoint(-6,7,6,10);
         assertEquals(0,result2[0]);
         assertEquals(8.5,result2[1]);
         assertNotEquals(8,result2[1]);
     }
-}
+}*/

@@ -41,9 +41,9 @@ public class Main extends Application {
     StackPane root = new StackPane();
     root.setStyle("-fx-background-color: black;");
 
-    Button startBtn = new Button("Start");
+    Button startBtn = new Button("Play");
     startBtn.setOnAction(event -> {
-      System.out.println("Start");
+      System.out.println("Play");
       ingame(primaryStage, root);
       for (int i = 0; i < 2; i++)
         root.getChildren().remove(0);
