@@ -56,4 +56,5 @@ rows is correct
         expectedHexagons = 9;
         assertEquals(expectedHexagons, newBoard.getCells()[4].length);
     }
-}*/
+}
+*/

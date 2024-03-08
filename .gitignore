@@ -25,6 +25,11 @@ replay_pid*
 
 # IDE
 .vscode
+.idea
 
 # MacOS
 .DS_Store
+
+META-INF
+MANIFEST.MF
+out
