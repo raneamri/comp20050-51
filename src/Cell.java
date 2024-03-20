@@ -7,7 +7,7 @@ public class Cell {
   private static final double ROTATION_ANGLE = Math.PI / 6.0;
   public Polygon hexagon;
   public int[] coords = new int[] {0, 0};
-  private boolean hasAtom;
+  private boolean hasAtom = false;
   private Atom atom;
 
   public Cell() {}
@@ -39,22 +39,6 @@ public class Cell {
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
-        double centerX = hexagon.getBoundsInParent().getCenterX();
-        double centerY = hexagon.getBoundsInParent().getCenterY();
-        Atom a = new Atom(centerX, centerY);
-        a.coi = new COI(centerX, centerY);
-        System.out.println("Hexagon clicked coords " + coords[0] + " " +
-                           coords[1]);
-
-        if (Main.atoms.size() == Main.MAX_ATOMS) {
-          return;
-        }
-
-        Main.getGroup().getChildren().add(a);
-        Main.getGroup().getChildren().add(a.coi);
-        Main.atoms.add(a);
-        hasAtom = true;
-        atom = a;
 
         hexagon.setOnMouseClicked(null);
       }
@@ -120,9 +104,7 @@ public class Cell {
       break;
     }
 
-    if (adjacentHexagon[0] < 0 || adjacentHexagon[1] < 0 ||
-        adjacentHexagon[1] >= Board.getNumHexagonsInRow(adjacentHexagon[0]) ||
-        adjacentHexagon[0] > 8) {
+    if (!Board.isInBoard(adjacentHexagon[0], adjacentHexagon[1])) {
       return null;
     } else {
       return Board.getCells()[adjacentHexagon[0]][adjacentHexagon[1]];
@@ -146,6 +128,28 @@ public class Cell {
   public int getCol() { return coords[1]; }
 
   public int[] getIndex() { return new int[] {getRow(), getCol()}; }
+
+  public boolean addAtom() {
+    if (hasAtom) {
+      return false;
+    } else {
+      double centerX = hexagon.getBoundsInParent().getCenterX();
+      double centerY = hexagon.getBoundsInParent().getCenterY();
+      Atom a = new Atom(centerX, centerY);
+      a.coi = new COI(centerX, centerY);
+      a.toggleOff();
+
+      System.out.println("Atom at " + coords[0] + " " + coords[1]);
+
+      Main.getGroup().getChildren().add(a);
+      Main.getGroup().getChildren().add(a.coi);
+      Main.atoms.add(a);
+      hasAtom = true;
+      this.atom = a;
+
+      return true;
+    }
+  }
 
   public boolean hasAtom() { return hasAtom; }
 

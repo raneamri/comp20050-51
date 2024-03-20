@@ -10,6 +10,16 @@ public class Atom extends Circle {
     setFill(Color.RED);
   }
 
+  public void toggleOn() {
+    setFill(Color.TRANSPARENT);
+    coi.toggleOn();
+  }
+
+  public void toggleOff() {
+    setFill(Color.TRANSPARENT);
+    coi.toggleOff();
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)

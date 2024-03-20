@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
@@ -54,15 +55,15 @@ public class Ray {
     switch (dir) {
     case LEFT_RIGHT:
       if (p1[1] > p2[1]) {
-        return Direction.DOWN_LEFT;
-      } else {
-        return Direction.UP_LEFT;
-      }
-    case RIGHT_LEFT:
-      if (p1[1] > p2[1]) {
         return Direction.DOWN_RIGHT;
       } else {
         return Direction.UP_RIGHT;
+      }
+    case RIGHT_LEFT:
+      if (p1[1] > p2[1]) {
+        return Direction.DOWN_LEFT;
+      } else {
+        return Direction.UP_LEFT;
       }
 
     case UP_LEFT:
@@ -188,10 +189,13 @@ public class Ray {
     Direction[] directions = new Direction[] {
         Direction.LEFT_RIGHT, Direction.RIGHT_LEFT, Direction.UP_RIGHT,
         Direction.UP_LEFT,    Direction.DOWN_RIGHT, Direction.DOWN_LEFT};
+
     ArrayList<Cell> collisions = new ArrayList<>();
+
     for (Direction d : directions) {
       Cell nextCollision = cell.getAdjacentHexagon(d);
-      if (nextCollision != null) {
+
+      if (!Objects.isNull(nextCollision)) {
         if (nextCollision.hasAtom()) {
           System.out.println("Collided with: " + nextCollision.getRow() + " " +
                              nextCollision.getCol());

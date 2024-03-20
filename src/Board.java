@@ -7,7 +7,7 @@ public class Board {
    * Dimensions as constants
    */
   private static final int HEXAGON_SIZE = 40;
-  private static final int NUM_ROWS = 9;
+  public static final int NUM_ROWS = 9;
 
   /**
    * Matrix to hold cell positions
@@ -131,6 +131,11 @@ public class Board {
     } else {
       return (row - 4) * HEXAGON_SIZE * 1.73 / 2;
     }
+  }
+
+  public static boolean isInBoard(int row, int col) {
+    return !(row < 0 || col < 0 || col >= Board.getNumHexagonsInRow(row) ||
+             row > 8);
   }
 
   public static Cell[][] getCells() { return cells; }

@@ -16,11 +16,12 @@ public class Main extends Application {
   private static final int HEIGHT = 1024;
   private static final int WIDTH = 1024;
   public static final int MAX_ATOMS = 6;
+  public static final int MAX_RAYS = 3;
 
   /**
    * Player classes
    */
-  // private static Setter setter = new Setter();
+  private static Setter setter = new Setter();
   // private static Experimenter experimenter = new Experimenter();
 
   /**
@@ -29,6 +30,7 @@ public class Main extends Application {
   private static Group group = new Group();
   public static ArrayList<Atom> atoms = new ArrayList<>();
   public static ArrayList<Torch> torchs = new ArrayList<>();
+  public static ArrayList<Ray> rays = new ArrayList<>();
 
   /**
    * JavaFX start function
@@ -77,6 +79,7 @@ public class Main extends Application {
     Board board = new Board();
     board.getBoardGroup();
     root.getChildren().add(getGroup());
+    setter.placeAtoms();
   }
 
   public static Group getGroup() { return group; }
