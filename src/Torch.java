@@ -7,6 +7,7 @@ import javafx.scene.shape.Polygon;
 public class Torch {
   public Polygon interactable;
   Ray ray;
+  public double[] mainMidpoint;
 
   // int i = array position of appropriate hexagon vertex
   public Torch(Cell cell, int i) {
@@ -28,7 +29,7 @@ public class Torch {
     double y2 = hexagonPoints.get(++i) + yOffset;
 
     // Midpoint of hexagon side
-    double[] mainMidpoint = cell.midPoint(x1, y1, x2, y2);
+    this.mainMidpoint = cell.midPoint(x1, y1, x2, y2);
 
     // getting midpoints again to make triangle smaller by setting vertices on
     // these midpoints

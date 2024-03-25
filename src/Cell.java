@@ -1,11 +1,14 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+import java.util.ArrayList;
+
 public class Cell {
   private static final double ROTATION_ANGLE = Math.PI / 6.0;
 
   public Polygon hexagon;
   private Atom atom;
+  ArrayList<Torch> torch;
 
   public int[] coords = new int[] {0, 0};
 
@@ -16,6 +19,7 @@ public class Cell {
   public Cell(int row, int col) {
     coords = new int[] {row, col};
     hasAtom = false;
+    torch = new ArrayList<>();
   }
 
   public Polygon createHexagon(double size) {
@@ -159,4 +163,14 @@ public class Cell {
     Cell other = (Cell)obj;
     return this.getIndex() == other.getIndex();
   }
+
+  public void addTorch(Torch t){
+    torch.add(t);
+  }
+
+  public ArrayList<Torch> getTorch(){
+    return torch;
+  }
+
+
 }

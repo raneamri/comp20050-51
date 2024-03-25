@@ -56,6 +56,7 @@ public class Board {
           if (row == 0) {
             for (int i = 0; i < 2; i++) {
               t = new Torch(cell, (i == 0) ? 6 : 8);
+              cell.addTorch(t);
               Main.getGroup().getChildren().add(t.interactable);
             }
           }
@@ -63,6 +64,7 @@ public class Board {
           if (row == NUM_ROWS - 1) {
             for (int i = 0; i < 2; i++) {
               t = new Torch(cell, (i == 0) ? 0 : 2);
+              cell.addTorch(t);
               Main.getGroup().getChildren().add(t.interactable);
             }
           }
@@ -71,7 +73,7 @@ public class Board {
             if (row <= NUM_ROWS / 2) {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 4 : 6);
-
+                cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.interactable);
               }
             }
@@ -79,7 +81,7 @@ public class Board {
             if (row >= NUM_ROWS / 2) {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 2 : 4);
-
+                cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.interactable);
               }
             }
@@ -89,12 +91,14 @@ public class Board {
             if (row <= NUM_ROWS / 2) {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 8 : 10);
+                cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.interactable);
               }
             }
             if (row >= NUM_ROWS / 2) {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 10 : 0);
+                cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.interactable);
               }
             }

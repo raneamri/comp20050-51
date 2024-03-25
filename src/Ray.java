@@ -221,17 +221,17 @@ public class Ray {
       if (Objects.isNull(cell.getAdjacentHexagon(dir))) {
         return;
       }
-      if (cell.getAdjacentHexagon(dir).equals(collisions.getFirst())) {
+      if (cell.getAdjacentHexagon(dir).equals(collisions.get(0))) {
         /**
          * Absorption
          */
         absorbed = true;
         System.out.println("Absorption");
-        path.add(collisions.getFirst());
+        path.add(collisions.get(0));
         return;
       } else {
         nextDir = sixtyReflection(dir, cell.getCenter(),
-                                  collisions.getFirst().getCenter());
+                                  collisions.get(0).getCenter());
         finalDirection = nextDir;
       }
     } else if (collisions.size() == 2) {
@@ -239,8 +239,8 @@ public class Ray {
        * Always 120 degree reflection
        */
       nextDir = onetwentyReflection(dir, cell.getCenter(),
-                                    collisions.getFirst().getCenter(),
-                                    collisions.getLast().getCenter());
+                                    collisions.get(0).getCenter(),
+                                    collisions.get(0).getCenter());
       finalDirection = nextDir;
     } else if (collisions.size() == 3) {
       /**
@@ -261,7 +261,7 @@ public class Ray {
     double centerX = c.getCenterX();
     double centerY = c.getCenterY();
 
-    switch (finalDirection) {
+    /*switch (finalDirection) {
     case LEFT_RIGHT:
       return new Pair<>(centerX + n, centerY);
     case RIGHT_LEFT:
@@ -276,7 +276,18 @@ public class Ray {
       return new Pair<>(centerX - n / 2, centerY + (3 * n) / 2);
     default:
       return null;
+    }*/
+
+   // c.getTorch().mainMidpoint[0];
+
+    for(Torch t : c.getTorch()){
+      if(slopeToDirection(c.getCenter(), t.mainMidpoint) == finalDirection)
+        return new Pair<>(t.mainMidpoint[0], t.mainMidpoint[1]);
+
+
     }
+
+    return null;
   }
 
   private void drawRays() {
@@ -286,7 +297,7 @@ public class Ray {
     }
 
     if (!absorbed)
-      coords.add(addFinalPoint(path.getLast()));
+      coords.add(addFinalPoint(path.get(path.size()-1)));
 
     for (int i = 0; i < coords.size() - 1; i++) {
       Line line =
