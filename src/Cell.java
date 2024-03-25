@@ -1,14 +1,15 @@
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Cell {
   private static final double ROTATION_ANGLE = Math.PI / 6.0;
+
   public Polygon hexagon;
-  public int[] coords = new int[] {0, 0};
-  private boolean hasAtom = false;
   private Atom atom;
+
+  public int[] coords = new int[] {0, 0};
+
+  private boolean hasAtom = false;
 
   public Cell() {}
 
@@ -35,14 +36,6 @@ public class Cell {
      */
     hexagon.setFill(Color.TRANSPARENT);
     hexagon.setStroke(Color.RED);
-
-    hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-
-        hexagon.setOnMouseClicked(null);
-      }
-    });
 
     return hexagon;
   }

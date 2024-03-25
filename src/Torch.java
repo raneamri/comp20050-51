@@ -54,6 +54,12 @@ public class Torch {
         interactable.setOnMouseClicked(null);
 
         Main.rays.add(ray);
+
+        if (Main.rays.size() == 6) {
+          /**
+           * Guessing phase
+           */
+        }
       }
     });
   }

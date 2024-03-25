@@ -9,6 +9,13 @@ public class Ray {
   private ArrayList<Line> lines = new ArrayList<>();
   private ArrayList<Cell> path = new ArrayList<>();
 
+  private Direction[] directions = new Direction[] {
+      Direction.LEFT_RIGHT, Direction.RIGHT_LEFT, Direction.UP_RIGHT,
+      Direction.UP_LEFT,    Direction.DOWN_RIGHT, Direction.DOWN_LEFT};
+
+  private boolean absorbed = false;
+  private Direction finalDirection;
+
   public Ray(double startX, double startY, Cell cell) {
     coords.add(new Pair<Double, Double>(startX, startY));
 
@@ -177,18 +184,21 @@ public class Ray {
     /**
      * Pre checks
      */
-    if (cell.hasAtom()) {
-      path.add(cell);
+    if (cell == null) {
+      return;
+    } else if (cell.hasAtom()) {
+      absorbed = true;
       return;
     }
+
+    System.out.println("Curr cell: " + cell.getRow() + " " + cell.getCol());
+    path.add(cell);
 
     /**
      * Check for collision (aka atoms in adjacent hexagons)
      */
     Direction nextDir = dir;
-    Direction[] directions = new Direction[] {
-        Direction.LEFT_RIGHT, Direction.RIGHT_LEFT, Direction.UP_RIGHT,
-        Direction.UP_LEFT,    Direction.DOWN_RIGHT, Direction.DOWN_LEFT};
+    finalDirection = nextDir;
 
     ArrayList<Cell> collisions = new ArrayList<>();
 
@@ -208,22 +218,22 @@ public class Ray {
       /**
        * Always 60 degree reflection or absorption
        */
+      if (Objects.isNull(cell.getAdjacentHexagon(dir))) {
+        return;
+      }
       if (cell.getAdjacentHexagon(dir).equals(collisions.getFirst())) {
         /**
          * Absorption
          */
+        absorbed = true;
         System.out.println("Absorption");
         path.add(collisions.getFirst());
         return;
       } else {
         nextDir = sixtyReflection(dir, cell.getCenter(),
                                   collisions.getFirst().getCenter());
-        Cell next = cell.getAdjacentHexagon(nextDir);
-        System.out.println("Next dir: " + nextDir.toString());
-        checkCollisions(nextDir, next);
-        return;
+        finalDirection = nextDir;
       }
-
     } else if (collisions.size() == 2) {
       /**
        * Always 120 degree reflection
@@ -231,57 +241,39 @@ public class Ray {
       nextDir = onetwentyReflection(dir, cell.getCenter(),
                                     collisions.getFirst().getCenter(),
                                     collisions.getLast().getCenter());
-
+      finalDirection = nextDir;
     } else if (collisions.size() == 3) {
       /**
        * Always full reflection
        */
       nextDir = fullReflection(nextDir);
-      checkCollisions(
-          nextDir,
-          cell.getAdjacentHexagon(nextDir).getAdjacentHexagon(nextDir));
+      finalDirection = nextDir;
     }
 
-    /**
-     * If no collisions and not at boards bounds, advance to next cell in
-     * direction
-     */
     Cell next = cell.getAdjacentHexagon(nextDir);
-    /**
-     * Check if reached boards bounds
-     */
-    if (next == null) {
-      System.out.println("Out of bounds");
-      return;
-    }
-    System.out.println("Curr cell: " + cell.getRow() + " " + cell.getCol());
-    System.out.println("Next cell: " + next.getRow() + " " + next.getCol());
-    path.add(next);
+
     checkCollisions(nextDir, next);
   }
 
-  private Pair<Double, Double> addFinalPoint(Cell c1, Cell c2) {
-    double n = 1;
+  private Pair<Double, Double> addFinalPoint(Cell c) {
+    double n = (Math.sqrt(3) * 40) / 2;
 
-    switch (slopeToDirection(c1.getCenter(), c2.getCenter())) {
+    double centerX = c.getCenterX();
+    double centerY = c.getCenterY();
+
+    switch (finalDirection) {
     case LEFT_RIGHT:
-      return new Pair<Double, Double>(c2.getCenterX() + n, c2.getCenterY());
-
+      return new Pair<>(centerX + n, centerY);
     case RIGHT_LEFT:
-      return new Pair<Double, Double>(c2.getCenterX() - n, c2.getCenterY());
-
+      return new Pair<>(centerX - n, centerY);
     case UP_RIGHT:
-      return new Pair<Double, Double>(c2.getCenterX() + n, c2.getCenterY() - n);
-
+      return new Pair<>(centerX + n / 2, centerY - (3 * n) / 2);
     case UP_LEFT:
-      return new Pair<Double, Double>(c2.getCenterX() - n, c2.getCenterY() - n);
-
+      return new Pair<>(centerX - n / 2, centerY - (3 * n) / 2);
     case DOWN_RIGHT:
-      return new Pair<Double, Double>(c2.getCenterX() - n, c2.getCenterY() + n);
-
+      return new Pair<>(centerX + n / 2, centerY + (3 * n) / 2);
     case DOWN_LEFT:
-      return new Pair<Double, Double>(c2.getCenterX() + n, c2.getCenterY() + n);
-
+      return new Pair<>(centerX - n / 2, centerY + (3 * n) / 2);
     default:
       return null;
     }
@@ -293,7 +285,8 @@ public class Ray {
           new Pair<Double, Double>(cell.getCenterX(), cell.getCenterY()));
     }
 
-    // coords.add(addFinalPoint(path.getLast(), path.get(path.size() - 2)));
+    if (!absorbed)
+      coords.add(addFinalPoint(path.getLast()));
 
     for (int i = 0; i < coords.size() - 1; i++) {
       Line line =
