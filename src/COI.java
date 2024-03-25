@@ -14,4 +14,9 @@ public class COI extends Circle {
     getStrokeDashArray().addAll(9d, 12d);
     setMouseTransparent(true);
   }
+
+  public void toggleOn() { setStroke(Color.WHITE); }
+
+  public void toggleOff() { /*setStroke(Color.TRANSPARENT);*/
+  }
 }

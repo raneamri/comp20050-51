@@ -52,6 +52,14 @@ public class Torch {
                            " " + mainMidpoint[1]);
         ray = new Ray(mainMidpoint[0], mainMidpoint[1], cell);
         interactable.setOnMouseClicked(null);
+
+        Main.rays.add(ray);
+
+        if (Main.rays.size() == 6) {
+          /**
+           * Guessing phase
+           */
+        }
       }
     });
   }
