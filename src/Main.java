@@ -13,8 +13,8 @@ public class Main extends Application {
   /**
    * Constant variables
    */
-  private static final int HEIGHT = 650;
-  private static final int WIDTH = 650;
+  private static final int HEIGHT = 1024;
+  private static final int WIDTH = 1024;
   public static final int MAX_ATOMS = 6;
   public static final int MAX_RAYS = 3;
 
@@ -22,15 +22,16 @@ public class Main extends Application {
    * Player classes
    */
   private static Setter setter = new Setter();
-  // private static Experimenter experimenter = new Experimenter();
+  private static Experimenter experimenter = new Experimenter();
 
   /**
-   * Display classes
+   * Game assets
    */
   private static Group group = new Group();
   public static ArrayList<Atom> atoms = new ArrayList<>();
   public static ArrayList<Torch> torchs = new ArrayList<>();
   public static ArrayList<Ray> rays = new ArrayList<>();
+  public static ArrayList<Flag> flags = new ArrayList<>();
 
   /**
    * JavaFX start function
@@ -41,9 +42,23 @@ public class Main extends Application {
      * JavaFX display objects
      */
     StackPane root = new StackPane();
-    root.setStyle("-fx-background-color: black;");
-
     Button startBtn = new Button("Play");
+    Label menuTitle = new Label("BlackBox+");
+    Scene scene = new Scene(root, HEIGHT, WIDTH);
+
+    /**
+     * Style elements
+     */
+    root.setStyle("-fx-background-color: black;");
+    scene.getStylesheets().add(
+        getClass().getResource("styles.css").toExternalForm());
+    startBtn.getStyleClass().add("button");
+    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 100;");
+    System.out.println("Stylesheet fetched");
+
+    /**
+     * Button actions
+     */
     startBtn.setOnAction(event -> {
       System.out.println("Play");
       ingame(primaryStage, root);
@@ -51,21 +66,20 @@ public class Main extends Application {
         root.getChildren().remove(0);
       System.out.println("Menu hidden");
     });
-    startBtn.getStyleClass().add("button");
     startBtn.setScaleZ(200);
-    root.getChildren().add(startBtn);
-    StackPane.setAlignment(startBtn, Pos.CENTER);
 
-    Label menuTitle = new Label("BlackBox+");
-    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 100;");
-    root.getChildren().add(menuTitle);
+    /**
+     * Alignments
+     */
+    StackPane.setAlignment(startBtn, Pos.CENTER);
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
-    System.out.println("Title created");
 
-    Scene scene = new Scene(root, HEIGHT, WIDTH);
-    scene.getStylesheets().add(
-        getClass().getResource("styles.css").toExternalForm());
+    /**
+     * Adding to root
+     */
+    root.getChildren().add(startBtn);
+    root.getChildren().add(menuTitle);
 
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+ (51)");
@@ -83,6 +97,8 @@ public class Main extends Application {
   }
 
   public static Group getGroup() { return group; }
+  public static Setter getSetter() { return setter; }
+  public static Experimenter getExperimenter() { return experimenter; }
 
   /**
    * Conventional main function

@@ -1,0 +1,18 @@
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.util.Pair;
+
+public class Marker {
+  private final int RADIUS = 11;
+  private Circle interactable;
+
+  public Marker(Pair<Double, Double> coords) {
+    interactable = new Circle(coords.getKey(), coords.getValue(), RADIUS);
+
+    interactable.setFill(Color.BLUE);
+    interactable.setStroke(Color.BLUEVIOLET);
+    interactable.setStrokeWidth(2);
+  }
+
+  public Circle getInteractable() { return this.interactable; }
+}

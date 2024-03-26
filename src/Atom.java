@@ -16,7 +16,7 @@ public class Atom extends Circle {
   }
 
   public void toggleOff() {
-    setFill(Color.RED);
+    setFill(Color.TRANSPARENT);
     coi.toggleOff();
   }
 

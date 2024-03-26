@@ -5,16 +5,16 @@ import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
 public class Ray {
+  /**
+   * Polyray drawing utilities
+   */
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
   private ArrayList<Cell> path = new ArrayList<>();
 
-  private Direction[] directions = new Direction[] {
-      Direction.LEFT_RIGHT, Direction.RIGHT_LEFT, Direction.UP_RIGHT,
-      Direction.UP_LEFT,    Direction.DOWN_RIGHT, Direction.DOWN_LEFT};
+  private Direction finalDirection;
 
   private boolean absorbed = false;
-  private Direction finalDirection;
 
   public Ray(double startX, double startY, Cell cell) {
     coords.add(new Pair<Double, Double>(startX, startY));
@@ -202,7 +202,7 @@ public class Ray {
 
     ArrayList<Cell> collisions = new ArrayList<>();
 
-    for (Direction d : directions) {
+    for (Direction d : Direction.values()) {
       Cell nextCollision = cell.getAdjacentHexagon(d);
 
       if (!Objects.isNull(nextCollision)) {
@@ -256,35 +256,10 @@ public class Ray {
   }
 
   private Pair<Double, Double> addFinalPoint(Cell c) {
-    double n = (Math.sqrt(3) * 40) / 2;
-
-    double centerX = c.getCenterX();
-    double centerY = c.getCenterY();
-
-    /*switch (finalDirection) {
-    case LEFT_RIGHT:
-      return new Pair<>(centerX + n, centerY);
-    case RIGHT_LEFT:
-      return new Pair<>(centerX - n, centerY);
-    case UP_RIGHT:
-      return new Pair<>(centerX + n / 2, centerY - (3 * n) / 2);
-    case UP_LEFT:
-      return new Pair<>(centerX - n / 2, centerY - (3 * n) / 2);
-    case DOWN_RIGHT:
-      return new Pair<>(centerX + n / 2, centerY + (3 * n) / 2);
-    case DOWN_LEFT:
-      return new Pair<>(centerX - n / 2, centerY + (3 * n) / 2);
-    default:
-      return null;
-    }*/
-
-   // c.getTorch().mainMidpoint[0];
-
-    for(Torch t : c.getTorch()){
-      if(slopeToDirection(c.getCenter(), t.mainMidpoint) == finalDirection)
-        return new Pair<>(t.mainMidpoint[0], t.mainMidpoint[1]);
-
-
+    for (Torch t : c.getTorch()) {
+      if (slopeToDirection(c.getCenter(), t.getMainMidpoint()) ==
+          finalDirection)
+        return new Pair<>(t.getMainMidpoint()[0], t.getMainMidpoint()[1]);
     }
 
     return null;
@@ -297,7 +272,7 @@ public class Ray {
     }
 
     if (!absorbed)
-      coords.add(addFinalPoint(path.get(path.size()-1)));
+      coords.add(addFinalPoint(path.get(path.size() - 1)));
 
     for (int i = 0; i < coords.size() - 1; i++) {
       Line line =
@@ -313,5 +288,31 @@ public class Ray {
 
       Main.getGroup().getChildren().add(line);
     }
+
+    toggleOff();
+
+    if (!absorbed) {
+      Flag flag = new Flag(getFlagPos());
+      Main.getGroup().getChildren().add(flag.getInteractable());
+    }
+  }
+
+  public void toggleOn() {
+    for (Line l : lines) {
+      l.setStroke(Color.YELLOW);
+    }
+  }
+  public void toggleOff() {
+    for (Line l : lines) {
+      l.setStroke(Color.TRANSPARENT);
+    }
+  }
+
+  /**
+   * @return null if the ray was absorbed, the exit position of the ray
+   *     otherwise
+   */
+  public Pair<Double, Double> getFlagPos() {
+    return (absorbed) ? null : coords.get(coords.size() - 1);
   }
 }

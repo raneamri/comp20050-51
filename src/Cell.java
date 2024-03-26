@@ -1,26 +1,32 @@
+import java.util.ArrayList;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-
-import java.util.ArrayList;
+import javafx.util.Pair;
 
 public class Cell {
+  /**
+   * Final constants
+   */
   private static final double ROTATION_ANGLE = Math.PI / 6.0;
 
-  public Polygon hexagon;
+  /**
+   * Cell children
+   */
+  private Polygon hexagon;
   private Atom atom;
-  ArrayList<Torch> torch;
+  private ArrayList<Torch> torches = new ArrayList<>();
 
   public int[] coords = new int[] {0, 0};
 
+  /**
+   * Flags
+   */
   private boolean hasAtom = false;
+  private boolean hasMarker = false;
 
-  public Cell() {}
-
-  public Cell(int row, int col) {
-    coords = new int[] {row, col};
-    hasAtom = false;
-    torch = new ArrayList<>();
-  }
+  public Cell(int row, int col) { this.coords = new int[] {row, col}; }
 
   public Polygon createHexagon(double size) {
     hexagon = new Polygon();
@@ -41,14 +47,45 @@ public class Cell {
     hexagon.setFill(Color.TRANSPARENT);
     hexagon.setStroke(Color.RED);
 
+    hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        Marker marker =
+            new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
+        Main.getGroup().getChildren().add(marker.getInteractable());
+
+        hasMarker = true;
+      }
+    });
+
     return hexagon;
   }
 
+  /**
+   * Finds the midpoint of two points
+   * Its applied purpose is finding the centre of the side of a cell
+   *
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   * @return double[] wrapped coordinates of the midpoint
+   */
   public double[] midPoint(double x1, double y1, double x2, double y2) {
     double midpoint[] = {(x1 + x2) / 2, (y1 + y2) / 2};
     return midpoint;
   }
 
+  /**
+   * Method uses a switch statement and external methods to find neighbor of a
+   * cell in a given direction
+   * This method will often return null
+   * This is intended and helps map the
+   * board's edges
+   *
+   * @param direction enum. type used to represent slope
+   * @return reference to cell in that direction if found, null otherwise
+   */
   public Cell getAdjacentHexagon(Direction direction) {
     int[] adjacentHexagon = new int[2];
     int row = getRow();
@@ -111,21 +148,23 @@ public class Cell {
   public double getCenterX() {
     return hexagon.getBoundsInParent().getCenterX();
   }
-
   public double getCenterY() {
     return hexagon.getBoundsInParent().getCenterY();
   }
-
   public double[] getCenter() {
     return new double[] {getCenterX(), getCenterY()};
   }
 
   public int getRow() { return coords[0]; }
-
   public int getCol() { return coords[1]; }
-
   public int[] getIndex() { return new int[] {getRow(), getCol()}; }
 
+  /**
+   * Attempts to allocate an atom to a cell
+   *
+   * @return true if the atom was successfully added, false if the cell already
+   *     had an atom
+   */
   public boolean addAtom() {
     if (hasAtom) {
       return false;
@@ -134,23 +173,35 @@ public class Cell {
       double centerY = hexagon.getBoundsInParent().getCenterY();
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
-      a.toggleOff();
+      // a.toggleOff();
 
       System.out.println("Atom at " + coords[0] + " " + coords[1]);
 
       Main.getGroup().getChildren().add(a);
       Main.getGroup().getChildren().add(a.coi);
       Main.atoms.add(a);
-      hasAtom = true;
+
+      this.hasAtom = true;
       this.atom = a;
 
       return true;
     }
   }
 
-  public boolean hasAtom() { return hasAtom; }
+  public boolean hasAtom() { return this.hasAtom; }
+  public Atom getAtom() { return this.atom; }
 
-  public Atom getAtom() { return atom; }
+  public void addTorch(Torch t) { torches.add(t); }
+  public ArrayList<Torch> getTorch() { return torches; }
+
+  public Polygon getHexagon() { return hexagon; }
+
+  /**
+   * Simplified check for if user has pinpointed the right atom
+   *
+   * @return true if guess is correct, false otherwise
+   */
+  public boolean hasCorrectGuess() { return hasAtom && hasMarker; }
 
   @Override
   public boolean equals(Object obj) {
@@ -163,14 +214,4 @@ public class Cell {
     Cell other = (Cell)obj;
     return this.getIndex() == other.getIndex();
   }
-
-  public void addTorch(Torch t){
-    torch.add(t);
-  }
-
-  public ArrayList<Torch> getTorch(){
-    return torch;
-  }
-
-
 }

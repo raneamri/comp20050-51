@@ -5,21 +5,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Torch {
-  public Polygon interactable;
-  Ray ray;
-  public double[] mainMidpoint;
+  private Polygon interactable;
+  private Ray ray;
+
+  private double[] mainMidpoint;
 
   // int i = array position of appropriate hexagon vertex
   public Torch(Cell cell, int i) {
     interactable = new Polygon();
+    Polygon hex = cell.getHexagon();
     // initializing array to contain hexagon points
-    ArrayList<Double> hexagonPoints = new ArrayList<>(cell.hexagon.getPoints());
-    double centerX = cell.hexagon.getBoundsInParent().getCenterX();
-    double centerY = cell.hexagon.getBoundsInParent().getCenterY();
+    ArrayList<Double> hexagonPoints = new ArrayList<>(hex.getPoints());
+    double centerX = hex.getBoundsInParent().getCenterX();
+    double centerY = hex.getBoundsInParent().getCenterY();
 
     // x and y offsets to place triangle vertices correctly on the board
-    double xOffset = cell.hexagon.getLayoutX();
-    double yOffset = cell.hexagon.getLayoutY();
+    double xOffset = hex.getLayoutX();
+    double yOffset = hex.getLayoutY();
 
     double x1 = hexagonPoints.get(i) + xOffset;
     double y1 = hexagonPoints.get(++i) + yOffset;
@@ -45,6 +47,11 @@ public class Torch {
                                     centremidPoint[1]);
     interactable.setFill(Color.RED);
 
+    interactable.setOnMouseEntered(
+        event -> { interactable.setFill(Color.YELLOWGREEN); });
+    interactable.setOnMouseExited(
+        event -> { interactable.setFill(Color.RED); });
+
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -53,6 +60,9 @@ public class Torch {
                            " " + mainMidpoint[1]);
         ray = new Ray(mainMidpoint[0], mainMidpoint[1], cell);
         interactable.setOnMouseClicked(null);
+        interactable.setOnMouseEntered(null);
+        interactable.setOnMouseExited(null);
+        interactable.setFill(Color.YELLOW);
 
         Main.rays.add(ray);
 
@@ -64,4 +74,11 @@ public class Torch {
       }
     });
   }
+
+  public Polygon getInteractable() { return this.interactable; }
+
+  public double[] getMainMidpoint() { return this.mainMidpoint; }
+
+  public void toggleOn() { interactable.setFill(Color.RED); }
+  public void toggleOff() { interactable.setFill(Color.TRANSPARENT); }
 }
