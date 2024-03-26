@@ -226,6 +226,7 @@ public class Ray {
          * Absorption
          */
         absorbed = true;
+        Main.getExperimenter().addAbsorption();
         System.out.println("Absorption");
         path.add(collisions.get(0));
         return;
@@ -284,12 +285,11 @@ public class Ray {
       line.setFill(Color.YELLOW);
       line.setStroke(Color.YELLOW);
       line.setStrokeWidth(2);
+      line.setMouseTransparent(true);
       lines.add(line);
 
       Main.getGroup().getChildren().add(line);
     }
-
-    toggleOff();
 
     if (!absorbed) {
       Flag flag = new Flag(getFlagPos());

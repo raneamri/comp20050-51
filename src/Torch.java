@@ -55,6 +55,17 @@ public class Torch {
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
+        if (Main.rays.size() >= 6) {
+          for (Torch t : Main.torchs) {
+            t.toggleOff();
+            interactable = new Polygon();
+            t.interactable.setOnMouseClicked(null);
+          }
+          return;
+          /**
+           * Guessing phase
+           */
+        }
         // passing in hex side midpoint and hex centre to shoot ray
         System.out.println("Torch clicked. Ray cast at: " + mainMidpoint[0] +
                            " " + mainMidpoint[1]);
@@ -65,12 +76,6 @@ public class Torch {
         interactable.setFill(Color.YELLOW);
 
         Main.rays.add(ray);
-
-        if (Main.rays.size() == 6) {
-          /**
-           * Guessing phase
-           */
-        }
       }
     });
   }

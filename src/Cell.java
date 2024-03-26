@@ -50,8 +50,14 @@ public class Cell {
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
+        if (Main.rays.size() < Main.MAX_RAYS ||
+            Main.markers.size() >= Main.MAX_MARKERS || hasMarker) {
+          return;
+        }
+
         Marker marker =
             new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
+        Main.markers.add(marker);
         Main.getGroup().getChildren().add(marker.getInteractable());
 
         hasMarker = true;

@@ -7,22 +7,25 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
   /**
    * Constant variables
    */
-  private static final int HEIGHT = 1024;
-  private static final int WIDTH = 1024;
-  public static final int MAX_ATOMS = 6;
-  public static final int MAX_RAYS = 3;
+  private static final int HEIGHT = 256 * 4;
+  private static final int WIDTH = 256 * 4;
+  public static final int MAX_ATOMS = 5;
+  public static final int MAX_RAYS = 6;
+  public static final int MAX_MARKERS = 5;
 
   /**
    * Player classes
    */
-  private static Setter setter = new Setter();
-  private static Experimenter experimenter = new Experimenter();
+  private static Setter setter;
+  private static Experimenter experimenter;
 
   /**
    * Game assets
@@ -32,6 +35,8 @@ public class Main extends Application {
   public static ArrayList<Torch> torchs = new ArrayList<>();
   public static ArrayList<Ray> rays = new ArrayList<>();
   public static ArrayList<Flag> flags = new ArrayList<>();
+  public static ArrayList<Marker> markers = new ArrayList<>();
+  public static Text absorptionsDisplay = new Text();
 
   /**
    * JavaFX start function
@@ -53,7 +58,10 @@ public class Main extends Application {
     scene.getStylesheets().add(
         getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
-    menuTitle.setStyle("-fx-text-fill: white; -fx-font-size: 100;");
+    menuTitle.setFont(Font.font("Arial", 100));
+    menuTitle.setStyle("-fx-text-fill: white");
+    absorptionsDisplay.setFont(Font.font("Arial", 20));
+    absorptionsDisplay.setStyle("-fx-font-weight: bold");
     System.out.println("Stylesheet fetched");
 
     /**
@@ -74,12 +82,14 @@ public class Main extends Application {
     StackPane.setAlignment(startBtn, Pos.CENTER);
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
+    StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
 
     /**
      * Adding to root
      */
     root.getChildren().add(startBtn);
     root.getChildren().add(menuTitle);
+    root.getChildren().add(absorptionsDisplay);
 
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+ (51)");
@@ -93,6 +103,10 @@ public class Main extends Application {
     Board board = new Board();
     board.getBoardGroup();
     root.getChildren().add(getGroup());
+
+    experimenter = new Experimenter();
+    setter = new Setter();
+
     setter.placeAtoms();
   }
 
