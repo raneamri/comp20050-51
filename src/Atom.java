@@ -7,6 +7,7 @@ public class Atom extends Circle {
 
   public Atom(double centerX, double centerY) {
     super(centerX, centerY, RADIUS);
+    setMouseTransparent(true);
     setFill(Color.RED);
   }
 

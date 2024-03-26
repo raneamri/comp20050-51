@@ -25,4 +25,14 @@ public class Flag {
   }
 
   public Polygon getInteractable() { return this.interactable; }
+
+  public void toggleOn() {
+    interactable.setFill(Color.BLUE);
+    interactable.setStroke(Color.BLUEVIOLET);
+  }
+
+  public void toggleOff() {
+    interactable.setFill(Color.TRANSPARENT);
+    interactable.setStroke(Color.TRANSPARENT);
+  }
 }

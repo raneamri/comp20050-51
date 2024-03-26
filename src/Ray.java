@@ -295,6 +295,8 @@ public class Ray {
       Flag flag = new Flag(getFlagPos());
       Main.getGroup().getChildren().add(flag.getInteractable());
     }
+
+    toggleOff();
   }
 
   public void toggleOn() {

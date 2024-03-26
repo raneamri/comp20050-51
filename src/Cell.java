@@ -46,12 +46,23 @@ public class Cell {
      */
     hexagon.setFill(Color.TRANSPARENT);
     hexagon.setStroke(Color.RED);
+    hexagon.setStrokeWidth(2);
 
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
-        if (Main.rays.size() < Main.MAX_RAYS ||
-            Main.markers.size() >= Main.MAX_MARKERS || hasMarker) {
+        if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
+          return;
+        } else if (Main.markers.size() >= Main.MAX_MARKERS) {
+          for (Atom a : Main.atoms) {
+            a.toggleOn();
+          }
+          for (Ray r : Main.rays) {
+            r.toggleOn();
+          }
+          for (Flag f : Main.flags) {
+            f.toggleOff();
+          }
           return;
         }
 
@@ -179,7 +190,7 @@ public class Cell {
       double centerY = hexagon.getBoundsInParent().getCenterY();
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
-      // a.toggleOff();
+      a.toggleOff();
 
       System.out.println("Atom at " + coords[0] + " " + coords[1]);
 
