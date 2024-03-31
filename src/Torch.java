@@ -55,20 +55,30 @@ public class Torch {
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
-        if (Main.rays.size() >= 6) {
+        if (Main.atoms.size() < Main.MAX_ATOMS) {
+          return;
+        }
+
+        if (Main.rays.size() >= Main.MAX_RAYS - 1) {
+          ray = new Ray(mainMidpoint, cell);
+          Main.rays.add(ray);
+
           for (Torch t : Main.torchs) {
             t.toggleOff();
-            interactable = new Polygon();
             t.interactable.setOnMouseClicked(null);
           }
+
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+
           return;
-          /**
-           * Guessing phase
-           */
         }
 
         // passing in hex side midpoint and hex centre to shoot ray
-        ray = new Ray(mainMidpoint[0], mainMidpoint[1], cell);
+        ray = new Ray(mainMidpoint, cell);
         interactable.setOnMouseClicked(null);
         interactable.setOnMouseEntered(null);
         interactable.setOnMouseExited(null);
@@ -83,6 +93,6 @@ public class Torch {
 
   public double[] getMainMidpoint() { return this.mainMidpoint; }
 
-  public void toggleOn() { interactable.setFill(Color.RED); }
-  public void toggleOff() { interactable.setFill(Color.TRANSPARENT); }
+  public void toggleOn() { interactable.setVisible(true); }
+  public void toggleOff() { interactable.setVisible(false); }
 }

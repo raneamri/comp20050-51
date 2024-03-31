@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -19,7 +20,7 @@ public class Main extends Application {
   private static final int WIDTH = 256 * 4;
   public static final int MAX_ATOMS = 5;
   public static final int MAX_RAYS = 6;
-  public static final int MAX_MARKERS = 5;
+  public static final int MAX_MARKERS = 8;
 
   /**
    * Player classes
@@ -37,6 +38,8 @@ public class Main extends Application {
   public static ArrayList<Flag> flags = new ArrayList<>();
   public static ArrayList<Marker> markers = new ArrayList<>();
   public static Text absorptionsDisplay = new Text();
+  public static Text scoreDisplay = new Text();
+  public static Button replayBtn = new Button("Replay");
 
   /**
    * JavaFX start function
@@ -58,23 +61,44 @@ public class Main extends Application {
     scene.getStylesheets().add(
         getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
+    replayBtn.getStyleClass().add("button");
     menuTitle.setFont(Font.font("Arial", 100));
     menuTitle.setStyle("-fx-text-fill: white");
     absorptionsDisplay.setFont(Font.font("Arial", 20));
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
-    System.out.println("Stylesheet fetched");
+    scoreDisplay.setFont(Font.font("Arial", 30));
+    scoreDisplay.setStyle("-fx-font-weight: bold");
+    // System.out.println("Stylesheet fetched");
 
     /**
      * Button actions
      */
     startBtn.setOnAction(event -> {
-      System.out.println("Play");
-      ingame(primaryStage, root);
       for (int i = 0; i < 2; i++)
         root.getChildren().remove(0);
-      System.out.println("Menu hidden");
+
+      ingame(primaryStage, root);
     });
-    startBtn.setScaleZ(200);
+    startBtn.setScaleX(1.5);
+    startBtn.setScaleY(1.5);
+
+    replayBtn.setOnAction(event -> {
+      root.getChildren().clear();
+      root.getChildren().add(absorptionsDisplay);
+      root.getChildren().add(scoreDisplay);
+      root.getChildren().add(replayBtn);
+
+      scoreDisplay.setFill(Color.TRANSPARENT);
+      replayBtn.setVisible(false);
+      replayBtn.setDisable(true);
+
+      clearAssets();
+
+      ingame(primaryStage, root);
+    });
+    replayBtn.setScaleZ(200);
+    replayBtn.setVisible(false);
+    replayBtn.setDisable(true);
 
     /**
      * Alignments
@@ -83,6 +107,8 @@ public class Main extends Application {
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
+    StackPane.setMargin(scoreDisplay, new Insets(-800, 0, 0, 0));
+    StackPane.setMargin(replayBtn, new Insets(-725, 0, 0, 0));
 
     /**
      * Adding to root
@@ -90,6 +116,8 @@ public class Main extends Application {
     root.getChildren().add(startBtn);
     root.getChildren().add(menuTitle);
     root.getChildren().add(absorptionsDisplay);
+    root.getChildren().add(scoreDisplay);
+    root.getChildren().add(replayBtn);
 
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+ (51)");
@@ -106,13 +134,21 @@ public class Main extends Application {
 
     experimenter = new Experimenter();
     setter = new Setter();
-
-    setter.placeAtoms();
   }
 
   public static Group getGroup() { return group; }
   public static Setter getSetter() { return setter; }
   public static Experimenter getExperimenter() { return experimenter; }
+
+  private void clearAssets() {
+    group = new Group();
+
+    atoms.clear();
+    torchs.clear();
+    rays.clear();
+    flags.clear();
+    markers.clear();
+  }
 
   /**
    * Conventional main function

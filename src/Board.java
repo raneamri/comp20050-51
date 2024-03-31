@@ -40,7 +40,7 @@ public class Board {
           Polygon hexagon = cell.createHexagon(HEXAGON_SIZE);
           Text numText =
               new Text(Integer.toString(row) + " " + Integer.toString(col));
-          numText.setStroke(Color.color(0.05, 0.05, 0.05));
+          numText.setStroke(Color.color(0.15, 0.15, 0.15));
           numText.setLayoutX(x);
           numText.setLayoutY(y);
           Main.getGroup().getChildren().add(numText);
@@ -59,6 +59,7 @@ public class Board {
               t = new Torch(cell, (i == 0) ? 6 : 8);
               cell.addTorch(t);
               Main.getGroup().getChildren().add(t.getInteractable());
+              Main.torchs.add(t);
             }
           }
           if (row == NUM_ROWS - 1) {
@@ -66,6 +67,7 @@ public class Board {
               t = new Torch(cell, (i == 0) ? 0 : 2);
               cell.addTorch(t);
               Main.getGroup().getChildren().add(t.getInteractable());
+              Main.torchs.add(t);
             }
           }
           if (col == 0) {
@@ -74,6 +76,7 @@ public class Board {
                 t = new Torch(cell, (i == 0) ? 4 : 6);
                 cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.getInteractable());
+                Main.torchs.add(t);
               }
             }
             if (row >= NUM_ROWS / 2) {
@@ -81,6 +84,7 @@ public class Board {
                 t = new Torch(cell, (i == 0) ? 2 : 4);
                 cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.getInteractable());
+                Main.torchs.add(t);
               }
             }
           }
@@ -90,6 +94,7 @@ public class Board {
                 t = new Torch(cell, (i == 0) ? 8 : 10);
                 cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.getInteractable());
+                Main.torchs.add(t);
               }
             }
             if (row >= NUM_ROWS / 2) {
@@ -97,6 +102,7 @@ public class Board {
                 t = new Torch(cell, (i == 0) ? 10 : 0);
                 cell.addTorch(t);
                 Main.getGroup().getChildren().add(t.getInteractable());
+                Main.torchs.add(t);
               }
             }
           }

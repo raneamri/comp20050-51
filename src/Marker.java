@@ -3,7 +3,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 
 public class Marker {
-  private final int RADIUS = 11;
+  private final int RADIUS = 9;
   private Circle interactable;
 
   public Marker(Pair<Double, Double> coords) {
@@ -11,7 +11,7 @@ public class Marker {
 
     interactable.setFill(Color.BLUE);
     interactable.setStroke(Color.BLUEVIOLET);
-    interactable.setStrokeWidth(2);
+    interactable.setStrokeWidth(3);
   }
 
   public Circle getInteractable() { return this.interactable; }

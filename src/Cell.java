@@ -51,9 +51,50 @@ public class Cell {
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
-        if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
+        if (Main.atoms.size() < Main.MAX_ATOMS) {
+          /**
+           * Allow setter to place atoms until all atoms are placed
+           */
+          addAtom();
+
+          if (Main.atoms.size() == Main.MAX_ATOMS) {
+            try {
+              Thread.sleep(100);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+
+            for (Atom a : Main.atoms) {
+              a.toggleOff();
+            }
+          }
+
           return;
-        } else if (Main.markers.size() >= Main.MAX_MARKERS) {
+
+        } else if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
+          /**
+           * Allow no placement until all rays have been picked
+           */
+          return;
+        } else if (Main.markers.size() >= Main.MAX_MARKERS - 1) {
+          /**
+           * Allow marker placement
+           */
+          hasMarker = true;
+
+          if (hasCorrectGuess()) {
+            Main.getExperimenter().addScore(1);
+          }
+
+          Marker marker =
+              new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
+          Main.markers.add(marker);
+          Main.getGroup().getChildren().add(marker.getInteractable());
+
+          Main.getExperimenter().showScore();
+          Main.getExperimenter().showReplay();
+          Main.getExperimenter().hideAbsorptions();
+
           for (Atom a : Main.atoms) {
             a.toggleOn();
           }
@@ -66,12 +107,16 @@ public class Cell {
           return;
         }
 
+        hasMarker = true;
+
+        if (hasCorrectGuess()) {
+          Main.getExperimenter().addScore(1);
+        }
+
         Marker marker =
             new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
         Main.markers.add(marker);
         Main.getGroup().getChildren().add(marker.getInteractable());
-
-        hasMarker = true;
       }
     });
 
@@ -190,9 +235,9 @@ public class Cell {
       double centerY = hexagon.getBoundsInParent().getCenterY();
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
-      a.toggleOff();
+      // a.toggleOff();
 
-      System.out.println("Atom at " + coords[0] + " " + coords[1]);
+      // System.out.println("Atom at " + coords[0] + " " + coords[1]);
 
       Main.getGroup().getChildren().add(a);
       Main.getGroup().getChildren().add(a.coi);
