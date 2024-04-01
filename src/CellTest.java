@@ -8,7 +8,7 @@ public class CellTest {
 
     @Test
     void testCreateHexagon(){
-        Cell newCell = new Cell();
+        Cell newCell = new Cell(4,5);
         Polygon hexagon = newCell.createHexagon(40);
 
         assertNotNull(hexagon);

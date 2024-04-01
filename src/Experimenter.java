@@ -8,9 +8,14 @@ public class Experimenter {
 
   public void setScore(int s) { this.score = s; }
   public int getScore() { return this.score; }
+  public void setAbsorptions(int a) { this.absorptions = a; }
 
   private String absorptionsToString() {
     return "Absorptions: " + Integer.toString(absorptions);
+  }
+
+  public String getToString(){
+    return absorptionsToString();
   }
 
   public void addAbsorption() {
