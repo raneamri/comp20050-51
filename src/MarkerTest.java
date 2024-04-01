@@ -13,7 +13,7 @@ public class MarkerTest {
         assertNotNull(marker);
         assertEquals(Color.BLUE, interactable.getFill());
         assertEquals(Color.BLUEVIOLET, interactable.getStroke());
-        assertEquals(2, interactable.getStrokeWidth());
+        assertEquals(3, interactable.getStrokeWidth());
     }
 
 }
