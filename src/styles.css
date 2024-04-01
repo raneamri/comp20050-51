@@ -2,7 +2,7 @@
 Button class curtesy of Algolia through https://getcssscan.com/css-buttons-examples
 */
 .button {
-    -fx-background-color: radial-gradient(center 100% 100%, radius 100%, #1b1b1b, #313131);
+    -fx-background-color: radial-gradient(center 100% 100%, radius 100%, #000000, #222222);
     -fx-border-color: transparent;
     -fx-border-radius: 6px;
     -fx-border-width: 0;
