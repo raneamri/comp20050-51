@@ -1,4 +1,4 @@
-/*
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.scene.paint.Color;
@@ -42,4 +42,4 @@ public class AtomandCOITest{
         assertEquals(atom1.equals(atom2), atom2.equals(atom1));
     }
 
-}*/
+}

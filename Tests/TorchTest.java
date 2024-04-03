@@ -1,4 +1,4 @@
-/*import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
@@ -31,4 +31,4 @@ public class TorchTest {
         assertEquals(8.5,result2[1]);
         assertNotEquals(8,result2[1]);
     }
-}*/
+}

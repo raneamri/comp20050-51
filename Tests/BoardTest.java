@@ -1,8 +1,10 @@
-/*import javafx.scene.Node;
+import javafx.scene.Node;
 import static org.junit.jupiter.api.Assertions.*;
-
+import javafx.scene.control.Button;
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
+
+
 
 public class BoardTest {
     final int NUM_ROWS = 9;
@@ -28,6 +30,9 @@ public class BoardTest {
     @Test
     void testGetBoardGroup(){
         Board newBoard = new Board();
+        Main main = new Main();
+        Button startBtn = new Button("Play");
+
         newBoard.getBoardGroup();
 
         boolean containsPolygon = false;
@@ -56,4 +61,3 @@ public class BoardTest {
         assertEquals(expectedHexagons, newBoard.getCells()[4].length);
     }
 }
-*/
