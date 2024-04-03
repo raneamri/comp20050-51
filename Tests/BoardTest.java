@@ -30,8 +30,6 @@ public class BoardTest {
     @Test
     void testGetBoardGroup(){
         Board newBoard = new Board();
-        Main main = new Main();
-        Button startBtn = new Button("Play");
 
         newBoard.getBoardGroup();
 
