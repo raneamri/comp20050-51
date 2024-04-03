@@ -68,7 +68,7 @@ public class Main extends Application {
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
     scoreDisplay.setFont(Font.font("Arial", 30));
     scoreDisplay.setStyle("-fx-font-weight: bold");
-    // System.out.println("Stylesheet fetched");
+    System.out.println("Stylesheet fetched successfully");
 
     /**
      * Button actions
@@ -120,7 +120,7 @@ public class Main extends Application {
     root.getChildren().add(replayBtn);
 
     primaryStage.setScene(scene);
-    primaryStage.setTitle("BlackBox+ (51)");
+    primaryStage.setTitle("BlackBox+");
     primaryStage.show();
   }
 

@@ -1,12 +1,11 @@
 import java.util.Random;
 
 public class Setter {
-  private int score = 0;
-
   public Setter() {}
 
   /**
    * Places atoms on the board at random locations
+   * (Outdated function used for bugfixing)
    */
   public void placeAtoms() {
     Random rand = new Random();
@@ -21,8 +20,4 @@ public class Setter {
       }
     }
   }
-
-  public void setScore(int s) { this.score = s; }
-
-  public int getScore() { return this.score; }
 }

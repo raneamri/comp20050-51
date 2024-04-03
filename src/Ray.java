@@ -16,6 +16,11 @@ public class Ray {
 
   private boolean absorbed = false;
 
+  /**
+   *
+   * @param startPos Midpoint of torch that spawned the Ray
+   * @param cell Cell object within which Ray is spawned
+   */
   public Ray(double[] startPos, Cell cell) {
     coords.add(new Pair<Double, Double>(startPos[0], startPos[1]));
 
@@ -26,9 +31,19 @@ public class Ray {
     drawRays();
   }
 
+  /**
+   * Recursive method that computes path of the ray. This method of finding
+   * the path is based on the assumption that any ray cast into the board passes
+   * through the midpoint of any Cell it crosses. We use a "virtual pointer"
+   * which tells us where the Ray's path finding is currently at and a direction
+   * to recursively reach either the end of the board or an absorption.
+   *
+   * @param dir current direction of the ray
+   * @param cell current cell virtual pointer is at
+   */
   private void checkCollisions(Direction dir, Cell cell) {
     /**
-     * Pre checks
+     * Pre checks (& base case)
      */
     if (cell == null) {
       return;
@@ -45,8 +60,10 @@ public class Ray {
     Direction nextDir = dir;
     finalDirection = nextDir;
 
+    /**
+     * Compute all possible collisions for the current cell
+     */
     ArrayList<Cell> collisions = new ArrayList<>();
-
     for (Direction d : Direction.values()) {
       Cell nextCollision = cell.getAdjacentHexagon(d);
 
@@ -57,6 +74,15 @@ public class Ray {
       }
     }
 
+    /**
+     * The maximum collisions that can occur at a cell is 3.
+     * There are four scenarios for collisions:
+     *  - Absorption
+     *  - 60° reflection
+     *  - 120° reflection
+     *  - 360° reflection
+     *
+     */
     if (collisions.size() == 1) {
       /**
        * Always 60 degree reflection or absorption
@@ -72,6 +98,9 @@ public class Ray {
         path.add(collisions.get(0));
         return;
       } else {
+        /**
+         * 60 degree reflection
+         */
         nextDir = sixtyReflection(dir, cell.getCenter(),
                                   collisions.get(0).getCenter());
         finalDirection = nextDir;
@@ -79,6 +108,8 @@ public class Ray {
     } else if (collisions.size() == 2) {
       /**
        * Always 120 degree reflection or full reflection
+       * It's unclear but full reflection from 2 atom collisions are handled
+       * within onetwentyReflection
        */
       nextDir = onetwentyReflection(dir, cell.getCenter(),
                                     collisions.get(0).getCenter(),
@@ -86,25 +117,33 @@ public class Ray {
       finalDirection = nextDir;
     } else if (collisions.size() == 3) {
       /**
-       * Always full reflection
+       * Full reflection
        */
       nextDir = fullReflection(nextDir);
       finalDirection = nextDir;
     }
 
+    /**
+     * Find next cell for recursion
+     */
     Cell next = cell.getAdjacentHexagon(nextDir);
 
+    /**
+     * Recursive call
+     */
     checkCollisions(nextDir, next);
   }
 
   /**
    * Takes two points and returns the general direction of the slope
+   *
    * @param p1
    * @param p2
    * @return Direction (enum) type method resolved
    */
   private Direction slopeToDirection(double[] p1, double[] p2) {
     double error = 1e-3d;
+
     if (Math.abs(p1[1] - p2[1]) < error) {
       if (p1[0] < p2[0]) {
         return Direction.LEFT_RIGHT;
@@ -126,10 +165,25 @@ public class Ray {
     }
   }
 
+  /**
+   * Finds the distance between two points
+   *
+   * @param p1 point 1
+   * @param p2 point 2
+   * @return d between p1 -> p2, as a double
+   */
   private double distanceBetween(double p1[], double p2[]) {
     return Math.sqrt(Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2));
   }
 
+  /**
+   * Handles 60° reflections by manipulating the Direction enum type
+   *
+   * @param dir direction before reflection
+   * @param p1 center point of cell the recursion is currently at
+   * @param p2 center point of atom
+   * @return new computed direction
+   */
   private Direction sixtyReflection(Direction dir, double[] p1, double p2[]) {
     switch (dir) {
     case LEFT_RIGHT:
@@ -177,6 +231,16 @@ public class Ray {
     }
   }
 
+  /**
+   * This method handles 120° reflection AND total internal reflection for two
+   * atom collisions
+   *
+   * @param dir direction before reflection
+   * @param p1 center point of cell the recursion is currently at
+   * @param p2 center point of atom 1
+   * @param p3 center point of atom 2
+   * @return
+   */
   private Direction onetwentyReflection(Direction dir, double[] p1, double[] p2,
                                         double[] p3) {
 
@@ -251,6 +315,12 @@ public class Ray {
     }
   }
 
+  /**
+   * Finds 360° reflection of ray by inversing current Direction
+   *
+   * @param dir direction to inverse
+   * @return inversed direction
+   */
   private Direction fullReflection(Direction dir) {
     switch (dir) {
     case LEFT_RIGHT:
@@ -276,6 +346,15 @@ public class Ray {
     }
   }
 
+  /**
+   * Computes the final point the Ray most cross in order to meet the edge of
+   * the board. This is done by taking the final Cell the Ray crossed and
+   * finding the codirectional Torch assigned to that Cell's midpoint.
+   *
+   * @param c final Cell the Ray crossed
+   * @return point required to meet edge of the board, or null if the Ray was
+   *     absorbed
+   */
   private Pair<Double, Double> addFinalPoint(Cell c) {
     for (Torch t : c.getTorch()) {
       if (slopeToDirection(c.getCenter(), t.getMainMidpoint()) ==
@@ -286,6 +365,10 @@ public class Ray {
     return null;
   }
 
+  /**
+   * Iterates over the points gathered by recursion and essentially draws a
+   * JavaFX Polyray
+   */
   private void drawRays() {
     for (Cell cell : path) {
       coords.add(

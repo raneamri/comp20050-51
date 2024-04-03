@@ -133,7 +133,7 @@ public class Cell {
    * @param y2
    * @return double[] wrapped coordinates of the midpoint
    */
-  public double[] midPoint(double x1, double y1, double x2, double y2) {
+  public double[] midpoint(double x1, double y1, double x2, double y2) {
     double midpoint[] = {(x1 + x2) / 2, (y1 + y2) / 2};
     return midpoint;
   }
