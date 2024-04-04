@@ -12,12 +12,11 @@ public class CellTest {
     Cell newCell = new Cell(4, 5);
     Polygon hexagon = newCell.createHexagon(40);
 
-    MouseEvent mouseEvent =
-        new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0,
-                       MouseEvent.MOUSE_CLICKED, 1, false, false, false, false,
-                       false, false, false, false, false, false, null);
+    MouseEvent mouseEvent = new MouseEvent(
+        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
+        false, false, false, false, false, false, false, false, false, null);
 
-    newCell.getHexagon().fireEvent(mouseEvent);
+    newCell.getHexagon().fireEvent();
 
     assertNotNull(hexagon);
     assertEquals(Color.TRANSPARENT, hexagon.getFill());

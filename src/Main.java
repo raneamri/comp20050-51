@@ -6,6 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -129,7 +131,8 @@ public class Main extends Application {
      * Set up board
      */
     Board board = new Board();
-    board.getBoardGroup();
+
+    group = board.getBoardGroup();
     root.getChildren().add(getGroup());
 
     experimenter = new Experimenter();

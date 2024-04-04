@@ -1,3 +1,4 @@
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
@@ -26,7 +27,9 @@ public class Board {
     }
   }
 
-  public void getBoardGroup() {
+  public Group getBoardGroup() {
+    Group group = new Group();
+
     for (int row = 0; row < NUM_ROWS; row++) {
       for (int col = 0; col < cells[row].length; col++) {
         Cell cell = cells[row][col];
@@ -43,11 +46,11 @@ public class Board {
           numText.setStroke(Color.color(0.15, 0.15, 0.15));
           numText.setLayoutX(x);
           numText.setLayoutY(y);
-          Main.getGroup().getChildren().add(numText);
+          group.getChildren().add(numText);
 
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);
-          Main.getGroup().getChildren().add(hexagon);
+          group.getChildren().add(hexagon);
 
           /**
            * Passing in the array position of the hexagon point needed to
@@ -58,7 +61,7 @@ public class Board {
             for (int i = 0; i < 2; i++) {
               t = new Torch(cell, (i == 0) ? 6 : 8);
               cell.addTorch(t);
-              Main.getGroup().getChildren().add(t.getInteractable());
+              group.getChildren().add(t.getInteractable());
               Main.torchs.add(t);
             }
           }
@@ -66,7 +69,7 @@ public class Board {
             for (int i = 0; i < 2; i++) {
               t = new Torch(cell, (i == 0) ? 0 : 2);
               cell.addTorch(t);
-              Main.getGroup().getChildren().add(t.getInteractable());
+              group.getChildren().add(t.getInteractable());
               Main.torchs.add(t);
             }
           }
@@ -75,7 +78,7 @@ public class Board {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 4 : 6);
                 cell.addTorch(t);
-                Main.getGroup().getChildren().add(t.getInteractable());
+                group.getChildren().add(t.getInteractable());
                 Main.torchs.add(t);
               }
             }
@@ -83,7 +86,7 @@ public class Board {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 2 : 4);
                 cell.addTorch(t);
-                Main.getGroup().getChildren().add(t.getInteractable());
+                group.getChildren().add(t.getInteractable());
                 Main.torchs.add(t);
               }
             }
@@ -93,7 +96,7 @@ public class Board {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 8 : 10);
                 cell.addTorch(t);
-                Main.getGroup().getChildren().add(t.getInteractable());
+                group.getChildren().add(t.getInteractable());
                 Main.torchs.add(t);
               }
             }
@@ -101,7 +104,7 @@ public class Board {
               for (int i = 0; i < 2; i++) {
                 t = new Torch(cell, (i == 0) ? 10 : 0);
                 cell.addTorch(t);
-                Main.getGroup().getChildren().add(t.getInteractable());
+                group.getChildren().add(t.getInteractable());
                 Main.torchs.add(t);
               }
             }
@@ -109,6 +112,8 @@ public class Board {
         }
       }
     }
+
+    return group;
   }
 
   /**

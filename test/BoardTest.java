@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Polygon;
@@ -31,11 +32,11 @@ public class BoardTest {
   void testGetBoardGroup() {
     Board newBoard = new Board();
 
-    newBoard.getBoardGroup();
+    Group group = newBoard.getBoardGroup();
 
     boolean containsPolygon = false;
 
-    for (Node node : Main.getGroup().getChildren()) {
+    for (Node node : group.getChildren()) {
       if (node instanceof Polygon) {
         containsPolygon = true;
         break;
