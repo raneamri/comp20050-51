@@ -10,7 +10,7 @@ public class ExperimenterTest {
 
     assertEquals("Absorptions: 5", experimenter.getToString());
   }
-  // not working I don't know why
+
   /*@Test
   void testShowAbsorptions(){
       Experimenter experimenter = new Experimenter();

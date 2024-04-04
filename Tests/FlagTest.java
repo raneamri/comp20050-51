@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
+
 public class FlagTest {
   @Test
   void testFlag() {
