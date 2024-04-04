@@ -80,7 +80,7 @@ public class Cell {
           /**
            * Allow marker placement
            */
-          hasMarker = true;
+          addMarker();
 
           if (hasCorrectGuess()) {
             Main.getExperimenter().addScore(1);
@@ -257,6 +257,8 @@ public class Cell {
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }
+
+  public void addMarker() { hasMarker = true; }
 
   /**
    * Simplified check for if user has pinpointed the right atom

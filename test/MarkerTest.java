@@ -17,4 +17,13 @@ public class MarkerTest {
     assertEquals(Color.BLUEVIOLET, interactable.getStroke());
     assertEquals(3, interactable.getStrokeWidth());
   }
+
+  @Test
+  void testMarkerScoreProperty() {
+    Cell cell = new Cell(1, 1);
+    cell.addAtom();
+    cell.addMarker();
+
+    assertTrue(cell.hasCorrectGuess());
+  }
 }
