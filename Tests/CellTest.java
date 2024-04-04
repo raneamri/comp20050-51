@@ -1,4 +1,4 @@
-/*import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.scene.shape.Polygon;
@@ -8,7 +8,7 @@ public class CellTest {
 
     @Test
     void testCreateHexagon(){
-        Cell newCell = new Cell();
+        Cell newCell = new Cell(4,5);
         Polygon hexagon = newCell.createHexagon(40);
 
         assertNotNull(hexagon);
@@ -18,4 +18,4 @@ public class CellTest {
 
     //Debugging fractures for mouse event in cell class
 
-}*/
+}

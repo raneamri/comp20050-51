@@ -1,4 +1,4 @@
-/*
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.scene.paint.Color;
@@ -15,7 +15,7 @@ public class AtomandCOITest{
         newAtom.coi = new COI(40, 40);
         assertNotNull(newAtom.coi);
         assertEquals(Color.TRANSPARENT, newAtom.coi.getFill());
-        assertEquals(Color.WHITE, newAtom.coi.getStroke());
+        assertEquals(Color.color(0.9, 0.9, 0.9), newAtom.coi.getStroke());
 
         Atom newAtom2 = new Atom(35, 37);
         assertNotNull(newAtom2);
@@ -42,4 +42,4 @@ public class AtomandCOITest{
         assertEquals(atom1.equals(atom2), atom2.equals(atom1));
     }
 
-}*/
+}
