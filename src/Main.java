@@ -1,25 +1,35 @@
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
   /**
    * Constant variables
    */
-  private static final int HEIGHT = 256 * 4;
-  private static final int WIDTH = 256 * 4;
+  Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+  int h = (int) screensize.getHeight();
+  int w = (int) screensize.getWidth();
+  private final int HEIGHT = 256*4;
+  private final int WIDTH = 256*4;
   public static final int MAX_ATOMS = 5;
   public static final int MAX_RAYS = 6;
   public static final int MAX_MARKERS = 8;
@@ -58,19 +68,42 @@ public class Main extends Application {
      */
     StackPane root = new StackPane();
     Button startBtn = new Button("Play");
+    Button instructBtn = new Button("Instructions");
+    Button exitBtn = new Button("X");
+    Button nextBtn = new Button("next");
     Label menuTitle = new Label("BlackBox+");
-    Scene scene = new Scene(root, HEIGHT, WIDTH);
+    Scene scene = new Scene(root);
 
     /**
      * Style elements
      */
     root.setStyle("-fx-background-color: black;");
+    /*  String path = "C:/Users/pinto/Downloads/atom.mp4";
+      Media media = new Media(new File(path).toURI().toString());
+      MediaPlayer mediaPlayer = new MediaPlayer(media);
+      MediaView mediaView = new MediaView(mediaPlayer);
+
+      mediaView.setFitWidth(800);
+      mediaView.setFitHeight(600);
+
+      mediaPlayer.play();
+    */
+
+    DropShadow dropShadow = new DropShadow();
+    dropShadow.setColor(Color.WHITE);
+    dropShadow.setOffsetX(3);
+    dropShadow.setOffsetY(3);
+    menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
         getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
+    instructBtn.getStyleClass().add("button");
     replayBtn.getStyleClass().add("button");
-    menuTitle.setFont(Font.font("Arial", 100));
+    menuTitle.setFont(Font.font("Verdana", 100));
     menuTitle.setStyle("-fx-text-fill: white");
+    menuTitle.setOpacity(0);
+    startBtn.setOpacity(0);
+    instructBtn.setOpacity(0);
     absorptionsDisplay.setFont(Font.font("Arial", 20));
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
     scoreDisplay.setFont(Font.font("Arial", 30));
@@ -78,16 +111,95 @@ public class Main extends Application {
     System.out.println("Stylesheet fetched successfully");
 
     /**
+     * Transitions
+     */
+    FadeTransition titleFadeIn = new FadeTransition(Duration.seconds(6), menuTitle);
+    titleFadeIn.setFromValue(0.0);
+    titleFadeIn.setToValue(1.0);
+    titleFadeIn.play();
+
+    FadeTransition buttonFadeIn = new FadeTransition(Duration.seconds(5), startBtn);
+    buttonFadeIn.setFromValue(0.0);
+    buttonFadeIn.setToValue(1.0);
+    buttonFadeIn.play();
+
+    FadeTransition instructFadeIn = new FadeTransition(Duration.seconds(5), instructBtn);
+    instructFadeIn.setFromValue(0.0);
+    instructFadeIn.setToValue(1.0);
+    instructFadeIn.play();
+
+    /**
+     * Text elements
+     */
+
+    Text text = new Text("Setter Instructions");
+    text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    text.setFill(Color.BLACK);
+
+    Text text2 = new Text("Experimenter Instructions");
+    text2.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    text2.setFill(Color.BLACK);
+
+    Text setter = new Text("\n\nSet up four 'atoms' by pressing a hexagon on the board.\n\n" +
+            "Secretly work out ray path and announce to the experimenter\nthe outcome of the ray.\n");
+    setter.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+    setter.setFill(Color.BLACK);
+
+    Text experimenter = new Text("\n\nDeduce position of atoms by sending in 'rays'.\n\n" +
+            "Send a ray by pressing the triangle on the edge of the board.\n" +
+            "\nWhen you believe you have located all the atoms, announce the\nend of the round.");
+    experimenter.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+    experimenter.setFill(Color.BLACK);
+
+    Rectangle background = new Rectangle(500,300);
+    background.setFill(Color.WHITE);
+    background.setOpacity(0.9);
+
+    /**
      * Button actions
      */
+
     startBtn.setOnAction(event -> {
-      for (int i = 0; i < 2; i++)
+      for (int i = 0; i < 3; i++)
         root.getChildren().remove(0);
 
       ingame(primaryStage, root);
     });
     startBtn.setScaleX(1.5);
     startBtn.setScaleY(1.5);
+
+    instructBtn.setOnAction(event -> {
+      root.getChildren().add(background);
+      root.getChildren().add(text);
+      root.getChildren().add(setter);
+      root.getChildren().add(exitBtn);
+      root.getChildren().add(nextBtn);
+    });
+
+    AtomicBoolean nextBtnPressed = new AtomicBoolean(false);
+    nextBtn.setOnAction(event ->{
+      root.getChildren().remove(text);
+      root.getChildren().remove(setter);
+      root.getChildren().remove(nextBtn);
+      root.getChildren().add(text2);
+      root.getChildren().add(experimenter);
+      nextBtnPressed.set(true);
+    });
+
+    exitBtn.setOnAction(event -> {
+      if(nextBtnPressed.get()){
+        root.getChildren().remove(experimenter);
+        root.getChildren().remove(text2);
+      }
+      else if(!nextBtnPressed.get()){
+        root.getChildren().remove(text);
+        root.getChildren().remove(setter);
+        root.getChildren().remove(nextBtn);
+      }
+      root.getChildren().remove(background);
+      root.getChildren().remove(exitBtn);
+      nextBtnPressed.set(false);
+    });
 
     replayBtn.setOnAction(event -> {
       root.getChildren().clear();
@@ -107,12 +219,22 @@ public class Main extends Application {
     replayBtn.setVisible(false);
     replayBtn.setDisable(true);
 
+
     /**
      * Alignments
      */
+
     StackPane.setAlignment(startBtn, Pos.CENTER);
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
+
+    StackPane.setMargin(instructBtn, new Insets(120, 0, 0, 0));
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
+    StackPane.setMargin(exitBtn, new Insets(-250,-400,0,0));
+    StackPane.setMargin(text, new Insets(-230,0,0,0));
+    StackPane.setMargin(text2, new Insets(-230,0,0,0));
+    StackPane.setMargin(setter, new Insets(-100,-20,0,0));
+    StackPane.setMargin(experimenter, new Insets(-100,-15,0,0));
+    StackPane.setMargin(nextBtn, new Insets(250,400,0,0));
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
     StackPane.setMargin(scoreDisplay, new Insets(-800, 0, 0, 0));
     StackPane.setMargin(replayBtn, new Insets(-725, 0, 0, 0));
@@ -121,14 +243,18 @@ public class Main extends Application {
      * Adding to root
      */
     root.getChildren().add(startBtn);
+    root.getChildren().add(instructBtn);
     root.getChildren().add(menuTitle);
+    //root.getChildren().add(mediaView);
     root.getChildren().add(absorptionsDisplay);
     root.getChildren().add(scoreDisplay);
     root.getChildren().add(replayBtn);
 
+    primaryStage.setFullScreen(true);
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+");
     primaryStage.show();
+
   }
 
   private static void ingame(Stage primaryStage, StackPane root) {
