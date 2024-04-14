@@ -22,11 +22,11 @@ public class TorchTest {
   @Test
   void testMidpoint() {
     Cell cell = new Cell(4, 5);
-    double[] result = cell.midPoint(2, 10, 4, 12);
+    double[] result = cell.midpoint(2, 10, 4, 12);
     assertEquals(3, result[0]);
     assertEquals(11, result[1]);
 
-    double[] result2 = cell.midPoint(-6, 7, 6, 10);
+    double[] result2 = cell.midpoint(-6, 7, 6, 10);
     assertEquals(0, result2[0]);
     assertEquals(8.5, result2[1]);
     assertNotEquals(8, result2[1]);
