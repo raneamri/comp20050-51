@@ -6,6 +6,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 
+/**
+ * The Flag class is a visual prop which indicates the exit point of a ray on
+ * the board. This is made with the JavaFX <a
+ * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Polygon.html">Polygon
+ * class</a>.
+ */
 public class Flag {
   private Polygon interactable;
   private int torchCreator;
@@ -22,7 +28,11 @@ public class Flag {
     label.setLayoutX(x);
     label.setLayoutY(y);
 
-    interactable.getPoints().addAll(x, y - 15, //
+    /*
+     * Hard coded points to draw flag (comments at EOL to prevent intellisense
+     * from collapsing the text)
+     */
+    interactable.getPoints().addAll(x, y - 15,      //
                                     x + 15, y - 15, //
                                     x + 5, y - 20,  //
                                     x + 15, y - 25, //
@@ -61,9 +71,6 @@ public class Flag {
             });
 
   }
-
-
-
 
   public Polygon getInteractable() { return this.interactable; }
 

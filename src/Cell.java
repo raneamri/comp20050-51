@@ -11,6 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 
+/**
+ * Cells are the building blocks of the board. Each cell is a hexagon, but the
+ * Cell class doesn't directly extend the JavaFX <a
+ * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Polygon.html">Polygon
+ * class</a> since cells include torches and assigned atoms.
+ */
 public class Cell {
   /**
    * Final constants
@@ -54,6 +60,9 @@ public class Cell {
     hexagon.setStroke(Color.RED);
     hexagon.setStrokeWidth(2);
 
+    /**
+     * Event handler
+     */
     hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
@@ -132,7 +141,7 @@ public class Cell {
   /**
    * Method uses a switch statement and external methods to find neighbor of a
    * cell in a given direction
-   * This method will often return null
+   * When applied, this method will sometimes return null
    * This is intended and helps map the
    * board's edges
    *
@@ -226,9 +235,6 @@ public class Cell {
       double centerY = hexagon.getBoundsInParent().getCenterY();
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
-      // a.toggleOff();
-
-      // System.out.println("Atom at " + coords[0] + " " + coords[1]);
 
       Main.getGroup().getChildren().add(a);
       Main.getGroup().getChildren().add(a.coi);
@@ -244,7 +250,7 @@ public class Cell {
   public boolean hasAtom() { return this.hasAtom; }
   public Atom getAtom() { return this.atom; }
 
-  public void addTorch(Torch t) {torches.add(t);}
+  public void addTorch(Torch t) { torches.add(t); }
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }

@@ -30,6 +30,4 @@ replay_pid*
 # MacOS
 .DS_Store
 
-META-INF
-MANIFEST.MF
 out

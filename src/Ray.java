@@ -4,14 +4,27 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
+/**
+ * The Ray class is a non trivial class which handles the calculating and
+ * drawing rays on the board. The Ray class does not directly extended the
+ * JavaFX <a
+ * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/shape/Line.html">Line
+ * class</a> and instead uses an ArrayList of coordinates to construct an
+ * ArrayList of Lines.
+ */
 public class Ray {
-  /**
+  /*
    * Polyray drawing utilities
    */
   private ArrayList<Cell> path = new ArrayList<>();
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
   private int torchCreator;
+
+  /*
+   * Tracks last direction passed in recursive call of
+   * <code>checkCollisions()</code>
+   */
   private Direction finalDirection;
 
   private boolean absorbed = false;
@@ -55,13 +68,13 @@ public class Ray {
 
     path.add(cell);
 
-    /**
+    /*
      * Check for collision (aka atoms in adjacent hexagons)
      */
     Direction nextDir = dir;
     finalDirection = nextDir;
 
-    /**
+    /*
      * Compute all possible collisions for the current cell
      */
     ArrayList<Cell> collisions = new ArrayList<>();
@@ -75,7 +88,7 @@ public class Ray {
       }
     }
 
-    /**
+    /*
      * The maximum collisions that can occur at a cell is 3.
      * There are four scenarios for collisions:
      *  - Absorption
@@ -85,13 +98,13 @@ public class Ray {
      *
      */
     if (collisions.size() == 1) {
-      /**
+      /*
        * Always 60 degree reflection or absorption
        */
       if (Objects.isNull(cell.getAdjacentHexagon(dir))
               ? false
               : cell.getAdjacentHexagon(dir).equals(collisions.get(0))) {
-        /**
+        /*
          * Absorption
          */
         absorbed = true;
@@ -99,7 +112,7 @@ public class Ray {
         path.add(collisions.get(0));
         return;
       } else {
-        /**
+        /*
          * 60 degree reflection
          */
         nextDir = sixtyReflection(dir, cell.getCenter(),
@@ -107,7 +120,7 @@ public class Ray {
         finalDirection = nextDir;
       }
     } else if (collisions.size() == 2) {
-      /**
+      /*
        * Always 120 degree reflection or full reflection
        * It's unclear but full reflection from 2 atom collisions are handled
        * within onetwentyReflection
@@ -117,19 +130,19 @@ public class Ray {
                                     collisions.get(1).getCenter());
       finalDirection = nextDir;
     } else if (collisions.size() == 3) {
-      /**
+      /*
        * Full reflection
        */
       nextDir = fullReflection(nextDir);
       finalDirection = nextDir;
     }
 
-    /**
+    /*
      * Find next cell for recursion
      */
     Cell next = cell.getAdjacentHexagon(nextDir);
 
-    /**
+    /*
      * Recursive call
      */
     checkCollisions(nextDir, next);
@@ -383,7 +396,7 @@ public class Ray {
       Line line =
           new Line(coords.get(i).getKey(), coords.get(i).getValue(),
                    coords.get(i + 1).getKey(), coords.get(i + 1).getValue());
-      /**
+      /*
        * Display parameters
        */
       line.setFill(Color.YELLOW);
@@ -401,7 +414,7 @@ public class Ray {
       Main.getGroup().getChildren().add(flag.getInteractable());
     }
 
-     toggleOff();
+    toggleOff();
   }
 
   public void toggleOn() {

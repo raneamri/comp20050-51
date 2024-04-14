@@ -1,5 +1,9 @@
 import javafx.scene.paint.Color;
 
+/**
+ * The Experimenter class keeps track of its own advancements, as well as the
+ * simple logic behind displaying wins, losses and score.
+ */
 public class Experimenter {
   private int score = 0;
   private int absorptions = 0;
@@ -9,15 +13,13 @@ public class Experimenter {
   public void addScore(int s) { this.score++; }
   public int getScore() { return this.score; }
 
-  public void setAbsorptions(int a){this.absorptions=a;}
+  public void setAbsorptions(int a) { this.absorptions = a; }
 
   private String absorptionsToString() {
     return "Absorptions: " + Integer.toString(absorptions);
   }
 
-  public String getToString(){
-    return absorptionsToString();
-  }
+  public String getToString() { return absorptionsToString(); }
 
   private String scoreToString() {
     return "Score: " + Integer.toString(score) +

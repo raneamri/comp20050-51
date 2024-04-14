@@ -4,6 +4,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The Board class generates all the cells for the game using maths. The board
+ * created by this class is then turned into a JavaFX <a
+ * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Group.html">Group
+ * class</a> for rendering purposes.
+ */
 public class Board {
   /**
    * Dimensions as constants
@@ -19,6 +25,9 @@ public class Board {
   public Board() {
     cells = new Cell[NUM_ROWS][];
 
+    /**
+     * Fill cells matrix and assigns each cell its index
+     */
     for (int row = 0; row < NUM_ROWS; row++) {
       cells[row] = new Cell[getNumHexagonsInRow(row)];
 
@@ -108,7 +117,7 @@ public class Board {
    * Mechanism to give the board the hexagonal shape we need
    *
    * @param row used to perform maths to figure width of current row
-   * @return
+   * @return corresponding number of hexagons in row
    */
   public static int getNumHexagonsInRow(int row) {
     if (row < 4) {
@@ -123,7 +132,7 @@ public class Board {
    * perfectly tangential
    *
    * @param row
-   * @return
+   * @return start position for first hexagon in given row
    */
   private double getStartXForRow(int row) {
     if (row < 4) {

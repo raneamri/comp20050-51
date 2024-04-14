@@ -2,12 +2,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -15,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -26,6 +25,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Entry point/launcher for the game. Includes all logic for the menu.
+ */
 public class Main extends Application {
   /**
    * Enums and Constant variables
@@ -52,15 +54,20 @@ public class Main extends Application {
   public static Text absorptionsDisplay = new Text();
   public static Text scoreDisplay = new Text();
   public static Button replayBtn = new Button("Replay");
-  public static Label instructions = new Label();
-  public static Text player = new Text("Setter");
+    public static Label instructions = new Label();
+    public static Text player = new Text("Setter");
+  /**
+   * Conventional main function
+   */
+  public static void main(String[] args) { launch(args); }
+
   /**
    * JavaFX start function
    */
   @Override
   public void start(Stage primaryStage) {
     /**
-     * JavaFX display objects
+     * Menu display objects
      */
     StackPane root = new StackPane();
     Button startBtn = new Button("Play");
@@ -69,6 +76,8 @@ public class Main extends Application {
     Button nextBtn = new Button("next");
     Label menuTitle = new Label("BlackBox+");
     Scene scene = new Scene(root);
+    DropShadow dropShadow = new DropShadow();
+    AtomicBoolean nextBtnPressed = new AtomicBoolean(false);
 
     /**
      * Style elements
@@ -82,16 +91,15 @@ public class Main extends Application {
       mediaView.setFitWidth(800);
       mediaView.setFitHeight(600);
 
-      mediaPlayer.play();*/
+      mediaPlayer.play();
+    */
 
-
-    DropShadow dropShadow = new DropShadow();
     dropShadow.setColor(Color.WHITE);
     dropShadow.setOffsetX(3);
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
-            getClass().getResource("styles.css").toExternalForm());
+        getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
     instructBtn.getStyleClass().add("button");
     replayBtn.getStyleClass().add("button");
@@ -120,17 +128,20 @@ public class Main extends Application {
     /**
      * Transitions
      */
-    FadeTransition titleFadeIn = new FadeTransition(Duration.seconds(6), menuTitle);
+    FadeTransition titleFadeIn =
+        new FadeTransition(Duration.seconds(6), menuTitle);
     titleFadeIn.setFromValue(0.0);
     titleFadeIn.setToValue(1.0);
     titleFadeIn.play();
 
-    FadeTransition buttonFadeIn = new FadeTransition(Duration.seconds(5), startBtn);
+    FadeTransition buttonFadeIn =
+        new FadeTransition(Duration.seconds(5), startBtn);
     buttonFadeIn.setFromValue(0.0);
     buttonFadeIn.setToValue(1.0);
     buttonFadeIn.play();
 
-    FadeTransition instructFadeIn = new FadeTransition(Duration.seconds(5), instructBtn);
+    FadeTransition instructFadeIn =
+        new FadeTransition(Duration.seconds(5), instructBtn);
     instructFadeIn.setFromValue(0.0);
     instructFadeIn.setToValue(1.0);
     instructFadeIn.play();
@@ -138,34 +149,40 @@ public class Main extends Application {
     /**
      * Text elements
      */
-
     Text text = new Text("Setter Instructions");
-    text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    text.setFont(
+        Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text.setFill(Color.BLACK);
 
     Text text2 = new Text("Experimenter Instructions");
-    text2.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    text2.setFont(
+        Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text2.setFill(Color.BLACK);
 
-    Text setter = new Text("\n\nSet up five 'atoms' by pressing a hexagon on the board.\n\n" +
-            "Secretly work out ray path and announce to the experimenter\nthe outcome of the ray.\n");
-    setter.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+    Text setter = new Text(
+        "\n\nSet up five 'atoms' by pressing a hexagon on the board.\n\n"
+        + "Secretly work out ray path and announce to the experimenter\nthe "
+        + "outcome of the ray.\n");
+    setter.setFont(
+        Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     setter.setFill(Color.BLACK);
 
-    Text experimenter = new Text("\n\nDeduce position of atoms by sending in 'rays'.\n\n" +
-            "Send a ray by pressing the triangle on the edge of the board.\n" +
-            "\nWhen you believe you have located all the atoms, announce the\nend of the round.");
-    experimenter.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+    Text experimenter = new Text(
+        "\n\nDeduce position of atoms by sending in 'rays'.\n\n"
+        + "Send a ray by pressing the triangle on the edge of the board.\n"
+        + "\nWhen you believe you have located all the atoms, announce "
+        + "the\nend of the round.");
+    experimenter.setFont(
+        Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     experimenter.setFill(Color.BLACK);
 
-    Rectangle background = new Rectangle(500,300);
+    Rectangle background = new Rectangle(500, 300);
     background.setFill(Color.WHITE);
     background.setOpacity(0.9);
 
     /**
      * Button actions
      */
-
     startBtn.setOnAction(event -> {
       for (int i = 0; i < 3; i++)
         root.getChildren().remove(0);
@@ -183,8 +200,7 @@ public class Main extends Application {
       root.getChildren().add(nextBtn);
     });
 
-    AtomicBoolean nextBtnPressed = new AtomicBoolean(false);
-    nextBtn.setOnAction(event ->{
+    nextBtn.setOnAction(event -> {
       root.getChildren().remove(text);
       root.getChildren().remove(setter);
       root.getChildren().remove(nextBtn);
@@ -194,11 +210,10 @@ public class Main extends Application {
     });
 
     exitBtn.setOnAction(event -> {
-      if(nextBtnPressed.get()){
+      if (nextBtnPressed.get()) {
         root.getChildren().remove(experimenter);
         root.getChildren().remove(text2);
-      }
-      else if(!nextBtnPressed.get()){
+      } else if (!nextBtnPressed.get()) {
         root.getChildren().remove(text);
         root.getChildren().remove(setter);
         root.getChildren().remove(nextBtn);
@@ -233,12 +248,12 @@ public class Main extends Application {
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
     StackPane.setMargin(instructBtn, new Insets(120, 0, 0, 0));
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
-    StackPane.setMargin(exitBtn, new Insets(-250,-400,0,0));
-    StackPane.setMargin(text, new Insets(-230,0,0,0));
-    StackPane.setMargin(text2, new Insets(-230,0,0,0));
-    StackPane.setMargin(setter, new Insets(-100,-20,0,0));
-    StackPane.setMargin(experimenter, new Insets(-100,-15,0,0));
-    StackPane.setMargin(nextBtn, new Insets(250,400,0,0));
+    StackPane.setMargin(exitBtn, new Insets(-250, -400, 0, 0));
+    StackPane.setMargin(text, new Insets(-230, 0, 0, 0));
+    StackPane.setMargin(text2, new Insets(-230, 0, 0, 0));
+    StackPane.setMargin(setter, new Insets(-100, -20, 0, 0));
+    StackPane.setMargin(experimenter, new Insets(-100, -15, 0, 0));
+    StackPane.setMargin(nextBtn, new Insets(250, 400, 0, 0));
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
     StackPane.setMargin(scoreDisplay, new Insets(-700, 0, 0, 0));
     StackPane.setMargin(replayBtn, new Insets(-600, 0, 0, 0));
@@ -251,7 +266,7 @@ public class Main extends Application {
     root.getChildren().add(startBtn);
     root.getChildren().add(instructBtn);
     root.getChildren().add(menuTitle);
-    //root.getChildren().add(mediaView);
+    // root.getChildren().add(mediaView);
     root.getChildren().add(absorptionsDisplay);
     root.getChildren().add(scoreDisplay);
     root.getChildren().add(replayBtn);
@@ -315,6 +330,9 @@ public class Main extends Application {
   public static Setter getSetter() { return setter; }
   public static Experimenter getExperimenter() { return experimenter; }
 
+  /**
+   * Resets all assets created by the game, useful for replay
+   */
   private void clearAssets() {
     group = new Group();
 
@@ -334,8 +352,4 @@ public class Main extends Application {
   }
 
 
-  /**
-   * Conventional main function
-   */
-  public static void main(String[] args) { launch(args); }
 }
