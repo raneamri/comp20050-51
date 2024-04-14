@@ -2,6 +2,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 
+/**
+ * The Marker is a simple visual indicator for Experimenter guesses.
+ */
 public class Marker {
   private final int RADIUS = 9;
   private Circle interactable;

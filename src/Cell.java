@@ -5,6 +5,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 
+/**
+ * Cells are the building blocks of the board. Each cell is a hexagon, but the
+ * Cell class doesn't directly extend the JavaFX <a
+ * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Polygon.html">Polygon
+ * class</a> since cells include torches and assigned atoms.
+ */
 public class Cell {
   /**
    * Final constants

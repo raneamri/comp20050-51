@@ -4,6 +4,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+/**
+ * The Torch class is an interactable that allows the Experimenter to shine rays
+ * on the board. The Torch is created by and bound to a Cell class. Cells and
+ * Torchs do not have a bijective relation.
+ */
 public class Torch {
   private Polygon interactable;
   private Ray ray;
@@ -19,14 +24,14 @@ public class Torch {
     interactable = new Polygon();
     Polygon hex = cell.getHexagon();
 
-    /**
+    /*
      * Init. array that contains hexagon points
      */
     ArrayList<Double> hexagonPoints = new ArrayList<>(hex.getPoints());
     double centerX = hex.getBoundsInParent().getCenterX();
     double centerY = hex.getBoundsInParent().getCenterY();
 
-    /**
+    /*
      * x & y offsets to place triangle vertices correctly on the board
      */
     double xOffset = hex.getLayoutX();
@@ -39,12 +44,12 @@ public class Torch {
     double x2 = hexagonPoints.get(++i) + xOffset;
     double y2 = hexagonPoints.get(++i) + yOffset;
 
-    /**
+    /*
      * Midpoint of hexagon side
      */
     midpoint = cell.midpoint(x1, y1, x2, y2);
 
-    /**
+    /*
      * Getting midpoints again to make triangle smaller by setting vertices on
      * these midpoints
      */
@@ -66,14 +71,14 @@ public class Torch {
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
-        /**
+        /*
          * Block action if not all atoms have been placed yet
          */
         if (Main.atoms.size() < Main.MAX_ATOMS) {
           return;
         }
 
-        /**
+        /*
          * If all rays have been shone, toggle off torches
          */
         if (Main.rays.size() >= Main.MAX_RAYS - 1) {
@@ -94,12 +99,12 @@ public class Torch {
           return;
         }
 
-        /**
+        /*
          * Passing hexagon's side's midpoint and hexagon's centre to begin
          * shooting the ray
          */
         ray = new Ray(midpoint, cell);
-        /**
+        /*
          * Void torch properties
          */
         interactable.setOnMouseClicked(null);

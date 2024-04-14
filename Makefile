@@ -13,7 +13,13 @@ build:
 	javac -cp "$(BIN_DIR):$(LIB_DIR)/*" -d "$(BIN_DIR)" $(SRC_DIR)/*.java
 
 doc:
-	javadoc -sourcepath $(SRC_DIR) -d $(DOC_DIR) -classpath "$(LIB_DIR)/*" $(SRC_DIR)/*.java
+	javadoc -private -sourcepath $(SRC_DIR) -d $(DOC_DIR) -classpath "$(LIB_DIR)/*" $(SRC_DIR)/*.java
+
+cleandoc:
+	rm -r doc
 
 jar: build
 	jar cmvf $(MANIFEST) $(JAR_FILE) -C $(BIN_DIR) . -C $(LIB_DIR) .
+
+runjar:
+	java -jar --module-path /Library/Java/javafx-sdk-21.0.2/lib --add-modules javafx.controls,javafx.fxml blackbox+.jar

@@ -1,5 +1,9 @@
 import javafx.scene.paint.Color;
 
+/**
+ * The Experimenter class keeps track of its own advancements, as well as the
+ * simple logic behind displaying wins, losses and score.
+ */
 public class Experimenter {
   private int score = 0;
   private int absorptions = 0;
