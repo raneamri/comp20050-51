@@ -1,5 +1,3 @@
-import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.FadeTransition;
@@ -15,9 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
@@ -33,8 +28,8 @@ public class Main extends Application {
    * Enums and Constant variables
    */
   public static final int MAX_ATOMS = 5;
-  public enum GameStatus {SETTER, RAYS, MARKERS, SCORE}
-  public static GameStatus gameStatus;
+  public enum GameStage {SETTER, RAYS, MARKERS, SCORE}
+  public static GameStage gameStage;
 
   /**
    * Player classes
@@ -54,8 +49,8 @@ public class Main extends Application {
   public static Text absorptionsDisplay = new Text();
   public static Text scoreDisplay = new Text();
   public static Button replayBtn = new Button("Replay");
-    public static Label instructions = new Label();
-    public static Text player = new Text("Setter");
+  public static Label gameStageInstruct = new Label();
+  public static Text player = new Text("Setter");
   /**
    * Conventional main function
    */
@@ -112,14 +107,17 @@ public class Main extends Application {
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
     scoreDisplay.setFont(Font.font("Arial", 30));
     scoreDisplay.setStyle("-fx-font-weight: bold");
-    instructions.setStyle("-fx-font-weight: bold");
-    instructions.setFont(Font.font("Arial", 25));
-    instructions.setTextAlignment(TextAlignment.CENTER);
-    instructions.setWrapText(true);
-    instructions.setPrefSize(400, 100);
-    instructions.setMouseTransparent(true);
-    instructions.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(10), Insets.EMPTY)));
-    instructions.setEffect(dropShadow);
+    gameStageInstruct.setStyle("-fx-font-weight: bold");
+    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+    gameStageInstruct.setFont(Font.font("Arial", 25));
+    gameStageInstruct.setWrapText(true);
+    gameStageInstruct.setPrefSize(400, 100);
+    gameStageInstruct.setMouseTransparent(true);
+    gameStageInstruct.setBackground(
+            new Background(
+                    new BackgroundFill(Color.BLUEVIOLET,
+                    new CornerRadii(10), Insets.EMPTY)));
+    gameStageInstruct.setEffect(dropShadow);
     player.setFont(Font.font("Arial", 30));
     player.setStyle("-fx-font-weight: bold");
     player.setFill(Color.RED);
@@ -257,8 +255,8 @@ public class Main extends Application {
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
     StackPane.setMargin(scoreDisplay, new Insets(-700, 0, 0, 0));
     StackPane.setMargin(replayBtn, new Insets(-600, 0, 0, 0));
-    StackPane.setAlignment(instructions, Pos.CENTER);
     StackPane.setMargin(player, new Insets(-625, 0, 0, 0));
+    StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
 
     /**
      * Adding to root
@@ -286,44 +284,69 @@ public class Main extends Application {
     StackPane.setMargin(group, new Insets(75, 0, 0, 0));
     root.getChildren().add(getGroup());
 
-    Main.gameStatus = GameStatus.SETTER;
+    /*
+     * Set up game stage and initial player
+     */
+    Main.gameStage = GameStage.SETTER;
     root.getChildren().add(player);
     player.setText("SETTER");
     player.setVisible(true);
 
-    instructions.setAlignment(Pos.CENTER);
-    root.getChildren().add(instructions);
+    /*
+     * Write stage instructions
+     */
+    root.getChildren().add(gameStageInstruct);
     statusInstruct("Setter's Turn\nPlace 5 atoms");
 
+    experimenter = new Experimenter();
+    setter = new Setter();
+
+    /*
+     * Create button to end player turn
+     * and switch stages
+     */
     Button endTurnBtn = new Button("End Turn?");
     endTurnBtn.getStyleClass().add("button");
     StackPane.setMargin(endTurnBtn, new Insets(550, 0, 0, 700));
     root.getChildren().add(endTurnBtn);
 
-    endTurnBtn.setOnAction(event -> {
-      switch (Main.gameStatus){
+    endTurnBtn.setOnMouseClicked(event -> {
+      switch (Main.gameStage){
         case RAYS -> {
-          Main.gameStatus = Main.GameStatus.MARKERS;
+
+          Main.gameStage = GameStage.MARKERS;
           statusInstruct("Place markers to guess");
+
           for(Torch t : Main.torchs){
             t.getInteractable().setOnMouseEntered(null);
             t.getInteractable().setOnMouseClicked(null);
           }
+
         }
         case MARKERS -> {
-          Main.gameStatus = Main.GameStatus.SCORE;
+          Main.gameStage = GameStage.SCORE;
           player.setVisible(false);
-          Board.showFullBoard();
-        }
 
+          experimenter.showScore();
+          experimenter.showReplay();
+          experimenter.hideAbsorptions();
+
+          for (Atom a : Main.atoms) {
+            a.toggleOn();
+          }
+          for (Ray r : Main.rays) {
+            r.toggleOn();
+          }
+          for (Flag f : Main.flags) {
+            f.toggleOff();
+          }
+        }
         default -> {
         }
       }
 
     });
 
-    experimenter = new Experimenter();
-    setter = new Setter();
   }
 
   public static Group getGroup() { return group; }
@@ -343,9 +366,15 @@ public class Main extends Application {
     markers.clear();
   }
 
+  /**
+   * Writes game stage instructions to screen
+   * with fade transition
+   *  @param message instruction message for current stage
+   */
   public static void statusInstruct(String message){
-    instructions.setText(message);
-    FadeTransition fade = new FadeTransition(Duration.millis(3500), instructions);
+    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+    gameStageInstruct.setText(message);
+    FadeTransition fade = new FadeTransition(Duration.millis(3500), gameStageInstruct);
     fade.setFromValue(1.0);
     fade.setToValue(0);
     fade.play();

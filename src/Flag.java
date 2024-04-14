@@ -43,18 +43,23 @@ public class Flag {
     interactable.setFill(Color.BLUE);
     interactable.setStroke(Color.BLUEVIOLET);
     interactable.setStrokeWidth(1);
-      BorderStroke borderStroke = new BorderStroke(
-              Color.BLUE,
-              BorderStrokeStyle.SOLID,
-              new CornerRadii(30),
-              new BorderWidths(2)
-      );
 
-      Border border = new Border(borderStroke);
-      label.setBorder(border);
-      label.setStyle("-fx-text-fill: blueviolet");
+    BorderStroke borderStroke = new BorderStroke(
+            Color.BLUE,
+            BorderStrokeStyle.SOLID,
+            new CornerRadii(30),
+            new BorderWidths(2)
+    );
 
-      interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
+    Border border = new Border(borderStroke);
+    label.setBorder(border);
+    label.setStyle("-fx-text-fill: blueviolet");
+
+    /*
+     * Mouse events
+     */
+
+    interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
             new EventHandler<MouseEvent>() {
               @Override
               public void handle(MouseEvent e) {

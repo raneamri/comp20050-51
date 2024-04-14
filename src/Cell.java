@@ -1,12 +1,7 @@
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
@@ -30,7 +25,7 @@ public class Cell {
   private Atom atom;
   private ArrayList<Torch> torches = new ArrayList<>();
 
-  public int[] coords = new int[] {0, 0};
+  public int[] coords;
 
   /**
    * Flags
@@ -66,14 +61,13 @@ public class Cell {
     hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        if((Main.gameStatus == Main.GameStatus.SETTER || Main.gameStatus == Main.GameStatus.MARKERS) && !hasAtom && !hasMarker){
+        if((Main.gameStage == Main.GameStage.SETTER || Main.gameStage == Main.GameStage.MARKERS) && !hasAtom && !hasMarker){
           hexagon.setFill(Color.ORANGE);
           hexagon.setOnMouseExited(
                   event -> { hexagon.setFill(Color.TRANSPARENT); });
         }
       }
     });
-
 
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
@@ -95,16 +89,21 @@ public class Cell {
               a.toggleOff();
             }
 
-            Main.gameStatus = Main.GameStatus.RAYS;
+            /*
+             * Switching game stage
+             */
+            Main.gameStage = Main.GameStage.RAYS;
             Main.player.setText("EXPERIMENTER");
-            Main.statusInstruct("Experimenter's Turn\nShoot rays to figure out atom locations");
+            Main.statusInstruct("Experimenter's Turn\n"
+                               + "Shoot rays to figure out atom locations");
           }
 
           return;
 
-        } else if(Main.gameStatus != Main.GameStatus.MARKERS || hasMarker){//else if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
+        } else if(Main.gameStage != Main.GameStage.MARKERS || hasMarker){
           /**
-           * Allow no placement until all rays have been picked
+           * Allow no placement if not in correct game stage
+           * or already has a marker
            */
           return;
         }

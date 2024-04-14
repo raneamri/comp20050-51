@@ -68,6 +68,9 @@ public class Torch {
             centremidPoint[1]);
     interactable.setFill(Color.RED);
 
+    /*
+     * Event handling
+     */
     interactable.setOnMouseEntered(
             event -> { interactable.setFill(Color.ORANGE); });
     interactable.setOnMouseExited(
@@ -88,10 +91,16 @@ public class Torch {
          * shooting the ray
          */
         ray = new Ray(midpoint, cell, number);
+
+        /*
+        * Changing torch colour is absorbed or not based
+        * on getFlagPos(), which returns null when ray is absorbed
+        * */
         if(ray.getFlagPos() == null)
           interactable.setFill(Color.YELLOW);
         else
           interactable.setFill(Color.ORANGE);
+
         /**
          * Void torch properties
          */
@@ -105,7 +114,6 @@ public class Torch {
   }
 
   public Polygon getInteractable() { return this.interactable; }
-
   public double[] getMainMidpoint() { return this.midpoint; }
   public int getNumber(){return number;}
   public void toggleOn() { interactable.setVisible(true); }

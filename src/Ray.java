@@ -33,6 +33,7 @@ public class Ray {
    *
    * @param startPos Midpoint of torch that spawned the Ray
    * @param cell Cell object within which Ray is spawned
+   * @param torchCreator the number of the torch that created the ray
    */
   public Ray(double[] startPos, Cell cell, int torchCreator) {
     this.torchCreator = torchCreator;

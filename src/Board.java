@@ -39,8 +39,8 @@ public class Board {
 
   public Group getBoardGroup() {
     Group group = new Group();
-    int down = 1;
-    int up = 54;
+    int lowerTorchNo = 1;
+    int upperTorchNo = 54;
     for (int row = 0; row < NUM_ROWS; row++) {
       for (int col = 0; col < cells[row].length; col++) {
         Cell cell = cells[row][col];
@@ -83,13 +83,13 @@ public class Board {
             cellTorches[1] = 4;
             cellTorches[2] = 8;
             for (int i = 0; i < 3; i++) {
-              torchCreate(group, cell, cellTorches[i], (i<2)?down++:up--);
+              torchVisuals(group, cell, cellTorches[i], (i<2)? lowerTorchNo++:upperTorchNo--);
             }
             continue;
           }
 
           else if(col == 0 && row == NUM_ROWS-1)
-              torchCreate(group, cell, 4, down++);
+              torchVisuals(group, cell, 4, lowerTorchNo++);
 
           else if(col == getNumHexagonsInRow(row) - 1 && (row == 0 || row == NUM_ROWS-1))
            cellTorches[2] = 10;
@@ -104,7 +104,7 @@ public class Board {
 
           if (cellTorches != null) {
             for (int i = 0; i < cellTorches.length && cellTorches[i] != -1; i++)
-              torchCreate(group, cell, cellTorches[i], (col == 0 || row == NUM_ROWS - 1) ? down++ : up--);
+              torchVisuals(group, cell, cellTorches[i], (col == 0 || row == NUM_ROWS - 1) ? lowerTorchNo++ : upperTorchNo--);
           }
         }
       }
@@ -156,21 +156,29 @@ public class Board {
 
   public static Cell[][] getCells() { return cells; }
 
-  private void torchCreate(Group group, Cell cell, int torchNo, int number){
+  /**
+   * Creates the board visuals for the torches
+   *
+   * @param group the board group
+   * @param cell the cell the torch is being made in
+   * @param hexPoint the index needed for the hexagon point array
+   *                 to draw torch
+   * @param number the number of the torch corresponding to board layout
+   */
+  private void torchVisuals(Group group, Cell cell, int hexPoint, int number){
 
-      Torch t = new Torch(cell, torchNo, number);
-      cell.addTorch(t);
-      group.getChildren().add(t.getInteractable());
-      Main.torchs.add(t);
+    Torch t = new Torch(cell, hexPoint, number);
+    cell.addTorch(t);
+    group.getChildren().add(t.getInteractable());
+    Main.torchs.add(t);
 
-      Text text = new Text(""+t.getNumber());
-      text.setFill(Color.BLUEVIOLET);
-      text.setFont(Font.font("Arial", 15));
-      text.setMouseTransparent(true);
-      text.setStroke(Color.BLACK);
-      text.setStrokeWidth(0.2);
-      text.setStyle("-fx-font-weight: bold");
-
+    Text text = new Text(""+t.getNumber());
+    text.setFill(Color.BLUEVIOLET);
+    text.setFont(Font.font("Arial", 15));
+    text.setMouseTransparent(true);
+    text.setStroke(Color.BLACK);
+    text.setStrokeWidth(0.2);
+    text.setStyle("-fx-font-weight: bold");
 
     if(cell.getCol() == 0)
         text.setLayoutX(t.getMainMidpoint()[0] -10);
@@ -184,24 +192,6 @@ public class Board {
     else
       text.setLayoutY(t.getMainMidpoint()[1]);
 
-      group.getChildren().add(text);
+    group.getChildren().add(text);
   }
-
-  public static void showFullBoard(){
-    Main.getExperimenter().showScore();
-    Main.getExperimenter().showReplay();
-    Main.getExperimenter().hideAbsorptions();
-
-    for (Atom a : Main.atoms) {
-      a.toggleOn();
-    }
-    for (Ray r : Main.rays) {
-      r.toggleOn();
-    }
-    for (Flag f : Main.flags) {
-      f.toggleOff();
-    }
-  }
-
-
 }
