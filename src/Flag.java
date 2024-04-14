@@ -44,12 +44,9 @@ public class Flag {
     interactable.setStroke(Color.BLUEVIOLET);
     interactable.setStrokeWidth(1);
 
-    BorderStroke borderStroke = new BorderStroke(
-            Color.BLUE,
-            BorderStrokeStyle.SOLID,
-            new CornerRadii(30),
-            new BorderWidths(2)
-    );
+    BorderStroke borderStroke =
+        new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID,
+                         new CornerRadii(30), new BorderWidths(2));
 
     Border border = new Border(borderStroke);
     label.setBorder(border);
@@ -60,21 +57,20 @@ public class Flag {
      */
 
     interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
-            new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(MouseEvent e) {
-                Main.getGroup().getChildren().add(label);
-              }
-            });
+                                 new EventHandler<MouseEvent>() {
+                                   @Override
+                                   public void handle(MouseEvent e) {
+                                     Main.getGroup().getChildren().add(label);
+                                   }
+                                 });
 
-    interactable.addEventHandler(MouseEvent.MOUSE_EXITED,
-            new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(MouseEvent e) {
-                Main.getGroup().getChildren().remove(label);
-              }
-            });
-
+    interactable.addEventHandler(
+        MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            Main.getGroup().getChildren().remove(label);
+          }
+        });
   }
 
   public Polygon getInteractable() { return this.interactable; }

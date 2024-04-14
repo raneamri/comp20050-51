@@ -64,17 +64,17 @@ public class Torch {
                                     x2midPoint[1], centremidPoint[0],
                                     centremidPoint[1]);
     interactable.getPoints().addAll(x1midPoint[0], x1midPoint[1], x2midPoint[0],
-            x2midPoint[1], centremidPoint[0],
-            centremidPoint[1]);
+                                    x2midPoint[1], centremidPoint[0],
+                                    centremidPoint[1]);
     interactable.setFill(Color.RED);
 
     /*
      * Event handling
      */
     interactable.setOnMouseEntered(
-            event -> { interactable.setFill(Color.ORANGE); });
+        event -> { interactable.setFill(Color.ORANGE); });
     interactable.setOnMouseExited(
-            event -> { interactable.setFill(Color.RED); });
+        event -> { interactable.setFill(Color.RED); });
 
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
@@ -93,10 +93,10 @@ public class Torch {
         ray = new Ray(midpoint, cell, number);
 
         /*
-        * Changing torch colour is absorbed or not based
-        * on getFlagPos(), which returns null when ray is absorbed
-        * */
-        if(ray.getFlagPos() == null)
+         * Changing torch colour is absorbed or not based
+         * on getFlagPos(), which returns null when ray is absorbed
+         * */
+        if (ray.getFlagPos() == null)
           interactable.setFill(Color.YELLOW);
         else
           interactable.setFill(Color.ORANGE);
@@ -115,7 +115,7 @@ public class Torch {
 
   public Polygon getInteractable() { return this.interactable; }
   public double[] getMainMidpoint() { return this.midpoint; }
-  public int getNumber(){return number;}
+  public int getNumber() { return number; }
   public void toggleOn() { interactable.setVisible(true); }
   public void toggleOff() { interactable.setVisible(false); }
 }

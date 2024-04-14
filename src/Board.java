@@ -52,12 +52,6 @@ public class Board {
           double y = row * yOffset * 1.85;
 
           Polygon hexagon = cell.createHexagon(HEXAGON_SIZE);
-          Text numText =
-              new Text(Integer.toString(row) + " " + Integer.toString(col));
-          numText.setStroke(Color.color(0.15, 0.15, 0.15));
-          numText.setLayoutX(x-7);
-          numText.setLayoutY(y+4);
-          group.getChildren().add(numText);
 
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);
@@ -71,40 +65,46 @@ public class Board {
 
           if (row == 0) {
             cellTorches = new int[] {6, 8, -1};
-          }else if (row == NUM_ROWS - 1) {
+          } else if (row == NUM_ROWS - 1) {
             cellTorches = new int[] {2, 0, -1};
-          }else if (col == 0) {
-            cellTorches = (row <= NUM_ROWS / 2) ? new int[] {6, 4, -1} : new int[] {4, 2, -1};
-          }else if (col == getNumHexagonsInRow(row) - 1) {
-            cellTorches = (row <= NUM_ROWS / 2) ? new int[] {8, 10, -1} : new int[] {10, 0, -1};
+          } else if (col == 0) {
+            cellTorches = (row <= NUM_ROWS / 2) ? new int[] {6, 4, -1}
+                                                : new int[] {4, 2, -1};
+          } else if (col == getNumHexagonsInRow(row) - 1) {
+            cellTorches = (row <= NUM_ROWS / 2) ? new int[] {8, 10, -1}
+                                                : new int[] {10, 0, -1};
           }
 
-          if(col == 0 && row == 0) {
+          if (col == 0 && row == 0) {
             cellTorches[1] = 4;
             cellTorches[2] = 8;
             for (int i = 0; i < 3; i++) {
-              torchVisuals(group, cell, cellTorches[i], (i<2)? lowerTorchNo++:upperTorchNo--);
+              torchVisuals(group, cell, cellTorches[i],
+                           (i < 2) ? lowerTorchNo++ : upperTorchNo--);
             }
             continue;
           }
 
-          else if(col == 0 && row == NUM_ROWS-1)
-              torchVisuals(group, cell, 4, lowerTorchNo++);
+          else if (col == 0 && row == NUM_ROWS - 1)
+            torchVisuals(group, cell, 4, lowerTorchNo++);
 
-          else if(col == getNumHexagonsInRow(row) - 1 && (row == 0 || row == NUM_ROWS-1))
-           cellTorches[2] = 10;
+          else if (col == getNumHexagonsInRow(row) - 1 &&
+                   (row == 0 || row == NUM_ROWS - 1))
+            cellTorches[2] = 10;
 
-          else if(col == 0 && row == NUM_ROWS/2)
-           cellTorches[2] = 2;
+          else if (col == 0 && row == NUM_ROWS / 2)
+            cellTorches[2] = 2;
 
-          else if(col == getNumHexagonsInRow(row) - 1 && row == NUM_ROWS/2) {
+          else if (col == getNumHexagonsInRow(row) - 1 && row == NUM_ROWS / 2) {
             assert cellTorches != null;
-              cellTorches[2] = 0;
+            cellTorches[2] = 0;
           }
 
           if (cellTorches != null) {
             for (int i = 0; i < cellTorches.length && cellTorches[i] != -1; i++)
-              torchVisuals(group, cell, cellTorches[i], (col == 0 || row == NUM_ROWS - 1) ? lowerTorchNo++ : upperTorchNo--);
+              torchVisuals(group, cell, cellTorches[i],
+                           (col == 0 || row == NUM_ROWS - 1) ? lowerTorchNo++
+                                                             : upperTorchNo--);
           }
         }
       }
@@ -136,9 +136,9 @@ public class Board {
    */
   private double getStartXForRow(int row) {
     if (row < 4) {
-      return (4 - row) * HEXAGON_SIZE * 1.85/ 2;
+      return (4 - row) * HEXAGON_SIZE * 1.85 / 2;
     } else {
-      return (row - 4) * HEXAGON_SIZE * 1.85/ 2;
+      return (row - 4) * HEXAGON_SIZE * 1.85 / 2;
     }
   }
 
@@ -165,14 +165,14 @@ public class Board {
    *                 to draw torch
    * @param number the number of the torch corresponding to board layout
    */
-  private void torchVisuals(Group group, Cell cell, int hexPoint, int number){
+  private void torchVisuals(Group group, Cell cell, int hexPoint, int number) {
 
     Torch t = new Torch(cell, hexPoint, number);
     cell.addTorch(t);
     group.getChildren().add(t.getInteractable());
     Main.torchs.add(t);
 
-    Text text = new Text(""+t.getNumber());
+    Text text = new Text("" + t.getNumber());
     text.setFill(Color.BLUEVIOLET);
     text.setFont(Font.font("Arial", 15));
     text.setMouseTransparent(true);
@@ -180,15 +180,15 @@ public class Board {
     text.setStrokeWidth(0.2);
     text.setStyle("-fx-font-weight: bold");
 
-    if(cell.getCol() == 0)
-        text.setLayoutX(t.getMainMidpoint()[0] -10);
-    else if(cell.getRow() > (NUM_ROWS)/2 && cell.getCol()==0)
+    if (cell.getCol() == 0)
+      text.setLayoutX(t.getMainMidpoint()[0] - 10);
+    else if (cell.getRow() > (NUM_ROWS) / 2 && cell.getCol() == 0)
       text.setLayoutX(t.getMainMidpoint()[0] - 20);
     else
-        text.setLayoutX(t.getMainMidpoint()[0] -1);
+      text.setLayoutX(t.getMainMidpoint()[0] - 1);
 
-    if(cell.getRow() == NUM_ROWS-1)
-      text.setLayoutY(t.getMainMidpoint()[1] +10);
+    if (cell.getRow() == NUM_ROWS - 1)
+      text.setLayoutY(t.getMainMidpoint()[1] + 10);
     else
       text.setLayoutY(t.getMainMidpoint()[1]);
 

@@ -6,12 +6,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -28,7 +28,7 @@ public class Main extends Application {
    * Enums and Constant variables
    */
   public static final int MAX_ATOMS = 5;
-  public enum GameStage {SETTER, RAYS, MARKERS, SCORE}
+  public enum GameStage { SETTER, RAYS, MARKERS, SCORE }
   public static GameStage gameStage;
 
   /**
@@ -89,7 +89,7 @@ public class Main extends Application {
       mediaPlayer.play();
     */
 
-    dropShadow.setColor(Color.WHITE);
+    dropShadow.setColor(Color.color(0.1, 0.1, 0.1));
     dropShadow.setOffsetX(3);
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
@@ -113,10 +113,8 @@ public class Main extends Application {
     gameStageInstruct.setWrapText(true);
     gameStageInstruct.setPrefSize(400, 100);
     gameStageInstruct.setMouseTransparent(true);
-    gameStageInstruct.setBackground(
-            new Background(
-                    new BackgroundFill(Color.BLUEVIOLET,
-                    new CornerRadii(10), Insets.EMPTY)));
+    gameStageInstruct.setBackground(new Background(new BackgroundFill(
+        Color.BLUEVIOLET, new CornerRadii(10), Insets.EMPTY)));
     gameStageInstruct.setEffect(dropShadow);
     player.setFont(Font.font("Arial", 30));
     player.setStyle("-fx-font-weight: bold");
@@ -296,7 +294,7 @@ public class Main extends Application {
      * Write stage instructions
      */
     root.getChildren().add(gameStageInstruct);
-    statusInstruct("Setter's Turn\nPlace 5 atoms");
+    statusInstruct("\tSetter's Turn\n\t Place 5 atoms");
 
     experimenter = new Experimenter();
     setter = new Setter();
@@ -305,23 +303,22 @@ public class Main extends Application {
      * Create button to end player turn
      * and switch stages
      */
-    Button endTurnBtn = new Button("End Turn?");
+    Button endTurnBtn = new Button("End Turn");
     endTurnBtn.getStyleClass().add("button");
     StackPane.setMargin(endTurnBtn, new Insets(550, 0, 0, 700));
     root.getChildren().add(endTurnBtn);
 
     endTurnBtn.setOnMouseClicked(event -> {
-      switch (Main.gameStage){
+      switch (Main.gameStage) {
         case RAYS -> {
 
           Main.gameStage = GameStage.MARKERS;
-          statusInstruct("Place markers to guess");
+          statusInstruct("\tPlace markers to guess");
 
           for(Torch t : Main.torchs){
             t.getInteractable().setOnMouseEntered(null);
             t.getInteractable().setOnMouseClicked(null);
           }
-
         }
         case MARKERS -> {
           Main.gameStage = GameStage.SCORE;
@@ -343,42 +340,40 @@ public class Main extends Application {
         }
         default -> {
         }
-      }
-
-    });
-
   }
+});
+}
 
-  public static Group getGroup() { return group; }
-  public static Setter getSetter() { return setter; }
-  public static Experimenter getExperimenter() { return experimenter; }
+public static Group getGroup() { return group; }
+public static Setter getSetter() { return setter; }
+public static Experimenter getExperimenter() { return experimenter; }
 
-  /**
-   * Resets all assets created by the game, useful for replay
-   */
-  private void clearAssets() {
-    group = new Group();
+/**
+ * Resets all assets created by the game, useful for replay
+ */
+private void clearAssets() {
+  group = new Group();
 
-    atoms.clear();
-    torchs.clear();
-    rays.clear();
-    flags.clear();
-    markers.clear();
-  }
+  atoms.clear();
+  torchs.clear();
+  rays.clear();
+  flags.clear();
+  markers.clear();
+}
 
-  /**
-   * Writes game stage instructions to screen
-   * with fade transition
-   *  @param message instruction message for current stage
-   */
-  public static void statusInstruct(String message){
-    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
-    gameStageInstruct.setText(message);
-    FadeTransition fade = new FadeTransition(Duration.millis(3500), gameStageInstruct);
-    fade.setFromValue(1.0);
-    fade.setToValue(0);
-    fade.play();
-  }
-
-
+/**
+ * Writes game stage instructions to screen
+ * with fade transition
+ *
+ * @param message instruction message for current stage
+ */
+public static void statusInstruct(String message) {
+  gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+  gameStageInstruct.setText(message);
+  FadeTransition fade =
+      new FadeTransition(Duration.millis(3500), gameStageInstruct);
+  fade.setFromValue(1.0);
+  fade.setToValue(0);
+  fade.play();
+}
 }

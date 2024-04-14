@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -61,10 +60,11 @@ public class Cell {
     hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        if(Main.gameStage == Main.GameStage.SETTER || Main.gameStage == Main.GameStage.MARKERS){
-          hexagon.setFill(Color.ORANGE);
+        if (Main.gameStage == Main.GameStage.SETTER ||
+            Main.gameStage == Main.GameStage.MARKERS) {
+          hexagon.setFill(Color.color(0.1, 0.1, 0.1));
           hexagon.setOnMouseExited(
-                  event -> { hexagon.setFill(Color.TRANSPARENT); });
+              event -> { hexagon.setFill(Color.TRANSPARENT); });
         }
       }
     });
@@ -95,12 +95,12 @@ public class Cell {
             Main.gameStage = Main.GameStage.RAYS;
             Main.player.setText("EXPERIMENTER");
             Main.statusInstruct("Experimenter's Turn\n"
-                               + "Shoot rays to figure out atom locations");
+                                + "Shoot rays to figure out atom locations");
           }
 
           return;
 
-        } else if(Main.gameStage != Main.GameStage.MARKERS || hasMarker){
+        } else if (Main.gameStage != Main.GameStage.MARKERS || hasMarker) {
           /**
            * Allow no placement if not in correct game stage
            * or already has a marker
