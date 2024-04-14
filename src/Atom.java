@@ -2,7 +2,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Atom extends Circle {
+
   private static final int RADIUS = 13;
+
   public COI coi;
 
   public Atom(double centerX, double centerY) {

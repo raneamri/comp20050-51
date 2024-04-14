@@ -12,6 +12,10 @@ public class Ray {
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
 
+  /**
+   * Tracks last direction passed in recursive call of
+   * <code>checkCollisions()</code>
+   */
   private Direction finalDirection;
 
   private boolean absorbed = false;
@@ -400,7 +404,7 @@ public class Ray {
       Main.getGroup().getChildren().add(flag.getInteractable());
     }
 
-    // toggleOff();
+    toggleOff();
   }
 
   public void toggleOn() {

@@ -9,15 +9,13 @@ public class Experimenter {
   public void addScore(int s) { this.score++; }
   public int getScore() { return this.score; }
 
-  public void setAbsorptions(int a){this.absorptions=a;}
+  public void setAbsorptions(int a) { this.absorptions = a; }
 
   private String absorptionsToString() {
     return "Absorptions: " + Integer.toString(absorptions);
   }
 
-  public String getToString(){
-    return absorptionsToString();
-  }
+  public String getToString() { return absorptionsToString(); }
 
   private String scoreToString() {
     return "Score: " + Integer.toString(score) +

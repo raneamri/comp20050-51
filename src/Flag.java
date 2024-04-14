@@ -11,6 +11,10 @@ public class Flag {
     double x = coords.getKey();
     double y = coords.getValue();
 
+    /**
+     * Hard coded points to draw flag (comments at EOL to prevent intellisense
+     * from collapsing the text)
+     */
     interactable.getPoints().addAll(x, y - 15,      //
                                     x + 15, y - 15, //
                                     x + 5, y - 20,  //

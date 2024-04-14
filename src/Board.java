@@ -18,6 +18,9 @@ public class Board {
   public Board() {
     cells = new Cell[NUM_ROWS][];
 
+    /**
+     * Fill cells matrix and assigns each cell its index
+     */
     for (int row = 0; row < NUM_ROWS; row++) {
       cells[row] = new Cell[getNumHexagonsInRow(row)];
 

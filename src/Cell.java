@@ -48,6 +48,9 @@ public class Cell {
     hexagon.setStroke(Color.RED);
     hexagon.setStrokeWidth(2);
 
+    /**
+     * Event handler
+     */
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -141,7 +144,7 @@ public class Cell {
   /**
    * Method uses a switch statement and external methods to find neighbor of a
    * cell in a given direction
-   * This method will often return null
+   * When applied, this method will sometimes return null
    * This is intended and helps map the
    * board's edges
    *
@@ -235,9 +238,6 @@ public class Cell {
       double centerY = hexagon.getBoundsInParent().getCenterY();
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
-      // a.toggleOff();
-
-      // System.out.println("Atom at " + coords[0] + " " + coords[1]);
 
       Main.getGroup().getChildren().add(a);
       Main.getGroup().getChildren().add(a.coi);

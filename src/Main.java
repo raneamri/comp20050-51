@@ -44,12 +44,17 @@ public class Main extends Application {
   public static Button replayBtn = new Button("Replay");
 
   /**
+   * Conventional main function
+   */
+  public static void main(String[] args) { launch(args); }
+
+  /**
    * JavaFX start function
    */
   @Override
   public void start(Stage primaryStage) {
     /**
-     * JavaFX display objects
+     * Menu display objects
      */
     StackPane root = new StackPane();
     Button startBtn = new Button("Play");
@@ -143,6 +148,9 @@ public class Main extends Application {
   public static Setter getSetter() { return setter; }
   public static Experimenter getExperimenter() { return experimenter; }
 
+  /**
+   * Resets all assets created by the game, useful for replay
+   */
   private void clearAssets() {
     group = new Group();
 
@@ -152,9 +160,4 @@ public class Main extends Application {
     flags.clear();
     markers.clear();
   }
-
-  /**
-   * Conventional main function
-   */
-  public static void main(String[] args) { launch(args); }
 }
