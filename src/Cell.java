@@ -61,7 +61,7 @@ public class Cell {
     hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        if((Main.gameStage == Main.GameStage.SETTER || Main.gameStage == Main.GameStage.MARKERS) && !hasAtom && !hasMarker){
+        if(Main.gameStage == Main.GameStage.SETTER || Main.gameStage == Main.GameStage.MARKERS){
           hexagon.setFill(Color.ORANGE);
           hexagon.setOnMouseExited(
                   event -> { hexagon.setFill(Color.TRANSPARENT); });
