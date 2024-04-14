@@ -16,10 +16,13 @@ doc:
 	javadoc -private -sourcepath $(SRC_DIR) -d $(DOC_DIR) -classpath "$(LIB_DIR)/*" $(SRC_DIR)/*.java
 
 cleandoc:
-	rm -r doc
+	rm -r $(DOC_DIR)
 
 jar: build
 	jar cmvf $(MANIFEST) $(JAR_FILE) -C $(BIN_DIR) . -C $(LIB_DIR) .
 
 runjar:
 	java -jar --module-path /Library/Java/javafx-sdk-21.0.2/lib --add-modules javafx.controls,javafx.fxml blackbox+.jar
+
+cleanjar:
+	rm $(JAR_FILE)
