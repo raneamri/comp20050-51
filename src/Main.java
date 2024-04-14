@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -11,28 +12,27 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
   /**
-   * Constant variables
+   * Enums and Constant variables
    */
-  Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-  int h = (int) screensize.getHeight();
-  int w = (int) screensize.getWidth();
-  private final int HEIGHT = 256*4;
-  private final int WIDTH = 256*4;
   public static final int MAX_ATOMS = 5;
-  public static final int MAX_RAYS = 6;
-  public static final int MAX_MARKERS = 8;
+  public enum GameStatus {SETTER, RAYS, MARKERS, SCORE}
+  public static GameStatus gameStatus;
 
   /**
    * Player classes
@@ -52,7 +52,8 @@ public class Main extends Application {
   public static Text absorptionsDisplay = new Text();
   public static Text scoreDisplay = new Text();
   public static Button replayBtn = new Button("Replay");
-
+  public static Label instructions = new Label();
+  public static Text player = new Text("Setter");
   /**
    * JavaFX start function
    */
@@ -81,8 +82,8 @@ public class Main extends Application {
       mediaView.setFitWidth(800);
       mediaView.setFitHeight(600);
 
-      mediaPlayer.play();
-    */
+      mediaPlayer.play();*/
+
 
     DropShadow dropShadow = new DropShadow();
     dropShadow.setColor(Color.WHITE);
@@ -90,7 +91,7 @@ public class Main extends Application {
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
-        getClass().getResource("styles.css").toExternalForm());
+            getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
     instructBtn.getStyleClass().add("button");
     replayBtn.getStyleClass().add("button");
@@ -103,6 +104,17 @@ public class Main extends Application {
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
     scoreDisplay.setFont(Font.font("Arial", 30));
     scoreDisplay.setStyle("-fx-font-weight: bold");
+    instructions.setStyle("-fx-font-weight: bold");
+    instructions.setFont(Font.font("Arial", 25));
+    instructions.setTextAlignment(TextAlignment.CENTER);
+    instructions.setWrapText(true);
+    instructions.setPrefSize(400, 100);
+    instructions.setMouseTransparent(true);
+    instructions.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(10), Insets.EMPTY)));
+    instructions.setEffect(dropShadow);
+    player.setFont(Font.font("Arial", 30));
+    player.setStyle("-fx-font-weight: bold");
+    player.setFill(Color.RED);
     System.out.println("Stylesheet fetched successfully");
 
     /**
@@ -135,7 +147,7 @@ public class Main extends Application {
     text2.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text2.setFill(Color.BLACK);
 
-    Text setter = new Text("\n\nSet up four 'atoms' by pressing a hexagon on the board.\n\n" +
+    Text setter = new Text("\n\nSet up five 'atoms' by pressing a hexagon on the board.\n\n" +
             "Secretly work out ray path and announce to the experimenter\nthe outcome of the ray.\n");
     setter.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     setter.setFill(Color.BLACK);
@@ -214,14 +226,11 @@ public class Main extends Application {
     replayBtn.setVisible(false);
     replayBtn.setDisable(true);
 
-
     /**
      * Alignments
      */
-
     StackPane.setAlignment(startBtn, Pos.CENTER);
     StackPane.setAlignment(menuTitle, Pos.TOP_CENTER);
-
     StackPane.setMargin(instructBtn, new Insets(120, 0, 0, 0));
     StackPane.setMargin(menuTitle, new Insets(70, 0, 0, 0));
     StackPane.setMargin(exitBtn, new Insets(-250,-400,0,0));
@@ -231,8 +240,10 @@ public class Main extends Application {
     StackPane.setMargin(experimenter, new Insets(-100,-15,0,0));
     StackPane.setMargin(nextBtn, new Insets(250,400,0,0));
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
-    StackPane.setMargin(scoreDisplay, new Insets(-800, 0, 0, 0));
-    StackPane.setMargin(replayBtn, new Insets(-725, 0, 0, 0));
+    StackPane.setMargin(scoreDisplay, new Insets(-700, 0, 0, 0));
+    StackPane.setMargin(replayBtn, new Insets(-600, 0, 0, 0));
+    StackPane.setAlignment(instructions, Pos.CENTER);
+    StackPane.setMargin(player, new Insets(-625, 0, 0, 0));
 
     /**
      * Adding to root
@@ -249,7 +260,6 @@ public class Main extends Application {
     primaryStage.setScene(scene);
     primaryStage.setTitle("BlackBox+");
     primaryStage.show();
-
   }
 
   private static void ingame(Stage primaryStage, StackPane root) {
@@ -257,9 +267,45 @@ public class Main extends Application {
      * Set up board
      */
     Board board = new Board();
-
     group = board.getBoardGroup();
+    StackPane.setMargin(group, new Insets(75, 0, 0, 0));
     root.getChildren().add(getGroup());
+
+    Main.gameStatus = GameStatus.SETTER;
+    root.getChildren().add(player);
+    player.setText("SETTER");
+    player.setVisible(true);
+
+    instructions.setAlignment(Pos.CENTER);
+    root.getChildren().add(instructions);
+    statusInstruct("Setter's Turn\nPlace 5 atoms");
+
+    Button endTurnBtn = new Button("End Turn?");
+    endTurnBtn.getStyleClass().add("button");
+    StackPane.setMargin(endTurnBtn, new Insets(550, 0, 0, 700));
+    root.getChildren().add(endTurnBtn);
+
+    endTurnBtn.setOnAction(event -> {
+      switch (Main.gameStatus){
+        case RAYS -> {
+          Main.gameStatus = Main.GameStatus.MARKERS;
+          statusInstruct("Place markers to guess");
+          for(Torch t : Main.torchs){
+            t.getInteractable().setOnMouseEntered(null);
+            t.getInteractable().setOnMouseClicked(null);
+          }
+        }
+        case MARKERS -> {
+          Main.gameStatus = Main.GameStatus.SCORE;
+          player.setVisible(false);
+          Board.showFullBoard();
+        }
+
+        default -> {
+        }
+      }
+
+    });
 
     experimenter = new Experimenter();
     setter = new Setter();
@@ -278,6 +324,15 @@ public class Main extends Application {
     flags.clear();
     markers.clear();
   }
+
+  public static void statusInstruct(String message){
+    instructions.setText(message);
+    FadeTransition fade = new FadeTransition(Duration.millis(3500), instructions);
+    fade.setFromValue(1.0);
+    fade.setToValue(0);
+    fade.play();
+  }
+
 
   /**
    * Conventional main function

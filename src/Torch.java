@@ -7,6 +7,7 @@ import javafx.scene.shape.Polygon;
 public class Torch {
   private Polygon interactable;
   private Ray ray;
+  private int number;
 
   private double[] midpoint;
 
@@ -15,7 +16,8 @@ public class Torch {
    * @param cell Cell object torch is being assigned to
    * @param i array position of appropriate hexagon vertex
    */
-  public Torch(Cell cell, int i) {
+  public Torch(Cell cell, int i, int number) {
+    this.number = number;
     interactable = new Polygon();
     Polygon hex = cell.getHexagon();
 
@@ -56,12 +58,15 @@ public class Torch {
     interactable.getPoints().addAll(x1midPoint[0], x1midPoint[1], x2midPoint[0],
                                     x2midPoint[1], centremidPoint[0],
                                     centremidPoint[1]);
+    interactable.getPoints().addAll(x1midPoint[0], x1midPoint[1], x2midPoint[0],
+            x2midPoint[1], centremidPoint[0],
+            centremidPoint[1]);
     interactable.setFill(Color.RED);
 
     interactable.setOnMouseEntered(
-        event -> { interactable.setFill(Color.YELLOWGREEN); });
+            event -> { interactable.setFill(Color.ORANGE); });
     interactable.setOnMouseExited(
-        event -> { interactable.setFill(Color.RED); });
+            event -> { interactable.setFill(Color.RED); });
 
     interactable.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
@@ -74,38 +79,20 @@ public class Torch {
         }
 
         /**
-         * If all rays have been shone, toggle off torches
-         */
-        if (Main.rays.size() >= Main.MAX_RAYS - 1) {
-          ray = new Ray(midpoint, cell);
-          Main.rays.add(ray);
-
-          for (Torch t : Main.torchs) {
-            t.toggleOff();
-            t.interactable.setOnMouseClicked(null);
-          }
-
-          try {
-            Thread.sleep(100);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-
-          return;
-        }
-
-        /**
          * Passing hexagon's side's midpoint and hexagon's centre to begin
          * shooting the ray
          */
-        ray = new Ray(midpoint, cell);
+        ray = new Ray(midpoint, cell, number);
+        if(ray.getFlagPos() == null)
+          interactable.setFill(Color.YELLOW);
+        else
+          interactable.setFill(Color.ORANGE);
         /**
          * Void torch properties
          */
         interactable.setOnMouseClicked(null);
         interactable.setOnMouseEntered(null);
         interactable.setOnMouseExited(null);
-        interactable.setFill(Color.YELLOW);
 
         Main.rays.add(ray);
       }
@@ -115,7 +102,7 @@ public class Torch {
   public Polygon getInteractable() { return this.interactable; }
 
   public double[] getMainMidpoint() { return this.midpoint; }
-
+  public int getNumber(){return number;}
   public void toggleOn() { interactable.setVisible(true); }
   public void toggleOff() { interactable.setVisible(false); }
 }

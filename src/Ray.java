@@ -11,7 +11,7 @@ public class Ray {
   private ArrayList<Cell> path = new ArrayList<>();
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
   private ArrayList<Line> lines = new ArrayList<>();
-
+  private int torchCreator;
   private Direction finalDirection;
 
   private boolean absorbed = false;
@@ -21,7 +21,8 @@ public class Ray {
    * @param startPos Midpoint of torch that spawned the Ray
    * @param cell Cell object within which Ray is spawned
    */
-  public Ray(double[] startPos, Cell cell) {
+  public Ray(double[] startPos, Cell cell, int torchCreator) {
+    this.torchCreator = torchCreator;
     coords.add(new Pair<Double, Double>(startPos[0], startPos[1]));
 
     Direction dir = slopeToDirection(startPos, cell.getCenter());
@@ -395,12 +396,12 @@ public class Ray {
     }
 
     if (!absorbed) {
-      Flag flag = new Flag(getFlagPos());
+      Flag flag = new Flag(getFlagPos(), torchCreator);
       Main.flags.add(flag);
       Main.getGroup().getChildren().add(flag.getInteractable());
     }
 
-    // toggleOff();
+     toggleOff();
   }
 
   public void toggleOn() {

@@ -1,6 +1,12 @@
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
@@ -48,6 +54,18 @@ public class Cell {
     hexagon.setStroke(Color.RED);
     hexagon.setStrokeWidth(2);
 
+    hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+        if((Main.gameStatus == Main.GameStatus.SETTER || Main.gameStatus == Main.GameStatus.MARKERS) && !hasAtom && !hasMarker){
+          hexagon.setFill(Color.ORANGE);
+          hexagon.setOnMouseExited(
+                  event -> { hexagon.setFill(Color.TRANSPARENT); });
+        }
+      }
+    });
+
+
     hexagon.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -67,46 +85,20 @@ public class Cell {
             for (Atom a : Main.atoms) {
               a.toggleOff();
             }
+
+            Main.gameStatus = Main.GameStatus.RAYS;
+            Main.player.setText("EXPERIMENTER");
+            Main.statusInstruct("Experimenter's Turn\nShoot rays to figure out atom locations");
           }
 
           return;
 
-        } else if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
+        } else if(Main.gameStatus != Main.GameStatus.MARKERS || hasMarker){//else if (Main.rays.size() < Main.MAX_RAYS || hasMarker) {
           /**
            * Allow no placement until all rays have been picked
            */
           return;
-        } else if (Main.markers.size() >= Main.MAX_MARKERS - 1) {
-          /**
-           * Allow marker placement
-           */
-          addMarker();
-
-          if (hasCorrectGuess()) {
-            Main.getExperimenter().addScore(1);
-          }
-
-          Marker marker =
-              new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
-          Main.markers.add(marker);
-          Main.getGroup().getChildren().add(marker.getInteractable());
-
-          Main.getExperimenter().showScore();
-          Main.getExperimenter().showReplay();
-          Main.getExperimenter().hideAbsorptions();
-
-          for (Atom a : Main.atoms) {
-            a.toggleOn();
-          }
-          for (Ray r : Main.rays) {
-            r.toggleOn();
-          }
-          for (Flag f : Main.flags) {
-            f.toggleOff();
-          }
-          return;
         }
-
         hasMarker = true;
 
         if (hasCorrectGuess()) {
@@ -119,7 +111,6 @@ public class Cell {
         Main.getGroup().getChildren().add(marker.getInteractable());
       }
     });
-
     return hexagon;
   }
 
@@ -253,7 +244,7 @@ public class Cell {
   public boolean hasAtom() { return this.hasAtom; }
   public Atom getAtom() { return this.atom; }
 
-  public void addTorch(Torch t) { torches.add(t); }
+  public void addTorch(Torch t) {torches.add(t);}
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }
