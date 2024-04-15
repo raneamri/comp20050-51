@@ -283,7 +283,7 @@ public class Ray {
       }
 
     case UP_RIGHT:
-      if (distanceBetween(p2, p3) > 70) {
+      if (distanceBetween(p2, p3) > 60) {
         return fullReflection(dir);
       } else {
         if (p2[1] == p3[1]) {
@@ -294,7 +294,8 @@ public class Ray {
       }
 
     case UP_LEFT:
-      if (distanceBetween(p2, p3) > 70) {
+      if (distanceBetween(p2, p3) > 71) {
+        System.out.println("FULL REFLECTION");
         return fullReflection(dir);
       } else {
         if (p2[1] == p3[1]) {
