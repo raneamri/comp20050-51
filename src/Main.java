@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -9,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -78,18 +83,8 @@ public class Main extends Application {
      * Style elements
      */
     root.setStyle("-fx-background-color: black;");
-    /*  String path = "C:/Users/pinto/Downloads/atom.mp4";
-      Media media = new Media(new File(path).toURI().toString());
-      MediaPlayer mediaPlayer = new MediaPlayer(media);
-      MediaView mediaView = new MediaView(mediaPlayer);
 
-      mediaView.setFitWidth(800);
-      mediaView.setFitHeight(600);
-
-      mediaPlayer.play();
-    */
-
-    dropShadow.setColor(Color.color(0.1, 0.1, 0.1));
+    dropShadow.setColor(Color.GRAY);
     dropShadow.setOffsetX(3);
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
@@ -124,23 +119,29 @@ public class Main extends Application {
     /**
      * Transitions
      */
+    Image image = new Image(getClass().getResourceAsStream("atom.jpg"));
+    ImageView imageView = new ImageView(image);
+
+    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(5), imageView);
+    scaleTransition.setToX(0);
+    scaleTransition.setToY(0);
+    scaleTransition.play();
+
     FadeTransition titleFadeIn =
         new FadeTransition(Duration.seconds(6), menuTitle);
     titleFadeIn.setFromValue(0.0);
     titleFadeIn.setToValue(1.0);
-    titleFadeIn.play();
 
     FadeTransition buttonFadeIn =
         new FadeTransition(Duration.seconds(5), startBtn);
     buttonFadeIn.setFromValue(0.0);
     buttonFadeIn.setToValue(1.0);
-    buttonFadeIn.play();
+
 
     FadeTransition instructFadeIn =
         new FadeTransition(Duration.seconds(5), instructBtn);
     instructFadeIn.setFromValue(0.0);
     instructFadeIn.setToValue(1.0);
-    instructFadeIn.play();
 
     /**
      * Text elements
@@ -179,8 +180,25 @@ public class Main extends Application {
     /**
      * Button actions
      */
+    scaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        root.getChildren().add(startBtn);
+        root.getChildren().add(instructBtn);
+        root.getChildren().add(menuTitle);
+        root.getChildren().add(absorptionsDisplay);
+        root.getChildren().add(scoreDisplay);
+        root.getChildren().add(replayBtn);
+
+        titleFadeIn.play();
+        buttonFadeIn.play();
+        instructFadeIn.play();
+      }
+
+    });
+
     startBtn.setOnAction(event -> {
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < 4; i++)
         root.getChildren().remove(0);
 
       ingame(primaryStage, root);
@@ -259,13 +277,7 @@ public class Main extends Application {
     /**
      * Adding to root
      */
-    root.getChildren().add(startBtn);
-    root.getChildren().add(instructBtn);
-    root.getChildren().add(menuTitle);
-    // root.getChildren().add(mediaView);
-    root.getChildren().add(absorptionsDisplay);
-    root.getChildren().add(scoreDisplay);
-    root.getChildren().add(replayBtn);
+    root.getChildren().add(imageView);
 
     primaryStage.setFullScreen(true);
     primaryStage.setScene(scene);
