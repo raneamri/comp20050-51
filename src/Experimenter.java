@@ -11,6 +11,7 @@ public class Experimenter {
   Experimenter() {}
 
   public void addScore(int s) { this.score++; }
+  public void subScore(int s) { score = Math.max(0, score - s); }
   public int getScore() { return this.score; }
 
   public void setAbsorptions(int a) { this.absorptions = a; }

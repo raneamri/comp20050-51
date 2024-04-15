@@ -29,20 +29,20 @@ import javafx.util.Duration;
  * Entry point/launcher for the game. Includes all logic for the menu.
  */
 public class Main extends Application {
-  /**
+  /*
    * Enums and Constant variables
    */
   public static final int MAX_ATOMS = 5;
   public enum GameStage { SETTER, RAYS, MARKERS, SCORE }
   public static GameStage gameStage;
 
-  /**
+  /*
    * Player classes
    */
   private static Setter setter;
   private static Experimenter experimenter;
 
-  /**
+  /*
    * Game assets
    */
   private static Group group = new Group();
@@ -56,6 +56,7 @@ public class Main extends Application {
   public static Button replayBtn = new Button("Replay");
   public static Label gameStageInstruct = new Label();
   public static Text player = new Text("Setter");
+
   /**
    * Conventional main function
    */
@@ -66,7 +67,7 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage primaryStage) {
-    /**
+    /*
      * Menu display objects
      */
     StackPane root = new StackPane();
@@ -79,12 +80,11 @@ public class Main extends Application {
     DropShadow dropShadow = new DropShadow();
     AtomicBoolean nextBtnPressed = new AtomicBoolean(false);
 
-    /**
+    /*
      * Style elements
      */
     root.setStyle("-fx-background-color: black;");
-
-    dropShadow.setColor(Color.GRAY);
+    dropShadow.setColor(Color.BLACK);
     dropShadow.setOffsetX(3);
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
@@ -108,21 +108,26 @@ public class Main extends Application {
     gameStageInstruct.setWrapText(true);
     gameStageInstruct.setPrefSize(400, 100);
     gameStageInstruct.setMouseTransparent(true);
-    gameStageInstruct.setBackground(new Background(new BackgroundFill(
-        Color.BLUEVIOLET, new CornerRadii(10), Insets.EMPTY)));
+    gameStageInstruct.setBackground(new Background(
+        new BackgroundFill(Color.BLACK, new CornerRadii(10), Insets.EMPTY)));
     gameStageInstruct.setEffect(dropShadow);
     player.setFont(Font.font("Arial", 30));
     player.setStyle("-fx-font-weight: bold");
     player.setFill(Color.RED);
+    primaryStage.setFullScreenExitHint("");
     System.out.println("Stylesheet fetched successfully");
 
-    /**
-     * Transitions
+    /*
+     * Image
      */
-    Image image = new Image(getClass().getResourceAsStream("atom.jpg"));
+    Image image = new Image(getClass().getResourceAsStream("img/atom.jpg"));
     ImageView imageView = new ImageView(image);
 
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(5), imageView);
+    /*
+     * Transitions
+     */
+    ScaleTransition scaleTransition =
+        new ScaleTransition(Duration.seconds(5), imageView);
     scaleTransition.setToX(0);
     scaleTransition.setToY(0);
     scaleTransition.play();
@@ -136,7 +141,6 @@ public class Main extends Application {
         new FadeTransition(Duration.seconds(5), startBtn);
     buttonFadeIn.setFromValue(0.0);
     buttonFadeIn.setToValue(1.0);
-
 
     FadeTransition instructFadeIn =
         new FadeTransition(Duration.seconds(5), instructBtn);
@@ -156,22 +160,24 @@ public class Main extends Application {
         Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text2.setFill(Color.BLACK);
 
-    Text setter = new Text(
-        "\n\nSet up five 'atoms' by pressing a hexagon on the board.\n\n"
-        + "Secretly work out ray path and announce to the experimenter\nthe "
-        + "outcome of the ray.\n");
+    Text setter =
+        new Text("\n\nSet up five 'atoms' by clicking cells on the board.\n\n");
     setter.setFont(
         Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     setter.setFill(Color.BLACK);
 
     Text experimenter = new Text(
-        "\n\nDeduce position of atoms by sending in 'rays'.\n\n"
-        + "Send a ray by pressing the triangle on the edge of the board.\n"
-        + "\nWhen you believe you have located all the atoms, announce "
-        + "the\nend of the round.");
+        "\n\n\n\n\n\n\tDeduce position of atoms by sending in rays.\n\n\t"
+        + "Send a ray by pressing the torchs (triangles) on the\n\tedge of the "
+        + "board.\n\t"
+        + "\n\tWhen you believe you have located all the atoms, \n\tannounce "
+        + "the end of the round and place markers\n\twhere you believe the "
+        + "atoms are.\n\tScore is calculated as \n\t{CORRECT GUESSES} - "
+        + "{INCORRECT GUESSES}");
     experimenter.setFont(
         Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     experimenter.setFill(Color.BLACK);
+    experimenter.setMouseTransparent(true);
 
     Rectangle background = new Rectangle(500, 300);
     background.setFill(Color.WHITE);
@@ -194,7 +200,6 @@ public class Main extends Application {
         buttonFadeIn.play();
         instructFadeIn.play();
       }
-
     });
 
     startBtn.setOnAction(event -> {
@@ -306,7 +311,7 @@ public class Main extends Application {
      * Write stage instructions
      */
     root.getChildren().add(gameStageInstruct);
-    statusInstruct("\tSetter's Turn\n\t Place 5 atoms");
+    statusInstruct("\tSetter's Turn\n\tPlace 5 atoms");
 
     experimenter = new Experimenter();
     setter = new Setter();

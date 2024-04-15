@@ -173,11 +173,11 @@ public class Board {
     Main.torchs.add(t);
 
     Text text = new Text("" + t.getNumber());
-    text.setFill(Color.BLUEVIOLET);
-    text.setFont(Font.font("Arial", 15));
-    text.setMouseTransparent(true);
+    text.setFill(Color.GRAY);
     text.setStroke(Color.BLACK);
-    text.setStrokeWidth(0.2);
+    text.setStrokeWidth(1.3);
+    text.setFont(Font.font("Arial", 20));
+    text.setMouseTransparent(true);
     text.setStyle("-fx-font-weight: bold");
 
     if (cell.getCol() == 0)

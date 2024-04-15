@@ -111,6 +111,10 @@ public class Cell {
 
         if (hasCorrectGuess()) {
           Main.getExperimenter().addScore(1);
+        } else {
+          if (hasMarker) {
+            Main.getExperimenter().subScore(1);
+          }
         }
 
         Marker marker =

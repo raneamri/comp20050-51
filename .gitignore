@@ -28,5 +28,5 @@ replay_pid*
 
 # MacOS
 .DS_Store
-
+bin
 out

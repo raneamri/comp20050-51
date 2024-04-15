@@ -92,14 +92,7 @@ public class Torch {
          */
         ray = new Ray(midpoint, cell, number);
 
-        /*
-         * Changing torch colour is absorbed or not based
-         * on getFlagPos(), which returns null when ray is absorbed
-         * */
-        if (ray.getFlagPos() == null)
-          interactable.setFill(Color.YELLOW);
-        else
-          interactable.setFill(Color.ORANGE);
+        interactable.setFill(Color.YELLOW);
 
         /**
          * Void torch properties
