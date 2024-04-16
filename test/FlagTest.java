@@ -9,7 +9,7 @@ public class FlagTest {
   @Test
   void testFlag() {
     Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
-    Flag flag = new Flag(coords);
+    Flag flag = new Flag(coords,5);
     Polygon interactable = flag.getInteractable();
 
     assertNotNull(flag);
@@ -21,7 +21,7 @@ public class FlagTest {
   @Test
   void testToggleOff() {
     Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
-    Flag flag = new Flag(coords);
+    Flag flag = new Flag(coords,5);
     flag.toggleOff();
     Polygon interactable = flag.getInteractable();
 

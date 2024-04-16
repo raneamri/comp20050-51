@@ -46,6 +46,8 @@ public class Ray {
     drawRays();
   }
 
+  public Ray (){}
+
   /**
    * Recursive method that computes path of the ray. This method of finding
    * the path is based on the assumption that any ray cast into the board passes
@@ -156,7 +158,7 @@ public class Ray {
    * @param p2
    * @return Direction (enum) type method resolved
    */
-  private Direction slopeToDirection(double[] p1, double[] p2) {
+  protected Direction slopeToDirection(double[] p1, double[] p2) {
     double error = 1e-3d;
 
     if (Math.abs(p1[1] - p2[1]) < error) {
@@ -187,7 +189,7 @@ public class Ray {
    * @param p2 point 2
    * @return d between p1 -> p2, as a double
    */
-  private double distanceBetween(double p1[], double p2[]) {
+  protected double distanceBetween(double p1[], double p2[]) {
     return Math.sqrt(Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2));
   }
 
@@ -199,7 +201,7 @@ public class Ray {
    * @param p2 center point of atom
    * @return new computed direction
    */
-  private Direction sixtyReflection(Direction dir, double[] p1, double p2[]) {
+  protected Direction sixtyReflection(Direction dir, double[] p1, double p2[]) {
     switch (dir) {
     case LEFT_RIGHT:
       if (p1[1] > p2[1]) {
@@ -256,7 +258,7 @@ public class Ray {
    * @param p3 center point of atom 2
    * @return
    */
-  private Direction onetwentyReflection(Direction dir, double[] p1, double[] p2,
+  protected Direction onetwentyReflection(Direction dir, double[] p1, double[] p2,
                                         double[] p3) {
 
     switch (dir) {
@@ -336,7 +338,7 @@ public class Ray {
    * @param dir direction to inverse
    * @return inversed direction
    */
-  private Direction fullReflection(Direction dir) {
+  protected Direction fullReflection(Direction dir) {
     switch (dir) {
     case LEFT_RIGHT:
       return Direction.RIGHT_LEFT;

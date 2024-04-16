@@ -12,7 +12,7 @@ public class TorchTest {
     Cell cell = new Cell(4, 5);
 
     Polygon hexagon = cell.createHexagon(40);
-    Torch torch = new Torch(cell, 0);
+    Torch torch = new Torch(cell, 0,2);
 
     assertNotNull(torch);
     assertNotNull(torch.getInteractable());
