@@ -18,9 +18,9 @@ public class Ray {
   /*
    * Polyray drawing utilities
    */
-  private ArrayList<Cell> path = new ArrayList<>();
-  private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
-  private ArrayList<Line> lines = new ArrayList<>();
+  public ArrayList<Cell> path = new ArrayList<>();
+  public ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
+  public ArrayList<Line> lines = new ArrayList<>();
   private int torchCreator;
 
   /*
@@ -47,6 +47,7 @@ public class Ray {
 
     drawRays();
   }
+
 
   /**
    * Recursive method that computes path of the ray. This method of finding
@@ -386,7 +387,7 @@ public class Ray {
    * Iterates over the points gathered by recursion and essentially draws a
    * JavaFX Polyray
    */
-  private void drawRays() {
+  public void drawRays() {
     for (Cell cell : path) {
       coords.add(
           new Pair<Double, Double>(cell.getCenterX(), cell.getCenterY()));
