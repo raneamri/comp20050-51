@@ -151,7 +151,7 @@ public class RayTest {
   }
   
   @Test
-  void drawRays(){
+  void testDrawRays(){
     test_src.Board board = new test_src.Board();
     board.getBoardGroup();
 
