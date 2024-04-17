@@ -1,0 +1,26 @@
+/* styles.css */
+.button {
+    -fx-background-color: #000000;
+    -fx-border-color: rgba(27, 31, 35, .15);
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #fff;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 16px;
+  }
+  
+  .button:hover {
+    -fx-background-color: #303030;
+  }
+  
+  .button:pressed {
+    -fx-background-color: #424141;
+  }
+  
+  .button:disabled {
+    -fx-background-color: #474747;
+    -fx-text-fill: rgba(255, 255, 255, .8);
+  }
+  
