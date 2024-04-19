@@ -1,4 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
+import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
 
 public class RayTest {
@@ -146,6 +147,26 @@ public class RayTest {
     assertEquals(Direction.DOWN_RIGHT,ray.fullReflection(directionUL));
     assertEquals(Direction.UP_LEFT,ray.fullReflection(directionDR));
     assertEquals(Direction.UP_RIGHT,ray.fullReflection(directionDL));
+
+  }
+  
+  @Test
+  void testDrawRays(){
+    test_src.Board board = new test_src.Board();
+    board.getBoardGroup();
+
+    test_src.Cell newCell = new test_src.Cell(4, 5);
+
+    newCell.getAdjacentHexagon(test_src.Direction.LEFT_RIGHT);
+    Polygon hexagon = newCell.createHexagon(40);
+
+    newCell.addAtom();
+    double[] start = {2,1};
+
+    test_src.Ray ray = new test_src.Ray(start,newCell,4);
+
+    ray.drawRays();
+    assertEquals(ray.lines.size(),ray.coords.size()-1);
 
   }
 
