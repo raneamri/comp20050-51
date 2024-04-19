@@ -54,7 +54,7 @@ public class CellTest {
     assertFalse(newCell2.hasAtom());
 
 
-    /*Test to see if atom id added correctly when hex is clicked and gamestage is Marker*/
+    /*Test to see if marker is added correctly when hex is clicked and gamestage is Marker*/
     Main.gameStage = Main.GameStage.MARKERS;
 
     test_src.Cell newCell3 = new test_src.Cell(2, 1);

@@ -10,7 +10,7 @@ public class Experimenter {
 
   Experimenter() {}
 
-  public void addScore(int s) { this.score++; }
+  public void addScore(int s) { this.score += s; }
   public void subScore(int s) { score = Math.max(0, score - s); }
   public int getScore() { return this.score; }
 
@@ -24,7 +24,7 @@ public class Experimenter {
 
   private String scoreToString() {
     return "Score: " + Integer.toString(score) +
-        ((score == 5) ? " Perfect!" : "");
+        ((score == 10) ? " Perfect!" : "");
   }
 
   public void addAbsorption() {

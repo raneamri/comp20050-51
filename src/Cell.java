@@ -110,11 +110,7 @@ public class Cell {
         hasMarker = true;
 
         if (hasCorrectGuess()) {
-          Main.getExperimenter().addScore(1);
-        } else {
-          if (hasMarker) {
-            Main.getExperimenter().subScore(1);
-          }
+          Main.getExperimenter().addScore(2);
         }
 
         Marker marker =
@@ -251,6 +247,7 @@ public class Cell {
   }
 
   public boolean hasAtom() { return this.hasAtom; }
+  public boolean hasMarker() { return this.hasMarker; }
   public Atom getAtom() { return this.atom; }
 
   public void addTorch(Torch t) { torches.add(t); }
