@@ -107,8 +107,12 @@ public class Torch {
   }
 
   public Polygon getInteractable() { return this.interactable; }
+
   public double[] getMainMidpoint() { return this.midpoint; }
+
   public int getNumber() { return number; }
+
   public void toggleOn() { interactable.setVisible(true); }
+
   public void toggleOff() { interactable.setVisible(false); }
 }

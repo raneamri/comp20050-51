@@ -48,7 +48,6 @@ public class Ray {
     drawRays();
   }
 
-
   /**
    * Recursive method that computes path of the ray. This method of finding
    * the path is based on the assumption that any ray cast into the board passes
@@ -119,19 +118,19 @@ public class Ray {
         /*
          * 60 degree reflection
          */
-        nextDir = sixtyReflection(dir, cell.getCenter(),
-                                  collisions.get(0).getCenter());
+        nextDir = oneAtomReflection(dir, cell.getCenter(),
+                                    collisions.get(0).getCenter());
         finalDirection = nextDir;
       }
     } else if (collisions.size() == 2) {
       /*
        * Always 120 degree reflection or full reflection
        * It's unclear but full reflection from 2 atom collisions are handled
-       * within onetwentyReflection
+       * within twoAtomReflection
        */
-      nextDir = onetwentyReflection(dir, cell.getCenter(),
-                                    collisions.get(0).getCenter(),
-                                    collisions.get(1).getCenter());
+      nextDir = twoAtomReflection(dir, cell.getCenter(),
+                                  collisions.get(0).getCenter(),
+                                  collisions.get(1).getCenter());
       finalDirection = nextDir;
     } else if (collisions.size() == 3) {
       /*
@@ -202,7 +201,8 @@ public class Ray {
    * @param p2 center point of atom
    * @return new computed direction
    */
-  protected Direction sixtyReflection(Direction dir, double[] p1, double p2[]) {
+  protected Direction oneAtomReflection(Direction dir, double[] p1,
+                                        double p2[]) {
     switch (dir) {
     case LEFT_RIGHT:
       if (p1[1] > p2[1]) {
@@ -259,8 +259,8 @@ public class Ray {
    * @param p3 center point of atom 2
    * @return
    */
-  protected Direction onetwentyReflection(Direction dir, double[] p1, double[] p2,
-                                          double[] p3) {
+  protected Direction twoAtomReflection(Direction dir, double[] p1, double[] p2,
+                                        double[] p3) {
 
     switch (dir) {
     case LEFT_RIGHT:

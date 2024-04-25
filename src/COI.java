@@ -23,5 +23,6 @@ public class COI extends Circle {
   }
 
   public void toggleOn() { setStroke(Color.color(0.9, 0.9, 0.9)); }
+
   public void toggleOff() { setStroke(Color.TRANSPARENT); }
 }

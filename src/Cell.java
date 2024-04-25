@@ -209,15 +209,19 @@ public class Cell {
   public double getCenterX() {
     return hexagon.getBoundsInParent().getCenterX();
   }
+
   public double getCenterY() {
     return hexagon.getBoundsInParent().getCenterY();
   }
+
   public double[] getCenter() {
     return new double[] {getCenterX(), getCenterY()};
   }
 
   public int getRow() { return coords[0]; }
+
   public int getCol() { return coords[1]; }
+
   public int[] getIndex() { return new int[] {getRow(), getCol()}; }
 
   /**
@@ -247,10 +251,13 @@ public class Cell {
   }
 
   public boolean hasAtom() { return this.hasAtom; }
+
   public boolean hasMarker() { return this.hasMarker; }
+
   public Atom getAtom() { return this.atom; }
 
   public void addTorch(Torch t) { torches.add(t); }
+  
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }

@@ -55,7 +55,6 @@ public class Flag {
     /*
      * Mouse events
      */
-
     interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
                                  new EventHandler<MouseEvent>() {
                                    @Override
