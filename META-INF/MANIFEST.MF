@@ -1,2 +1,1 @@
-Main-Class: Main
-VM-Args: --module-path /Library/Java/javafx-sdk-21.0.2/lib --add-modules javafx.controls,javafx.fxml
+Main-Class: blackbox.Main

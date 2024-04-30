@@ -62,14 +62,14 @@ public class GameLogicTest {
 
   @Test
   void testCorrectGuess() {
-    test_src.Cell cell = new test_src.Cell(1, 1);
+    Cell cell = new Cell(1, 1);
     Polygon hexagon = cell.createHexagon(40);
     cell.addAtom();
     cell.addMarker();
 
     assertTrue(cell.hasCorrectGuess());
 
-    cell = new test_src.Cell(1, 1);
+    cell = new Cell(1, 1);
     cell.addMarker();
     assertFalse(cell.hasCorrectGuess());
   }
@@ -98,16 +98,16 @@ public class GameLogicTest {
 
   @Test
   void testAtomRelations() {
-    test_src.Board board = new test_src.Board();
+    Board board = new Board();
 
-    test_src.Cell cell = board.getCells()[1][1];
+    Cell cell = board.getCells()[1][1];
     Polygon hexagon = cell.createHexagon(40);
     assertFalse(cell.hasAtom());
 
     cell.addAtom();
     assertTrue(cell.hasAtom());
 
-    test_src.Atom atom = new test_src.Atom(0, 0);
+    Atom atom = new Atom(0, 0);
     assertEquals(cell.getAtom().getClass(), atom.getClass());
   }
 
@@ -325,20 +325,20 @@ public class GameLogicTest {
 
   @Test
   void testDrawRays() {
-    test_src.Board board = new test_src.Board();
+    Board board = new Board();
     board.getBoardGroup();
 
-    test_src.Cell newCell = new test_src.Cell(4, 5);
+    Cell newCell = new Cell(4, 5);
 
-    newCell.getAdjacentHexagon(test_src.Direction.LEFT_RIGHT);
+    newCell.getAdjacentHexagon(Direction.LEFT_RIGHT);
     Polygon hexagon = newCell.createHexagon(40);
 
     newCell.addAtom();
     double[] start = {2, 1};
 
-    test_src.Ray ray = new test_src.Ray(start, newCell, 4);
+    Ray ray = new Ray(start, newCell, 4);
 
     ray.drawRays();
-    assertEquals(ray.lines.size(), ray.coords.size() - 1);
+    assertEquals(ray.getLines().size(), ray.getCoords().size() - 1);
   }
 }

@@ -160,7 +160,7 @@ public class Ray {
    * @param p2
    * @return Direction (enum) type method resolved
    */
-  protected Direction slopeToDirection(double[] p1, double[] p2) {
+  public Direction slopeToDirection(double[] p1, double[] p2) {
     /*
      * Allow some margin of error to not lose information or return false
      * positives
@@ -195,7 +195,7 @@ public class Ray {
    * @param p2 point 2
    * @return d between p1 -> p2, as a double
    */
-  protected double distanceBetween(double p1[], double p2[]) {
+  public double distanceBetween(double p1[], double p2[]) {
     return Math.sqrt(Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2));
   }
 
@@ -207,8 +207,7 @@ public class Ray {
    * @param p2 center point of atom
    * @return new computed direction
    */
-  protected Direction oneAtomReflection(Direction dir, double[] p1,
-                                        double p2[]) {
+  public Direction oneAtomReflection(Direction dir, double[] p1, double p2[]) {
     switch (dir) {
     case LEFT_RIGHT:
       if (p1[1] > p2[1]) {
@@ -265,8 +264,8 @@ public class Ray {
    * @param p3 center point of atom 2
    * @return
    */
-  protected Direction twoAtomReflection(Direction dir, double[] p1, double[] p2,
-                                        double[] p3) {
+  public Direction twoAtomReflection(Direction dir, double[] p1, double[] p2,
+                                     double[] p3) {
 
     switch (dir) {
     case LEFT_RIGHT:
@@ -345,7 +344,7 @@ public class Ray {
    * @param dir direction to inverse
    * @return inversed direction
    */
-  protected Direction fullReflection(Direction dir) {
+  public Direction fullReflection(Direction dir) {
     switch (dir) {
     case LEFT_RIGHT:
       return Direction.RIGHT_LEFT;
@@ -393,7 +392,7 @@ public class Ray {
    * Iterates over the points gathered by recursion and essentially draws a
    * JavaFX Polyray
    */
-  private void drawRays() {
+  public void drawRays() {
     for (Cell cell : path) {
       coords.add(
           new Pair<Double, Double>(cell.getCenterX(), cell.getCenterY()));
@@ -445,4 +444,8 @@ public class Ray {
   public Pair<Double, Double> getFlagPos() {
     return (absorbed) ? null : coords.get(coords.size() - 1);
   }
+
+  public ArrayList<Line> getLines() { return lines; }
+
+  public ArrayList<Pair<Double, Double>> getCoords() { return coords; }
 }
