@@ -112,30 +112,30 @@ public class Cell {
                     + "Shoot rays to figure out atom locations");
           }
 
-          return;
 
-        } else if (Main.gameStage != Main.GameStage.MARKERS || hasMarker) {
+        } else if (Main.gameStage == Main.GameStage.MARKERS && !hasMarker
+                && Main.markers.size() < Main.MAX_ATOMS) {
           /*
-           * Allow no placement if not in correct game stage
-           * or already has a marker
+           * Allow experimenter to place markers until 5 are placed
            */
-          return;
-        }
-        hasMarker = true;
+          hasMarker = true;
 
-        if (hasCorrectGuess()) {
-          Main.getExperimenter().addScore(2);
-        }
+          if (hasCorrectGuess()) {
+            Main.getExperimenter().addScore(2);
+          }
 
-        Marker marker =
-                new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
-        Main.markers.add(marker);
-        Main.getGroup().getChildren().add(marker.getInteractable());
+          Marker marker =
+                  new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
+          Main.markers.add(marker);
+          Main.getGroup().getChildren().add(marker.getInteractable());
+
+          if (Main.markers.size() == Main.MAX_ATOMS)
+            Main.showEndBoard();
+        }
       }
     });
     return hexagon;
   }
-
   /**
    * Finds the midpoint of two points
    * Its applied purpose is finding the centre of the side of a cell

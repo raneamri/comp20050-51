@@ -173,7 +173,7 @@ public class Main extends Application {
         + "\n\tWhen you believe you have located all the atoms, \n\tannounce "
         + "the end of the round and place markers\n\twhere you believe the "
         + "atoms are.\n\tScore is calculated as: \n\t(2 x correct atoms) - "
-        + "(no. of rays cast > 12)\n\t\t - (no. of markers placed > 5)");
+        + "(no. of rays cast > 12)");
     experimenter.setFont(
         Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     experimenter.setFill(Color.BLACK);
@@ -333,56 +333,16 @@ public class Main extends Application {
       switch (Main.gameStage) {
         case RAYS -> {
           Main.gameStage = GameStage.MARKERS;
-          statusInstruct("\tPlace markers to guess");
+          statusInstruct("\tPlace 5 markers to guess");
 
           for(Torch t : Main.torchs){
             t.getInteractable().setOnMouseEntered(null);
             t.getInteractable().setOnMouseClicked(null);
           }
+          endTurnBtn.setVisible(false);
+          endTurnBtn.setMouseTransparent(true);
         }
 
-    case MARKERS
-        -> {
-      Main.gameStage = GameStage.SCORE; player.setVisible(false);
-
-      /*Calculating score
-       * 2xcorrect atoms -(no. of rays cast > 12) - (no. of markers placed > 5)"
-       */
-      int initialScore = experimenter.getScore();
-
-      int markerminus = markers.size(); markerminus = (markerminus <= 5) ? 0:
-      markerminus - 5;
-      experimenter.subScore(markerminus);
-
-      int torchminus = 0;
-      for (Torch t : torchs) {
-        if (t.getInteractable().getFill() == Color.YELLOW)
-          torchminus++;
-      }
-
-      torchminus = (torchminus <= 12) ? 0 : torchminus - 12;
-      experimenter.subScore(torchminus);
-
-      experimenter.showScore();
-      experimenter.showReplay();
-      experimenter.hideAbsorptions();
-      StackPane.setAlignment(gameStageInstruct, Pos.CENTER_RIGHT);
-      statusInstruct("Score Breakdown\n"
-                     + "2 x " + initialScore / 2 + " Atoms correct\n"
-                     + "-1 x " + torchminus + " Extra torches shone\n"
-                     + "-1 x " + markerminus + " Extra markers");
-
-      for (Atom a : Main.atoms) {
-        a.toggleOn();
-      }
-      for (Ray r : Main.rays) {
-        r.toggleOn();
-      }
-      for (Flag f : Main.flags) {
-        f.toggleOff();
-      }
-
-        }
         default -> {
         }
   }
@@ -412,24 +372,60 @@ private void clearAssets() {
  *
  * @param message instruction message for current stage
  */
-public static void statusInstruct(String message) {
-  FadeTransition fade =
-      new FadeTransition(Duration.millis(3500), gameStageInstruct);
-  fade.setFromValue(1.0);
-  if (gameStage == GameStage.SCORE) {
-    gameStageInstruct.setFont(Font.font("Arial", 15));
-    gameStageInstruct.setPadding(new Insets(0, 0, 0, 55));
-    gameStageInstruct.setPrefSize(300, 300);
-    fade.setToValue(1.0);
-  } else {
-    gameStageInstruct.setPrefSize(350, 100);
-    gameStageInstruct.setFont(Font.font("Arial", 25));
-    fade.setToValue(0);
+  public static void statusInstruct(String message) {
+    FadeTransition fade =
+        new FadeTransition(Duration.millis(3500), gameStageInstruct);
+    fade.setFromValue(1.0);
+    if (gameStage == GameStage.SCORE) {
+      gameStageInstruct.setFont(Font.font("Arial", 15));
+      gameStageInstruct.setPadding(new Insets(0, 0, 0, 55));
+      gameStageInstruct.setPrefSize(300, 300);
+      fade.setToValue(1.0);
+    } else {
+      gameStageInstruct.setPrefSize(350, 100);
+      gameStageInstruct.setFont(Font.font("Arial", 25));
+      fade.setToValue(0);
+    }
+
+    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+    gameStageInstruct.setText(message);
+
+    fade.play();
   }
 
-  gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
-  gameStageInstruct.setText(message);
+  public static void showEndBoard(){
+    Main.gameStage = GameStage.SCORE; player.setVisible(false);
 
-  fade.play();
-}
+    /*Calculating score
+    * 2xcorrect atoms - (no. of rays cast > 12)"
+    */
+    int initialScore = experimenter.getScore();
+
+    int torchminus = 0;
+    for (Torch t : torchs) {
+      if (t.getInteractable().getFill() == Color.YELLOW)
+        torchminus++;
+    }
+
+    torchminus = (torchminus <= 12) ? 0 : torchminus - 12;
+    experimenter.subScore(torchminus);
+
+    experimenter.showScore();
+    experimenter.showReplay();
+    experimenter.hideAbsorptions();
+    StackPane.setAlignment(gameStageInstruct, Pos.CENTER_RIGHT);
+    statusInstruct("Score Breakdown\n"
+            + "2 x " + initialScore / 2 + " Atoms correct\n"
+            + "-1 x " + torchminus + " Extra torches shone\n");
+
+    for (Atom a : Main.atoms) {
+      a.toggleOn();
+    }
+    for (Ray r : Main.rays) {
+      r.toggleOn();
+    }
+    for (Flag f : Main.flags) {
+      f.toggleOff();
+    }
+  }
 }
