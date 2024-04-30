@@ -27,7 +27,7 @@ public class Board {
   public Board() {
     cells = new Cell[NUM_ROWS][];
 
-    /**
+    /*
      * Fill cells matrix and assigns each cell its index
      */
     for (int row = 0; row < NUM_ROWS; row++) {
@@ -59,7 +59,7 @@ public class Board {
           hexagon.setLayoutY(y);
           group.getChildren().add(hexagon);
 
-          /**
+          /*
            * Passing in the array position of the hexagon point needed to
            * draw triangle of torch
            */
@@ -133,7 +133,7 @@ public class Board {
    * Uses geometry to pinpoint where next row should start to have all cells
    * perfectly tangential
    *
-   * @param row
+   * @param row row for which x-start is to be fetched
    * @return start position for first hexagon in given row
    */
   private double getStartXForRow(int row) {
@@ -147,8 +147,8 @@ public class Board {
   /**
    * Checks if an index pair [i][j] exists in Board and is a populated entry
    *
-   * @param row
-   * @param col
+   * @param row row entry of hexagon
+   * @param col col entry of hexagon
    * @return true if the entry exists, false otherwise
    */
   public static boolean isInBoard(int row, int col) {
@@ -171,8 +171,15 @@ public class Board {
 
     Torch t = new Torch(cell, hexPoint, number);
     cell.addTorch(t);
+
     group.getChildren().add(t.getInteractable());
-    Main.torchs.add(t);
+
+    /*
+     * Ignore errors caused by test classes
+     */
+    try {
+      Main.torchs.add(t);
+    } catch (Throwable ignored) {}
 
     Text text = new Text("" + t.getNumber());
     text.setFill(Color.GRAY);

@@ -1,14 +1,15 @@
 package blackbox;
 
-import java.util.ArrayList;
-import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
- * The Ray class is a non trivial class which handles the calculating and
- * drawing rays on the board. The Ray class does not directly extended the
+ * The Ray class is a non-trivial class which handles the calculating and
+ * drawing rays on the board. The Ray class does not directly extend the
  * JavaFX <a
  * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/shape/Line.html">Line
  * class</a> and instead uses an ArrayList of coordinates to construct an
@@ -16,7 +17,7 @@ import javafx.util.Pair;
  */
 public class Ray {
   /*
-   * Polyray drawing utilities
+   * PolyRay drawing utilities
    */
   private ArrayList<Cell> path = new ArrayList<>();
   private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Ray {
    */
   public Ray(double[] startPos, Cell cell, int torchCreator) {
     this.torchCreator = torchCreator;
-    coords.add(new Pair<Double, Double>(startPos[0], startPos[1]));
+    coords.add(new Pair<>(startPos[0], startPos[1]));
 
     Direction dir = slopeToDirection(startPos, cell.getCenter());
 
@@ -61,8 +62,8 @@ public class Ray {
    * @param cell current cell virtual pointer is at
    */
   private void checkCollisions(Direction dir, Cell cell) {
-    /**
-     * Pre checks (& base case)
+    /*
+     * Pre-checks (& base case)
      */
     if (cell == null) {
       return;
@@ -106,9 +107,7 @@ public class Ray {
       /*
        * Always 60 degree reflection or absorption
        */
-      if (Objects.isNull(cell.getAdjacentHexagon(dir))
-              ? false
-              : cell.getAdjacentHexagon(dir).equals(collisions.get(0))) {
+      if (!Objects.isNull(cell.getAdjacentHexagon(dir)) && cell.getAdjacentHexagon(dir).equals(collisions.get(0))) {
         /*
          * Absorption
          */
@@ -195,7 +194,7 @@ public class Ray {
    * @param p2 point 2
    * @return d between p1 -> p2, as a double
    */
-  public double distanceBetween(double p1[], double p2[]) {
+  public double distanceBetween(double[] p1, double[] p2) {
     return Math.sqrt(Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2));
   }
 
@@ -207,7 +206,7 @@ public class Ray {
    * @param p2 center point of atom
    * @return new computed direction
    */
-  public Direction oneAtomReflection(Direction dir, double[] p1, double p2[]) {
+  public Direction oneAtomReflection(Direction dir, double[] p1, double[] p2) {
     switch (dir) {
     case LEFT_RIGHT:
       if (p1[1] > p2[1]) {
@@ -262,7 +261,7 @@ public class Ray {
    * @param p1 center point of cell the recursion is currently at
    * @param p2 center point of atom 1
    * @param p3 center point of atom 2
-   * @return
+   * @return direction of reflected ray
    */
   public Direction twoAtomReflection(Direction dir, double[] p1, double[] p2,
                                      double[] p3) {
@@ -339,40 +338,26 @@ public class Ray {
   }
 
   /**
-   * Finds 360° reflection of ray by inversing current Direction
+   * Finds 360° reflection of ray by inverting current Direction
    *
    * @param dir direction to inverse
-   * @return inversed direction
+   * @return inverted direction
    */
   public Direction fullReflection(Direction dir) {
-    switch (dir) {
-    case LEFT_RIGHT:
-      return Direction.RIGHT_LEFT;
-
-    case RIGHT_LEFT:
-      return Direction.LEFT_RIGHT;
-
-    case UP_RIGHT:
-      return Direction.DOWN_LEFT;
-
-    case UP_LEFT:
-      return Direction.DOWN_RIGHT;
-
-    case DOWN_RIGHT:
-      return Direction.UP_LEFT;
-
-    case DOWN_LEFT:
-      return Direction.UP_RIGHT;
-
-    default:
-      return null;
-    }
+      return switch (dir) {
+          case LEFT_RIGHT -> Direction.RIGHT_LEFT;
+          case RIGHT_LEFT -> Direction.LEFT_RIGHT;
+          case UP_RIGHT -> Direction.DOWN_LEFT;
+          case UP_LEFT -> Direction.DOWN_RIGHT;
+          case DOWN_RIGHT -> Direction.UP_LEFT;
+          case DOWN_LEFT -> Direction.UP_RIGHT;
+      };
   }
 
   /**
    * Computes the final point the Ray most cross in order to meet the edge of
    * the board. This is done by taking the final Cell the Ray crossed and
-   * finding the codirectional Torch assigned to that Cell's midpoint.
+   * finding the directional Torch assigned to that Cell's midpoint.
    *
    * @param c final Cell the Ray crossed
    * @return point required to meet edge of the board, or null if the Ray was
@@ -390,12 +375,12 @@ public class Ray {
 
   /**
    * Iterates over the points gathered by recursion and essentially draws a
-   * JavaFX Polyray
+   * JavaFX PolyRay
    */
   public void drawRays() {
     for (Cell cell : path) {
       coords.add(
-          new Pair<Double, Double>(cell.getCenterX(), cell.getCenterY()));
+          new Pair<>(cell.getCenterX(), cell.getCenterY()));
     }
 
     if (!absorbed)

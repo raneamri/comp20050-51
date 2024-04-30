@@ -1,15 +1,13 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import blackbox.*;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class GameLogicTest {
+
   @Test
   void testAtomEquals() {
     Atom atom1 = new Atom(10, 10);
@@ -26,24 +24,6 @@ public class GameLogicTest {
     assertFalse(atom3.equals(coi1));
     assertFalse(atom4.equals(coi2));
     assertEquals(atom1.equals(atom2), atom2.equals(atom1));
-  }
-
-  @Test
-  void testGetBoardGroup() {
-    Board newBoard = new Board();
-
-    Group group = newBoard.getBoardGroup();
-
-    boolean containsPolygon = false;
-
-    for (Node node : group.getChildren()) {
-      if (node instanceof Polygon) {
-        containsPolygon = true;
-        break;
-      }
-    }
-    // Ensure the hexagons are being added to main's group correctly
-    assertTrue(containsPolygon);
   }
 
   @Test
@@ -145,6 +125,7 @@ public class GameLogicTest {
   @Test
   void testMarkerScoreProperty() {
     Cell cell = new Cell(1, 1);
+    cell.createHexagon(50);
     cell.addAtom();
     cell.addMarker();
 

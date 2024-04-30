@@ -7,7 +7,7 @@ public class Setter {
 
   /**
    * Places atoms on the board at random locations
-   * (Outdated function used for bugfixing)
+   * (Outdated function used for bug fixing)
    * Deprecated (Thu 25 Apr 2024) due to its implementation not being tested for
    * final version
    */
@@ -21,7 +21,6 @@ public class Setter {
 
       if (!Board.getCells()[row][col].addAtom()) {
         i--;
-        continue;
       }
     }
   }

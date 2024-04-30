@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 /**
  * The atom is an extension of the JavaFX <a
  * href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/shape/Circle.html">Circle
- * class</a>. The only signicant part of the Atom class are its center point.
+ * class</a>. The only significant part of the Atom class are its center point.
  * The rest is purely visual.
  */
 public class Atom extends Circle {

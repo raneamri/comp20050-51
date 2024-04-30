@@ -1,11 +1,12 @@
 package blackbox;
 
-import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
+
+import java.util.ArrayList;
 
 /**
  * Cells are the building blocks of the board. Each cell is a hexagon, but the
@@ -39,7 +40,7 @@ public class Cell {
   public Polygon createHexagon(double size) {
     hexagon = new Polygon();
 
-    /**
+    /*
      * Simple maths to construct a hexagon
      */
     for (int i = 0; i < 6; i++) {
@@ -49,14 +50,14 @@ public class Cell {
       hexagon.getPoints().addAll(x, y);
     }
 
-    /**
+    /*
      * Visual parameters
      */
     hexagon.setFill(Color.TRANSPARENT);
     hexagon.setStroke(Color.RED);
     hexagon.setStrokeWidth(2);
 
-    /**
+    /*
      * Event handler
      */
     hexagon.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -75,7 +76,7 @@ public class Cell {
       @Override
       public void handle(MouseEvent event) {
         if (Main.atoms.size() < Main.MAX_ATOMS) {
-          /**
+          /*
            * Allow setter to place atoms until all atoms are placed
            */
           addAtom();
@@ -83,8 +84,8 @@ public class Cell {
           if (Main.atoms.size() == Main.MAX_ATOMS) {
             try {
               Thread.sleep(100);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
+            } catch (InterruptedException ignored) {
+              // no handling since the lack of sleep won't cause any issues
             }
 
             for (Atom a : Main.atoms) {
@@ -103,7 +104,7 @@ public class Cell {
           return;
 
         } else if (Main.gameStage != Main.GameStage.MARKERS || hasMarker) {
-          /**
+          /*
            * Allow no placement if not in correct game stage
            * or already has a marker
            */
@@ -128,15 +129,14 @@ public class Cell {
    * Finds the midpoint of two points
    * Its applied purpose is finding the centre of the side of a cell
    *
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
+   * @param x1 p1 x
+   * @param y1 p1 y
+   * @param x2 p2 x
+   * @param y2 p2 y
    * @return double[] wrapped coordinates of the midpoint
    */
   public double[] midpoint(double x1, double y1, double x2, double y2) {
-    double midpoint[] = {(x1 + x2) / 2, (y1 + y2) / 2};
-    return midpoint;
+      return new double[]{(x1 + x2) / 2, (y1 + y2) / 2};
   }
 
   /**
@@ -241,9 +241,11 @@ public class Cell {
       Atom a = new Atom(centerX, centerY);
       a.coi = new COI(centerX, centerY);
 
-      Main.getGroup().getChildren().add(a);
-      Main.getGroup().getChildren().add(a.coi);
-      Main.atoms.add(a);
+      try {
+        Main.getGroup().getChildren().add(a);
+        Main.getGroup().getChildren().add(a.coi);
+        Main.atoms.add(a);
+      } catch (Throwable ignored) {}
 
       this.hasAtom = true;
       this.atom = a;

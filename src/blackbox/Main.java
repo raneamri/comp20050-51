@@ -1,7 +1,5 @@
 package blackbox;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -23,9 +21,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Entry point/launcher for the game. Includes all logic for the menu.
@@ -91,7 +92,7 @@ public class Main extends Application {
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
-        getClass().getResource("styles.css").toExternalForm());
+        Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
     startBtn.getStyleClass().add("button");
     instructBtn.getStyleClass().add("button");
     replayBtn.getStyleClass().add("button");
@@ -119,7 +120,7 @@ public class Main extends Application {
     /*
      * Image
      */
-    Image image = new Image(getClass().getResourceAsStream("img/atom.jpg"));
+    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("img/atom.jpg")));
     ImageView imageView = new ImageView(image);
 
     /*
@@ -146,7 +147,7 @@ public class Main extends Application {
     instructFadeIn.setFromValue(0.0);
     instructFadeIn.setToValue(1.0);
 
-    /**
+    /*
      * Text elements
      */
     Text text = new Text("Setter Instructions");
@@ -185,7 +186,7 @@ public class Main extends Application {
     background.setFill(Color.WHITE);
     background.setOpacity(0.9);
 
-    /**
+    /*
      * Button actions
      */
     scaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
@@ -263,7 +264,7 @@ public class Main extends Application {
     replayBtn.setVisible(false);
     replayBtn.setDisable(true);
 
-    /**
+    /*
      * Alignments
      */
     StackPane.setAlignment(startBtn, Pos.CENTER);
@@ -282,7 +283,7 @@ public class Main extends Application {
     StackPane.setMargin(player, new Insets(-625, 0, 0, 0));
     StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
 
-    /**
+    /*
      * Adding to root
      */
     root.getChildren().add(imageView);

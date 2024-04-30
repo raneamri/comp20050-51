@@ -21,13 +21,13 @@ public class Experimenter {
   public void setAbsorptions(int a) { this.absorptions = a; }
 
   private String absorptionsToString() {
-    return "Absorptions: " + Integer.toString(absorptions);
+    return "Absorptions: " + absorptions;
   }
 
   public String getToString() { return absorptionsToString(); }
 
   private String scoreToString() {
-    return "Score: " + Integer.toString(score) +
+    return "Score: " + score +
         ((score == 10) ? " Perfect!" : "");
   }
 
@@ -49,14 +49,9 @@ public class Experimenter {
     Main.scoreDisplay.setText(scoreToString());
     Main.scoreDisplay.setFill(Color.BLUEVIOLET);
   }
-  public void hideScore() { Main.scoreDisplay.setFill(Color.TRANSPARENT); }
 
   public void showReplay() {
     Main.replayBtn.setVisible(true);
     Main.replayBtn.setDisable(false);
-  }
-  public void hideReplay() {
-    Main.replayBtn.setVisible(false);
-    Main.replayBtn.setDisable(true);
   }
 }

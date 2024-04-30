@@ -16,13 +16,11 @@ import javafx.util.Pair;
  */
 public class Flag {
   private Polygon interactable;
-  private int torchCreator;
   private final Label label;
 
   public Flag(Pair<Double, Double> coords, int torchCreator) {
-    this.torchCreator = torchCreator;
     interactable = new Polygon(coords.getKey(), coords.getValue());
-    label = new Label("Torch " + this.torchCreator);
+    label = new Label("Torch " + torchCreator);
     label.setLabelFor(interactable);
 
     double x = coords.getKey();
@@ -57,21 +55,23 @@ public class Flag {
     /*
      * Mouse events
      */
-    interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                                 new EventHandler<MouseEvent>() {
-                                   @Override
-                                   public void handle(MouseEvent e) {
-                                     Main.getGroup().getChildren().add(label);
-                                   }
-                                 });
+    try {
+      interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
+              new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                  Main.getGroup().getChildren().add(label);
+                }
+              });
 
-    interactable.addEventHandler(
-        MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            Main.getGroup().getChildren().remove(label);
-          }
-        });
+      interactable.addEventHandler(
+              MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                  Main.getGroup().getChildren().remove(label);
+                }
+              });
+    } catch (Throwable ignored) {}
   }
 
   public Polygon getInteractable() { return this.interactable; }
