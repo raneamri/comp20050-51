@@ -6,14 +6,14 @@ JAR_FILE := blackbox+.jar
 MANIFEST := META-INF/MANIFEST.MF
 
 run:
-	javac -cp "$(BIN_DIR):$(LIB_DIR)/*" -d "$(BIN_DIR)" $(SRC_DIR)/blackbox/*.java \
+	make build \
 	&& java --enable-preview --module-path "$(LIB_DIR)" --add-modules javafx.controls,javafx.fxml -cp "$(BIN_DIR)" blackbox.Main
 
 build:
 	javac -cp "$(BIN_DIR):$(LIB_DIR)/*" -d "$(BIN_DIR)" $(SRC_DIR)/blackbox/*.java
 
 doc:
-	javadoc -private -sourcepath $(SRC_DIR) -d $(DOC_DIR) -classpath "$(LIB_DIR)/*" $(SRC_DIR)/*.java
+	javadoc -private -sourcepath $(SRC_DIR) -d $(DOC_DIR) -classpath "$(LIB_DIR)/*" $(SRC_DIR)/blackbox/*.java
 
 cleandoc:
 	rm -r $(DOC_DIR)

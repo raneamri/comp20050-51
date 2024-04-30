@@ -156,8 +156,8 @@ public class Ray {
   /**
    * Takes two points and returns the general direction of the slope
    *
-   * @param p1
-   * @param p2
+   * @param p1 point 1
+   * @param p2 point 2
    * @return Direction (enum) type method resolved
    */
   public Direction slopeToDirection(double[] p1, double[] p2) {
