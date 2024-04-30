@@ -1,3 +1,5 @@
+package blackbox;
+
 import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -257,7 +259,7 @@ public class Cell {
   public Atom getAtom() { return this.atom; }
 
   public void addTorch(Torch t) { torches.add(t); }
-  
+
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }

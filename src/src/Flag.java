@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -57,7 +57,6 @@ public class Flag {
     /*
      * Mouse events
      */
-
     interactable.addEventHandler(MouseEvent.MOUSE_ENTERED,
                                  new EventHandler<MouseEvent>() {
                                    @Override

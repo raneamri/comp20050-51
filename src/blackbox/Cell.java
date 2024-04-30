@@ -1,4 +1,5 @@
-package test_src;
+package blackbox;
+
 import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -31,7 +32,7 @@ public class Cell {
    * Flags
    */
   private boolean hasAtom = false;
-  public boolean hasMarker = false;
+  private boolean hasMarker = false;
 
   public Cell(int row, int col) { this.coords = new int[] {row, col}; }
 
@@ -62,10 +63,10 @@ public class Cell {
       @Override
       public void handle(MouseEvent mouseEvent) {
         if (Main.gameStage == Main.GameStage.SETTER ||
-                Main.gameStage == Main.GameStage.MARKERS) {
+            Main.gameStage == Main.GameStage.MARKERS) {
           hexagon.setFill(Color.color(0.1, 0.1, 0.1));
           hexagon.setOnMouseExited(
-                  event -> { hexagon.setFill(Color.TRANSPARENT); });
+              event -> { hexagon.setFill(Color.TRANSPARENT); });
         }
       }
     });
@@ -95,9 +96,8 @@ public class Cell {
              */
             Main.gameStage = Main.GameStage.RAYS;
             Main.player.setText("EXPERIMENTER");
-            //Main.cellLabel = Main.statusInstruct("Experimenter's Turn\n"
-              //      + "Shoot rays to figure out atom locations");
-            //Main.cellLabel.setVisible(true);
+            Main.statusInstruct("Experimenter's Turn\n"
+                                + "Shoot rays to figure out atom locations");
           }
 
           return;
@@ -112,15 +112,11 @@ public class Cell {
         hasMarker = true;
 
         if (hasCorrectGuess()) {
-          Main.getExperimenter().addScore(1);
-        } else {
-          if (hasMarker) {
-            Main.getExperimenter().subScore(1);
-          }
+          Main.getExperimenter().addScore(2);
         }
 
         Marker marker =
-                new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
+            new Marker(new Pair<Double, Double>(getCenterX(), getCenterY()));
         Main.markers.add(marker);
         Main.getGroup().getChildren().add(marker.getInteractable());
       }
@@ -159,50 +155,50 @@ public class Cell {
     int col = getCol();
 
     switch (direction) {
-      case LEFT_RIGHT:
-        adjacentHexagon[0] = row;
+    case LEFT_RIGHT:
+      adjacentHexagon[0] = row;
+      adjacentHexagon[1] = col + 1;
+      break;
+    case RIGHT_LEFT:
+      adjacentHexagon[0] = row;
+      adjacentHexagon[1] = col - 1;
+      break;
+    case UP_RIGHT:
+      if (row >= 5) {
+        adjacentHexagon[0] = row - 1;
         adjacentHexagon[1] = col + 1;
-        break;
-      case RIGHT_LEFT:
-        adjacentHexagon[0] = row;
+      } else {
+        adjacentHexagon[0] = row - 1;
+        adjacentHexagon[1] = col;
+      }
+      break;
+    case UP_LEFT:
+      if (row >= 5) {
+        adjacentHexagon[0] = row - 1;
+        adjacentHexagon[1] = col;
+      } else {
+        adjacentHexagon[0] = row - 1;
         adjacentHexagon[1] = col - 1;
-        break;
-      case UP_RIGHT:
-        if (row >= 5) {
-          adjacentHexagon[0] = row - 1;
-          adjacentHexagon[1] = col + 1;
-        } else {
-          adjacentHexagon[0] = row - 1;
-          adjacentHexagon[1] = col;
-        }
-        break;
-      case UP_LEFT:
-        if (row >= 5) {
-          adjacentHexagon[0] = row - 1;
-          adjacentHexagon[1] = col;
-        } else {
-          adjacentHexagon[0] = row - 1;
-          adjacentHexagon[1] = col - 1;
-        }
-        break;
-      case DOWN_RIGHT:
-        if (row >= 4) {
-          adjacentHexagon[0] = row + 1;
-          adjacentHexagon[1] = col;
-        } else {
-          adjacentHexagon[0] = row + 1;
-          adjacentHexagon[1] = col + 1;
-        }
-        break;
-      case DOWN_LEFT:
-        if (row >= 4) {
-          adjacentHexagon[0] = row + 1;
-          adjacentHexagon[1] = col - 1;
-        } else {
-          adjacentHexagon[0] = row + 1;
-          adjacentHexagon[1] = col;
-        }
-        break;
+      }
+      break;
+    case DOWN_RIGHT:
+      if (row >= 4) {
+        adjacentHexagon[0] = row + 1;
+        adjacentHexagon[1] = col;
+      } else {
+        adjacentHexagon[0] = row + 1;
+        adjacentHexagon[1] = col + 1;
+      }
+      break;
+    case DOWN_LEFT:
+      if (row >= 4) {
+        adjacentHexagon[0] = row + 1;
+        adjacentHexagon[1] = col - 1;
+      } else {
+        adjacentHexagon[0] = row + 1;
+        adjacentHexagon[1] = col;
+      }
+      break;
     }
 
     if (!Board.isInBoard(adjacentHexagon[0], adjacentHexagon[1])) {
@@ -215,15 +211,19 @@ public class Cell {
   public double getCenterX() {
     return hexagon.getBoundsInParent().getCenterX();
   }
+
   public double getCenterY() {
     return hexagon.getBoundsInParent().getCenterY();
   }
+
   public double[] getCenter() {
     return new double[] {getCenterX(), getCenterY()};
   }
 
   public int getRow() { return coords[0]; }
+
   public int getCol() { return coords[1]; }
+
   public int[] getIndex() { return new int[] {getRow(), getCol()}; }
 
   /**
@@ -253,9 +253,13 @@ public class Cell {
   }
 
   public boolean hasAtom() { return this.hasAtom; }
+
+  public boolean hasMarker() { return this.hasMarker; }
+
   public Atom getAtom() { return this.atom; }
 
   public void addTorch(Torch t) { torches.add(t); }
+
   public ArrayList<Torch> getTorch() { return torches; }
 
   public Polygon getHexagon() { return hexagon; }

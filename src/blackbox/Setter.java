@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 import java.util.Random;
 
@@ -8,7 +8,10 @@ public class Setter {
   /**
    * Places atoms on the board at random locations
    * (Outdated function used for bugfixing)
+   * Deprecated (Thu 25 Apr 2024) due to its implementation not being tested for
+   * final version
    */
+  @Deprecated
   public void placeAtoms() {
     Random rand = new Random();
 

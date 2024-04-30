@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 /**
  * Rays only ever have one of six slopes in Blackbox+

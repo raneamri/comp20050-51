@@ -1,3 +1,9 @@
+package test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import blackbox.*;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -6,169 +12,166 @@ import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 import test_src.Main;
-import javafx.scene.control.Label;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class GameUITest {
-    @Test
-    void testCreateAtom() {
-        Atom newAtom = new Atom(40, 40);
-        assertNotNull(newAtom);
-        assertEquals(Color.RED, newAtom.getFill());
+  @Test
+  void testCreateAtom() {
+    Atom newAtom = new Atom(40, 40);
+    assertNotNull(newAtom);
+    assertEquals(Color.RED, newAtom.getFill());
 
-        newAtom.coi = new COI(40, 40);
-        assertNotNull(newAtom.coi);
-        assertEquals(Color.TRANSPARENT, newAtom.coi.getFill());
-        assertEquals(Color.color(0.9, 0.9, 0.9), newAtom.coi.getStroke());
+    newAtom.coi = new COI(40, 40);
+    assertNotNull(newAtom.coi);
+    assertEquals(Color.TRANSPARENT, newAtom.coi.getFill());
+    assertEquals(Color.color(0.9, 0.9, 0.9), newAtom.coi.getStroke());
 
-        Atom newAtom2 = new Atom(35, 37);
-        assertNotNull(newAtom2);
-        assertEquals(Color.RED, newAtom2.getFill());
+    Atom newAtom2 = new Atom(35, 37);
+    assertNotNull(newAtom2);
+    assertEquals(Color.RED, newAtom2.getFill());
+  }
+
+  final int NUM_ROWS = 9;
+
+  @Test
+  void testCreateBoard() {
+    Board newBoard = new Board();
+
+    assertNotNull(newBoard.getCells()); // Ensuring cells are created
+    assertEquals(
+        NUM_ROWS,
+        newBoard.getCells().length); // Ensuring the no of rows is correct
+
+    // Verify coordinates
+    for (int row = 0; row < NUM_ROWS / 2; row++) {
+      int expectedNumHexagons = row + 5;
+      for (int col = 0; col < expectedNumHexagons; col++) {
+        assertEquals(row, newBoard.getCells()[row][col].coords[0]);
+        assertEquals(col, newBoard.getCells()[row][col].coords[1]);
+      }
     }
+  }
 
-    final int NUM_ROWS = 9;
+  @Test
+  void testCreateHexagon() {
+    test_src.Cell newCell = new test_src.Cell(4, 5);
+    Polygon hexagon = newCell.createHexagon(40);
 
-    @Test
-    void testCreateBoard() {
-        Board newBoard = new Board();
+    assertEquals(Color.RED, hexagon.getStroke());
+    assertEquals(Color.TRANSPARENT, hexagon.getFill());
+    assertNotNull(hexagon);
 
-        assertNotNull(newBoard.getCells()); // Ensuring cells are created
-        assertEquals(
-                NUM_ROWS,
-                newBoard.getCells().length); // Ensuring the no of rows is correct
+    test_src.Cell newCell2 = new test_src.Cell(6, 2);
+    Polygon hexagon2 = newCell2.createHexagon(40);
+    assertEquals(Color.RED, hexagon2.getStroke());
+    assertEquals(Color.TRANSPARENT, hexagon2.getFill());
+  }
 
-        // Verify coordinates
-        for (int row = 0; row < NUM_ROWS / 2; row++) {
-            int expectedNumHexagons = row + 5;
-            for (int col = 0; col < expectedNumHexagons; col++) {
-                assertEquals(row, newBoard.getCells()[row][col].coords[0]);
-                assertEquals(col, newBoard.getCells()[row][col].coords[1]);
-            }
-        }
-    }
+  @Test
+  void testCellMouseEvents() {
+    /*Test to see if atom id added correctly when hex is clicked and gamestage
+     * is Setter*/
+    Experimenter experimenter = new Experimenter();
+    Cell newCell = new test_src.Cell(4, 5);
+    Polygon hexagon = newCell.createHexagon(40);
 
-    @Test
-    void testCreateHexagon() {
-        test_src.Cell newCell = new test_src.Cell(4, 5);
-        Polygon hexagon = newCell.createHexagon(40);
+    MouseEvent mouseEvent = new MouseEvent(
+        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
+        false, false, false, false, false, false, false, false, false, null);
 
-        assertEquals(Color.RED, hexagon.getStroke());
-        assertEquals(Color.TRANSPARENT, hexagon.getFill());
-        assertNotNull(hexagon);
+    newCell.getHexagon().fireEvent(mouseEvent);
+    assertTrue(newCell.hasAtom());
 
-        test_src.Cell newCell2 = new test_src.Cell(6, 2);
-        Polygon hexagon2 = newCell2.createHexagon(40);
-        assertEquals(Color.RED, hexagon2.getStroke());
-        assertEquals(Color.TRANSPARENT, hexagon2.getFill());
+    /*Test to see if atom is not added when hex is clicked and gamestage is
+     * Rays*/
+    Main.atoms.add(new test_src.Atom(3, 6));
+    Main.atoms.add(new test_src.Atom(3, 2));
+    Main.atoms.add(new test_src.Atom(3, 4));
+    Main.atoms.add(new test_src.Atom(3, 1));
 
-    }
+    test_src.Cell newCell2 = new test_src.Cell(4, 5);
+    Polygon hexagon2 = newCell2.createHexagon(40);
+    MouseEvent mouseEvent2 = new MouseEvent(
+        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
+        false, false, false, false, false, false, false, false, false, null);
 
-    @Test
-    void testCellMouseEvents(){
-        /*Test to see if atom id added correctly when hex is clicked and gamestage is Setter*/
-        Main.experimenter = new test_src.Experimenter();
-        test_src.Cell newCell = new test_src.Cell(4, 5);
-        Polygon hexagon = newCell.createHexagon(40);
+    newCell2.getHexagon().fireEvent(mouseEvent2);
+    assertFalse(newCell2.hasAtom());
 
-        MouseEvent mouseEvent = new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
-                false, false, false, false, false, false, false, false, false, null);
+    /*Test to see if marker is added correctly when hex is clicked and gamestage
+     * is Marker*/
+    Main.gameStage = Main.GameStage.MARKERS;
 
-        newCell.getHexagon().fireEvent(mouseEvent);
-        assertTrue(newCell.hasAtom());
+    test_src.Cell newCell3 = new test_src.Cell(2, 1);
+    Polygon hexagon3 = newCell3.createHexagon(40);
+    MouseEvent mouseEvent3 = new MouseEvent(
+        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
+        false, false, false, false, false, false, false, false, false, null);
 
-        /*Test to see if atom is not added when hex is clicked and gamestage is Rays*/
-        Main.atoms.add(new test_src.Atom(3,6));
-        Main.atoms.add(new test_src.Atom(3,2));
-        Main.atoms.add(new test_src.Atom(3,4));
-        Main.atoms.add(new test_src.Atom(3,1));
+    newCell3.getHexagon().fireEvent(mouseEvent3);
+    assertTrue(newCell3.hasMarker);
 
-        test_src.Cell newCell2 = new test_src.Cell(4, 5);
-        Polygon hexagon2 = newCell2.createHexagon(40);
-        MouseEvent mouseEvent2 = new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
-                false, false, false, false, false, false, false, false, false, null);
+    /*Test to see if hex lights up correctly when hovered on*/
+    MouseEvent mouseEvent4 = new MouseEvent(
+        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
+        false, false, false, false, false, false, false, false, false, null);
+    newCell3.getHexagon().fireEvent(mouseEvent4);
+    assertEquals(hexagon3.getFill().toString(),
+                 Color.color(0.1, 0.1, 0.1).toString());
+  }
 
-        newCell2.getHexagon().fireEvent(mouseEvent2);
-        assertFalse(newCell2.hasAtom());
+  @Test
+  void testToString() {
+    Experimenter experimenter = new Experimenter();
+    experimenter.setAbsorptions(5);
 
+    assertEquals("Absorptions: 5", experimenter.getToString());
+  }
 
-        /*Test to see if marker is added correctly when hex is clicked and gamestage is Marker*/
-        Main.gameStage = Main.GameStage.MARKERS;
+  @Test
+  void testFlag() {
+    Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
+    Flag flag = new Flag(coords, 5);
+    Polygon interactable = flag.getInteractable();
 
-        test_src.Cell newCell3 = new test_src.Cell(2, 1);
-        Polygon hexagon3 = newCell3.createHexagon(40);
-        MouseEvent mouseEvent3 = new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
-                false, false, false, false, false, false, false, false, false, null);
+    assertNotNull(flag);
+    assertEquals(Color.BLUE, interactable.getFill());
+    assertEquals(Color.BLUEVIOLET, interactable.getStroke());
+    assertEquals(2, interactable.getStrokeWidth());
+  }
 
+  @Test
+  void testToggleOff() {
+    Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
+    Flag flag = new Flag(coords, 5);
+    flag.toggleOff();
+    Polygon interactable = flag.getInteractable();
 
-        newCell3.getHexagon().fireEvent(mouseEvent3);
-        assertTrue(newCell3.hasMarker);
+    assertNotNull(flag);
+    assertEquals(Color.TRANSPARENT, interactable.getFill());
+    assertEquals(Color.TRANSPARENT, interactable.getStroke());
+  }
 
-        /*Test to see if hex lights up correctly when hovered on*/
-        MouseEvent mouseEvent4 = new MouseEvent(
-                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
-                false, false, false, false, false, false, false, false, false, null);
-        newCell3.getHexagon().fireEvent(mouseEvent4);
-        assertEquals(hexagon3.getFill().toString(), Color.color(0.1, 0.1, 0.1).toString());
+  @Test
+  void testMarker() {
+    Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
+    Marker marker = new Marker(coords);
+    Circle interactable = marker.getInteractable();
 
-    }
+    assertNotNull(marker);
+    assertEquals(Color.BLUE, interactable.getFill());
+    assertEquals(Color.BLUEVIOLET, interactable.getStroke());
+    assertEquals(3, interactable.getStrokeWidth());
+  }
 
-    @Test
-    void testToString() {
-        Experimenter experimenter = new Experimenter();
-        experimenter.setAbsorptions(5);
+  @Test
+  void testTorch() {
+    Cell cell = new Cell(4, 5);
 
-        assertEquals("Absorptions: 5", experimenter.getToString());
-    }
+    Polygon hexagon = cell.createHexagon(40);
+    Torch torch = new Torch(cell, 0, 2);
 
-    @Test
-    void testFlag() {
-        Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
-        Flag flag = new Flag(coords,5);
-        Polygon interactable = flag.getInteractable();
-
-        assertNotNull(flag);
-        assertEquals(Color.BLUE, interactable.getFill());
-        assertEquals(Color.BLUEVIOLET, interactable.getStroke());
-        assertEquals(2, interactable.getStrokeWidth());
-    }
-
-    @Test
-    void testToggleOff() {
-        Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
-        Flag flag = new Flag(coords,5);
-        flag.toggleOff();
-        Polygon interactable = flag.getInteractable();
-
-        assertNotNull(flag);
-        assertEquals(Color.TRANSPARENT, interactable.getFill());
-        assertEquals(Color.TRANSPARENT, interactable.getStroke());
-    }
-
-    @Test
-    void testMarker() {
-        Pair<Double, Double> coords = new Pair<>(5.0, 10.0);
-        Marker marker = new Marker(coords);
-        Circle interactable = marker.getInteractable();
-
-        assertNotNull(marker);
-        assertEquals(Color.BLUE, interactable.getFill());
-        assertEquals(Color.BLUEVIOLET, interactable.getStroke());
-        assertEquals(3, interactable.getStrokeWidth());
-    }
-
-    @Test
-    void testTorch() {
-        Cell cell = new Cell(4, 5);
-
-        Polygon hexagon = cell.createHexagon(40);
-        Torch torch = new Torch(cell, 0,2);
-
-        assertNotNull(torch);
-        assertNotNull(torch.getInteractable());
-        assertEquals(Color.RED, torch.getInteractable().getFill());
-    }
+    assertNotNull(torch);
+    assertNotNull(torch.getInteractable());
+    assertEquals(Color.RED, torch.getInteractable().getFill());
+  }
 }

@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -54,13 +54,6 @@ public class Board {
           double y = row * yOffset * 1.85;
 
           Polygon hexagon = cell.createHexagon(HEXAGON_SIZE);
-
-          Text numText =
-                  new Text(Integer.toString(row) + " " + Integer.toString(col));
-          numText.setStroke(Color.color(0.15, 0.15, 0.15));
-          numText.setLayoutX(x-7);
-          numText.setLayoutY(y+4);
-          group.getChildren().add(numText);
 
           hexagon.setLayoutX(x);
           hexagon.setLayoutY(y);

@@ -1,3 +1,5 @@
+package blackbox;
+
 /**
  * Rays only ever have one of six slopes in Blackbox+
  * To simplify the logic, it uses this enum type instead of six decimal values

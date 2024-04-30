@@ -1,3 +1,5 @@
+package blackbox;
+
 import javafx.scene.paint.Color;
 
 /**

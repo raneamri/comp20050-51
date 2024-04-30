@@ -1,3 +1,5 @@
+package blackbox;
+
 import java.util.Random;
 
 public class Setter {

@@ -1,6 +1,6 @@
-package test_src;
+package blackbox;
+
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -42,7 +42,7 @@ public class Main extends Application {
    * Player classes
    */
   private static Setter setter;
-  public static Experimenter experimenter;
+  private static Experimenter experimenter;
 
   /*
    * Game assets
@@ -55,10 +55,9 @@ public class Main extends Application {
   public static ArrayList<Marker> markers = new ArrayList<>();
   public static Text absorptionsDisplay = new Text();
   public static Text scoreDisplay = new Text();
-  // public static Button replayBtn = new Button("Replay");
-  //public Label gameStageInstruct = new Label();
+  public static Button replayBtn = new Button("Replay");
+  public static Label gameStageInstruct = new Label();
   public static Text player = new Text("Setter");
-  public static Label cellLabel;
 
   /**
    * Conventional main function
@@ -92,9 +91,10 @@ public class Main extends Application {
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
-            getClass().getResource("styles.css").toExternalForm());
+        getClass().getResource("styles.css").toExternalForm());
     startBtn.getStyleClass().add("button");
     instructBtn.getStyleClass().add("button");
+    replayBtn.getStyleClass().add("button");
     menuTitle.setFont(Font.font("Verdana", 100));
     menuTitle.setStyle("-fx-text-fill: white");
     menuTitle.setOpacity(0);
@@ -104,39 +104,45 @@ public class Main extends Application {
     absorptionsDisplay.setStyle("-fx-font-weight: bold");
     scoreDisplay.setFont(Font.font("Arial", 30));
     scoreDisplay.setStyle("-fx-font-weight: bold");
+    gameStageInstruct.setStyle("-fx-font-weight: bold");
+    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+    gameStageInstruct.setWrapText(true);
+    gameStageInstruct.setMouseTransparent(true);
+    gameStageInstruct.setBackground(new Background(
+        new BackgroundFill(Color.BLACK, new CornerRadii(10), Insets.EMPTY)));
+    gameStageInstruct.setEffect(dropShadow);
     player.setFont(Font.font("Arial", 30));
     player.setStyle("-fx-font-weight: bold");
     player.setFill(Color.RED);
     primaryStage.setFullScreenExitHint("");
-    System.out.println("Stylesheet fetched successfully");
 
     /*
      * Image
      */
-    Image image = new Image(getClass().getResourceAsStream("atom.jpg"));
+    Image image = new Image(getClass().getResourceAsStream("img/atom.jpg"));
     ImageView imageView = new ImageView(image);
 
     /*
      * Transitions
      */
     ScaleTransition scaleTransition =
-            new ScaleTransition(Duration.seconds(5), imageView);
+        new ScaleTransition(Duration.seconds(5), imageView);
     scaleTransition.setToX(0);
     scaleTransition.setToY(0);
     scaleTransition.play();
 
     FadeTransition titleFadeIn =
-            new FadeTransition(Duration.seconds(6), menuTitle);
+        new FadeTransition(Duration.seconds(6), menuTitle);
     titleFadeIn.setFromValue(0.0);
     titleFadeIn.setToValue(1.0);
 
     FadeTransition buttonFadeIn =
-            new FadeTransition(Duration.seconds(5), startBtn);
+        new FadeTransition(Duration.seconds(5), startBtn);
     buttonFadeIn.setFromValue(0.0);
     buttonFadeIn.setToValue(1.0);
 
     FadeTransition instructFadeIn =
-            new FadeTransition(Duration.seconds(5), instructBtn);
+        new FadeTransition(Duration.seconds(5), instructBtn);
     instructFadeIn.setFromValue(0.0);
     instructFadeIn.setToValue(1.0);
 
@@ -145,33 +151,36 @@ public class Main extends Application {
      */
     Text text = new Text("Setter Instructions");
     text.setFont(
-            Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text.setFill(Color.BLACK);
 
     Text text2 = new Text("Experimenter Instructions");
     text2.setFont(
-            Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     text2.setFill(Color.BLACK);
 
     Text setter =
-            new Text("\n\nSet up five 'atoms' by clicking cells on the board.\n\n");
+        new Text("\n\nSet up five 'atoms' by clicking cells on the board.\n\n");
     setter.setFont(
-            Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+        Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     setter.setFill(Color.BLACK);
 
     Text experimenter = new Text(
-            "\n\n\n\n\n\n\tDeduce position of atoms by sending in rays.\n\n\t"
-                    + "Send a ray by pressing the torchs (triangles) on the\n\tedge of the "
-                    + "board.\n\t"
-                    + "\n\tWhen you believe you have located all the atoms, \n\tannounce "
-                    + "the end of the round and place markers\n\twhere you believe the "
-                    + "atoms are.\n\tScore is calculated as \n\t{CORRECT GUESSES} - "
-                    + "{INCORRECT GUESSES}");
+        "\n\n\n\n\n\n\tDeduce position of atoms by sending in rays.\n\n\t"
+        + "Send a ray by pressing the torchs (triangles) on the\n\tedge of the "
+        + "board.\n\t"
+        + "\n\tWhen you believe you have located all the atoms, \n\tannounce "
+        + "the end of the round and place markers\n\twhere you believe the "
+        + "atoms are.\n\tScore is calculated as: \n\t(2 x correct atoms) - "
+        + "(no. of rays cast > 12)\n\t\t - (no. of markers placed > 5)");
     experimenter.setFont(
-            Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+        Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
     experimenter.setFill(Color.BLACK);
     experimenter.setMouseTransparent(true);
 
+    /*
+     * Background
+     */
     Rectangle background = new Rectangle(500, 300);
     background.setFill(Color.WHITE);
     background.setOpacity(0.9);
@@ -187,6 +196,7 @@ public class Main extends Application {
         root.getChildren().add(menuTitle);
         root.getChildren().add(absorptionsDisplay);
         root.getChildren().add(scoreDisplay);
+        root.getChildren().add(replayBtn);
 
         titleFadeIn.play();
         buttonFadeIn.play();
@@ -234,6 +244,24 @@ public class Main extends Application {
       nextBtnPressed.set(false);
     });
 
+    replayBtn.setOnAction(event -> {
+      root.getChildren().clear();
+      root.getChildren().add(absorptionsDisplay);
+      root.getChildren().add(scoreDisplay);
+      root.getChildren().add(replayBtn);
+
+      StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
+      scoreDisplay.setFill(Color.TRANSPARENT);
+      replayBtn.setVisible(false);
+      replayBtn.setDisable(true);
+
+      clearAssets();
+
+      ingame(primaryStage, root);
+    });
+    replayBtn.setScaleZ(200);
+    replayBtn.setVisible(false);
+    replayBtn.setDisable(true);
 
     /**
      * Alignments
@@ -250,8 +278,9 @@ public class Main extends Application {
     StackPane.setMargin(nextBtn, new Insets(250, 400, 0, 0));
     StackPane.setMargin(absorptionsDisplay, new Insets(-10, 826, 0, 0));
     StackPane.setMargin(scoreDisplay, new Insets(-700, 0, 0, 0));
+    StackPane.setMargin(replayBtn, new Insets(-600, 0, 0, 0));
     StackPane.setMargin(player, new Insets(-625, 0, 0, 0));
-    //StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
+    StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
 
     /**
      * Adding to root
@@ -264,7 +293,7 @@ public class Main extends Application {
     primaryStage.show();
   }
 
-  private void ingame(Stage primaryStage, StackPane root) {
+  private static void ingame(Stage primaryStage, StackPane root) {
     /*
      * Set up board
      */
@@ -284,8 +313,8 @@ public class Main extends Application {
     /*
      * Write stage instructions
      */
-    //root.getChildren().add(gameStageInstruct);
-    root.getChildren().add(statusInstruct("\tSetter's Turn\n\tPlace 5 atoms"));
+    root.getChildren().add(gameStageInstruct);
+    statusInstruct("\tSetter's Turn\n\tPlace 5 atoms");
 
     experimenter = new Experimenter();
     setter = new Setter();
@@ -300,116 +329,106 @@ public class Main extends Application {
     root.getChildren().add(endTurnBtn);
 
     endTurnBtn.setOnMouseClicked(event -> {
+      switch (Main.gameStage) {
+        case RAYS -> {
+          Main.gameStage = GameStage.MARKERS;
+          statusInstruct("\tPlace markers to guess");
 
-      if(Main.gameStage == GameStage.RAYS){
-
-        Main.gameStage = GameStage.MARKERS;
-        Label label = statusInstruct("\tPlace markers to guess");
-        root.getChildren().add(label);
-
-        for(Torch t : Main.torchs){
-          t.getInteractable().setOnMouseEntered(null);
-          t.getInteractable().setOnMouseClicked(null);
+          for(Torch t : Main.torchs){
+            t.getInteractable().setOnMouseEntered(null);
+            t.getInteractable().setOnMouseClicked(null);
+          }
         }
-      }
-      else if(Main.gameStage == GameStage.MARKERS){
-        Main.gameStage = GameStage.SCORE;
-        player.setVisible(false);
 
-        experimenter.showScore();
+    case MARKERS
+        -> {
+      Main.gameStage = GameStage.SCORE; player.setVisible(false);
 
-        Button replayBtn = new Button("Replay");
-        replayBtn.getStyleClass().add("button");
-        replayBtn.setScaleZ(200);
-        StackPane.setMargin(replayBtn, new Insets(-600, 0, 0, 0));
+      /*Calculating score
+       * 2xcorrect atoms -(no. of rays cast > 12) - (no. of markers placed > 5)"
+       */
+      int initialScore = experimenter.getScore();
 
-        replayBtn.setOnAction(newevent -> {
-          root.getChildren().clear();
-          root.getChildren().add(absorptionsDisplay);
-          root.getChildren().add(scoreDisplay);
-          root.getChildren().add(replayBtn);
+      int markerminus = markers.size(); markerminus = (markerminus <= 5) ? 0:
+      markerminus - 5;
+      experimenter.subScore(markerminus);
 
-          scoreDisplay.setFill(Color.TRANSPARENT);
-          replayBtn.setVisible(false);
-          replayBtn.setDisable(true);
-
-          clearAssets();
-
-          ingame(primaryStage, root);
-        });
-        root.getChildren().add(replayBtn);
-
-        experimenter.hideAbsorptions();
-
-        for (Atom a : Main.atoms) {
-          a.toggleOn();
-        }
-        for (Ray r : Main.rays) {
-          r.toggleOn();
-        }
-        for (Flag f : Main.flags) {
-          f.toggleOff();
-        }
-      }
-      else {
+      int torchminus = 0;
+      for (Torch t : torchs) {
+        if (t.getInteractable().getFill() == Color.YELLOW)
+          torchminus++;
       }
 
-    });
+      torchminus = (torchminus <= 12) ? 0 : torchminus - 12;
+      experimenter.subScore(torchminus);
+
+      experimenter.showScore();
+      experimenter.showReplay();
+      experimenter.hideAbsorptions();
+      StackPane.setAlignment(gameStageInstruct, Pos.CENTER_RIGHT);
+      statusInstruct("Score Breakdown\n"
+                     + "2 x " + initialScore / 2 + " Atoms correct\n"
+                     + "-1 x " + torchminus + " Extra torches shone\n"
+                     + "-1 x " + markerminus + " Extra markers");
+
+      for (Atom a : Main.atoms) {
+        a.toggleOn();
+      }
+      for (Ray r : Main.rays) {
+        r.toggleOn();
+      }
+      for (Flag f : Main.flags) {
+        f.toggleOff();
+      }
+
+        }
+        default -> {
+        }
   }
+});
+}
 
-  public static Group getGroup() { return group; }
-  public static Setter getSetter() { return setter; }
-  public static Experimenter getExperimenter() { return experimenter; }
+public static Group getGroup() { return group; }
+public static Setter getSetter() { return setter; }
+public static Experimenter getExperimenter() { return experimenter; }
 
-  /**
-   * Resets all assets created by the game, useful for replay
-   */
-  private void clearAssets() {
-    group = new Group();
+/**
+ * Resets all assets created by the game, useful for replay
+ */
+private void clearAssets() {
+  group = new Group();
 
-    atoms.clear();
-    torchs.clear();
-    rays.clear();
-    flags.clear();
-    markers.clear();
-  }
+  atoms.clear();
+  torchs.clear();
+  rays.clear();
+  flags.clear();
+  markers.clear();
+}
 
-  /**
-   * Writes game stage instructions to screen
-   * with fade transition
-   *
-   * @param message instruction message for current stage
-   */
-  public static Label statusInstruct(String message) {
-    Label gameStageInstruct = new Label(message);
-    DropShadow dropShadow = new DropShadow();
-    dropShadow.setColor(Color.BLACK);
-    dropShadow.setOffsetX(3);
-    dropShadow.setOffsetY(3);
-    gameStageInstruct.setStyle("-fx-font-weight: bold");
-    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+/**
+ * Writes game stage instructions to screen
+ * with fade transition
+ *
+ * @param message instruction message for current stage
+ */
+public static void statusInstruct(String message) {
+  FadeTransition fade =
+      new FadeTransition(Duration.millis(3500), gameStageInstruct);
+  fade.setFromValue(1.0);
+  if (gameStage == GameStage.SCORE) {
+    gameStageInstruct.setFont(Font.font("Arial", 15));
+    gameStageInstruct.setPadding(new Insets(0, 0, 0, 55));
+    gameStageInstruct.setPrefSize(300, 300);
+    fade.setToValue(1.0);
+  } else {
+    gameStageInstruct.setPrefSize(350, 100);
     gameStageInstruct.setFont(Font.font("Arial", 25));
-    gameStageInstruct.setWrapText(true);
-    gameStageInstruct.setPrefSize(400, 100);
-    gameStageInstruct.setMouseTransparent(true);
-    gameStageInstruct.setBackground(new Background(
-            new BackgroundFill(Color.BLACK, new CornerRadii(10), Insets.EMPTY)));
-    gameStageInstruct.setEffect(dropShadow);
-    StackPane.setAlignment(gameStageInstruct, Pos.CENTER);
-
-    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
-    gameStageInstruct.setText(message);
-    FadeTransition fade =
-            new FadeTransition(Duration.millis(3500), gameStageInstruct);
-    fade.setFromValue(1.0);
     fade.setToValue(0);
-    fade.play();
-
-    return gameStageInstruct;
   }
 
-  public void addLabel(Label f){
-    //root.getChildren().add(f);
-  }
+  gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+  gameStageInstruct.setText(message);
 
+  fade.play();
+}
 }

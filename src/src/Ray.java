@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -18,9 +18,9 @@ public class Ray {
   /*
    * Polyray drawing utilities
    */
-  public ArrayList<Cell> path = new ArrayList<>();
-  public ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
-  public ArrayList<Line> lines = new ArrayList<>();
+  private ArrayList<Cell> path = new ArrayList<>();
+  private ArrayList<Pair<Double, Double>> coords = new ArrayList<>();
+  private ArrayList<Line> lines = new ArrayList<>();
   private int torchCreator;
 
   /*
@@ -47,6 +47,8 @@ public class Ray {
 
     drawRays();
   }
+
+  public Ray() {}
 
   /**
    * Recursive method that computes path of the ray. This method of finding
@@ -159,6 +161,10 @@ public class Ray {
    * @return Direction (enum) type method resolved
    */
   protected Direction slopeToDirection(double[] p1, double[] p2) {
+    /*
+     * Allow some margin of error to not lose information or return false
+     * positives
+     */
     double error = 1e-3d;
 
     if (Math.abs(p1[1] - p2[1]) < error) {
@@ -387,7 +393,7 @@ public class Ray {
    * Iterates over the points gathered by recursion and essentially draws a
    * JavaFX Polyray
    */
-  public void drawRays() {
+  private void drawRays() {
     for (Cell cell : path) {
       coords.add(
           new Pair<Double, Double>(cell.getCenterX(), cell.getCenterY()));

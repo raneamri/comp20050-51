@@ -1,4 +1,4 @@
-package test_src;
+package blackbox;
 
 import javafx.scene.paint.Color;
 
@@ -12,8 +12,10 @@ public class Experimenter {
 
   public Experimenter() {}
 
-  public void addScore(int s) { this.score++; }
+  public void addScore(int s) { this.score += s; }
+
   public void subScore(int s) { score = Math.max(0, score - s); }
+
   public int getScore() { return this.score; }
 
   public void setAbsorptions(int a) { this.absorptions = a; }
@@ -26,7 +28,7 @@ public class Experimenter {
 
   private String scoreToString() {
     return "Score: " + Integer.toString(score) +
-        ((score == 5) ? " Perfect!" : "");
+        ((score == 10) ? " Perfect!" : "");
   }
 
   public void addAbsorption() {
@@ -49,12 +51,12 @@ public class Experimenter {
   }
   public void hideScore() { Main.scoreDisplay.setFill(Color.TRANSPARENT); }
 
-  /*public void showReplay() {
+  public void showReplay() {
     Main.replayBtn.setVisible(true);
     Main.replayBtn.setDisable(false);
   }
   public void hideReplay() {
     Main.replayBtn.setVisible(false);
     Main.replayBtn.setDisable(true);
-  }*/
+  }
 }
