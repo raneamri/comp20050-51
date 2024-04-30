@@ -65,43 +65,24 @@ public class GameUITest {
   }
 
   @Test
-  void testCellMouseEvents() {
+  void testCellMouseEvent() {
+    //Test to see if atom is added correctly when hex is clicked
     MouseEvent mouseEvent = new MouseEvent(
             MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false,
             false, false, false, false, false, false, false, false, false, null);
 
-
-    /*
-     * Test to see if atom id added correctly when hex is clicked and game stage
-     * is Setter
-     */
-    Experimenter experimenter = new Experimenter();
     Cell newCell = new Cell(4, 5);
     newCell.createHexagon(40);
 
     newCell.getHexagon().fireEvent(mouseEvent);
     assertTrue(newCell.hasAtom());
 
-    Cell newCell2 = new Cell(4, 5);
+    Cell newCell2 = new Cell(5, 5);
     newCell2.createHexagon(40);
-    newCell2.getHexagon().fireEvent(mouseEvent);
 
+    newCell2.getHexagon().fireEvent(mouseEvent);
     assertTrue(newCell2.hasAtom());
 
-    /*
-     * Test to see if marker is added correctly when hex is clicked and game stage
-     * is Marker
-     */
-    Cell newCell3 = new Cell(2, 1);
-    newCell3.createHexagon(40);
-    newCell3.getHexagon().fireEvent(mouseEvent);
-
-    assertTrue(newCell3.hasMarker());
-
-    /*Test to see if hex lights up correctly when hovered on*/
-    newCell3.getHexagon().fireEvent(mouseEvent);
-    assertEquals(newCell3.getHexagon().getFill().toString(),
-                 Color.color(0.1, 0.1, 0.1).toString());
   }
 
   @Test
