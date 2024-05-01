@@ -1,5 +1,8 @@
 package blackbox;
 
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -23,10 +26,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Entry point/launcher for the game. Includes all logic for the menu.
@@ -92,7 +91,8 @@ public class Main extends Application {
     dropShadow.setOffsetY(3);
     menuTitle.setEffect(dropShadow);
     scene.getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
+        Objects.requireNonNull(getClass().getResource("styles.css"))
+            .toExternalForm());
     startBtn.getStyleClass().add("button");
     instructBtn.getStyleClass().add("button");
     replayBtn.getStyleClass().add("button");
@@ -120,7 +120,8 @@ public class Main extends Application {
     /*
      * Image
      */
-    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("img/atom.jpg")));
+    Image image = new Image(
+        Objects.requireNonNull(getClass().getResourceAsStream("img/atom.jpg")));
     ImageView imageView = new ImageView(image);
 
     /*
@@ -343,10 +344,9 @@ public class Main extends Application {
           endTurnBtn.setMouseTransparent(true);
         }
 
-        default -> {
-        }
+        default -> {}
   }
-});
+  });
 }
 
 public static Group getGroup() { return group; }
@@ -372,60 +372,61 @@ private void clearAssets() {
  *
  * @param message instruction message for current stage
  */
-  public static void statusInstruct(String message) {
-    FadeTransition fade =
-        new FadeTransition(Duration.millis(3500), gameStageInstruct);
-    fade.setFromValue(1.0);
-    if (gameStage == GameStage.SCORE) {
-      gameStageInstruct.setFont(Font.font("Arial", 15));
-      gameStageInstruct.setPadding(new Insets(0, 0, 0, 55));
-      gameStageInstruct.setPrefSize(300, 300);
-      fade.setToValue(1.0);
-    } else {
-      gameStageInstruct.setPrefSize(350, 100);
-      gameStageInstruct.setFont(Font.font("Arial", 25));
-      fade.setToValue(0);
-    }
-
-    gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
-    gameStageInstruct.setText(message);
-
-    fade.play();
+public static void statusInstruct(String message) {
+  FadeTransition fade =
+      new FadeTransition(Duration.millis(3500), gameStageInstruct);
+  fade.setFromValue(1.0);
+  if (gameStage == GameStage.SCORE) {
+    gameStageInstruct.setFont(Font.font("Arial", 15));
+    gameStageInstruct.setPadding(new Insets(0, 0, 0, 55));
+    gameStageInstruct.setPrefSize(300, 300);
+    fade.setToValue(1.0);
+  } else {
+    gameStageInstruct.setPrefSize(350, 100);
+    gameStageInstruct.setFont(Font.font("Arial", 25));
+    fade.setToValue(0);
   }
 
-  public static void showEndBoard(){
-    Main.gameStage = GameStage.SCORE; player.setVisible(false);
+  gameStageInstruct.setTextAlignment(TextAlignment.CENTER);
+  gameStageInstruct.setText(message);
 
-    /*Calculating score
-    * 2xcorrect atoms - (no. of rays cast > 12)"
-    */
-    int initialScore = experimenter.getScore();
+  fade.play();
+}
 
-    int torchminus = 0;
-    for (Torch t : torchs) {
-      if (t.getInteractable().getFill() == Color.YELLOW)
-        torchminus++;
-    }
+public static void showEndBoard() {
+  Main.gameStage = GameStage.SCORE;
+  player.setVisible(false);
 
-    torchminus = (torchminus <= 12) ? 0 : torchminus - 12;
-    experimenter.subScore(torchminus);
+  /*Calculating score
+   * 2xcorrect atoms - (no. of rays cast > 12)"
+   */
+  int initialScore = experimenter.getScore();
 
-    experimenter.showScore();
-    experimenter.showReplay();
-    experimenter.hideAbsorptions();
-    StackPane.setAlignment(gameStageInstruct, Pos.CENTER_RIGHT);
-    statusInstruct("Score Breakdown\n"
-            + "2 x " + initialScore / 2 + " Atoms correct\n"
-            + "-1 x " + torchminus + " Extra torches shone\n");
-
-    for (Atom a : Main.atoms) {
-      a.toggleOn();
-    }
-    for (Ray r : Main.rays) {
-      r.toggleOn();
-    }
-    for (Flag f : Main.flags) {
-      f.toggleOff();
-    }
+  int torchminus = 0;
+  for (Torch t : torchs) {
+    if (t.getInteractable().getFill() == Color.YELLOW)
+      torchminus++;
   }
+
+  torchminus = (torchminus <= 12) ? 0 : torchminus - 12;
+  experimenter.subScore(torchminus);
+
+  experimenter.showScore();
+  experimenter.showReplay();
+  experimenter.hideAbsorptions();
+  StackPane.setAlignment(gameStageInstruct, Pos.CENTER_RIGHT);
+  statusInstruct("Score Breakdown\n"
+                 + "2 x " + initialScore / 2 + " Atoms correct\n"
+                 + "-1 x " + torchminus + " Extra torches shone\n");
+
+  for (Atom a : Main.atoms) {
+    a.toggleOn();
+  }
+  for (Ray r : Main.rays) {
+    r.toggleOn();
+  }
+  for (Flag f : Main.flags) {
+    f.toggleOff();
+  }
+}
 }
