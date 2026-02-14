@@ -31,26 +31,3 @@ The score is calculated as
 ```
 
 To play again, click the replay button that appears at the top.
-
-## Startup
-Open Makefile and switch LIB_DIR with your JavaFX installation folder.
-
-### Makefile
-From the blackbox directory, run
-```bash
-    make run
-```
-to launch the game.
-
-### Jar
-From the blackbox directory, run
-```bash
-    make jar
-```
-to create a new jar file. To then run it, run
-```bash
-    make runjar
-```
-
-
-## Implementation
